@@ -17,6 +17,20 @@ let queueLib = require('@lib/queue');
 global.sequelize = require('@static/sequelize')(serverLogger);
 global.smsQueue = queueLib.smsQueue(serverLogger);
 global.emailQueue = queueLib.emailQueue(serverLogger);
+global.azure = require('azure-storage');
+global.blobService = global.azure.createBlobService();
+global.blobService.createContainerIfNotExists('taskcontainer', {
+  publicAccessLevel: 'blob'
+}, function(error, result, response) {
+  if (!error) {
+    serverLogger.debug('result', result);
+    serverLogger.debug('response', response);
+    // if result = true, container was created.
+    // if result = false, container already existed.
+  } else {
+    serverLogger.error(error);
+  }
+});
 const schedule = require('@lib/schedule');
 
 var restartWorkers = true;

@@ -1,0 +1,33 @@
+<!doctype html>
+<html class="h-100" lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+        <title>Azure - Containers</title>
+        <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.css" integrity="sha256-5U3z9K3P17cKgGYxXQA5rBZO5EDju+lgtXG6oDXNbNY=" rel="stylesheet"/>
+    </head>
+    <body
+        class="d-flex flex-column h-100">
+        <!-- Begin page content -->
+        <main class="flex-shrink-0" role="main">
+            <div class="container">
+                <h1 class="mt-5">Containers ({{data.entries.length}})</h1>
+                {% for container in data.entries %}
+                    <hr/>
+                    <p>
+                    Container : <code>{{container.name}}</code> <br/>
+                    Last-Modified <code>{{container.lastModified}}</code><br/>
+                    <a href="/azure/blobs/{{container.name}}"> Voir les blobs</a>
+                    </p>
+                    <hr/>
+                {% endfor %}
+                <h1>Create one</h1>
+                <form method="post" accept-charset="UTF-8" action="/azure/container/create">
+                    <h3><label for="containerName">Name</label></h3>
+                    <input id="containerName" type="text" name="containerName">
+                    <input type="submit" value="create">
+                </form>
+            </div>
+        </main>
+    </body>
+</html>
