@@ -1,0 +1,40 @@
+{% extends 'basic.twig' %}
+{% block title %}Statistiques de temps moyen |{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="col-md-12 mt-4">
+        <table class="table table-bordered table-inverse">
+            <thead class="thead-default">
+                <tr>
+                    <th>Id serveur</th>
+                    <th>Nom</th>
+                    <th>Temps moyen</th>
+                    <th>Dernier code HTTP</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for server in servers %}
+                {% set color = "" %}
+                    <tr {% spaceless %}
+                            {% if server.lastStatusCode >= 200 and server.lastStatusCode < 300 %}class="table-success"
+                            {% elseif server.lastStatusCode >= 300 and server.lastStatusCode < 400 %}
+                            class="table-warning"
+                            {% elseif server.lastStatusCode == 401 %}
+                            class="table-info"
+                            {% elseif server.lastStatusCode == 403 %}
+                            class="table-danger"
+                            {% elseif server.lastStatusCode == 501 %}
+                            class="table-secondary"
+                            {% endif %}
+                        {% endspaceless %}>
+                        <td scope="row"><a href="stats/{{ server.idServer }}" >{{ server.idServer }}</a></td>
+                        <td>
+                            <a href="{{ server.url }}" target="_blank" rel="noopener noreferrer nofollow" >{{ server.name }}</a>
+                        </td>
+                        <td>{{ server.avgTime }} ms</td>
+                        <td>{{ server.lastStatusCode }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

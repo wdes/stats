@@ -1,0 +1,7 @@
+{% for server in servers %}
+Server: {{ server.name }}
+Url: {{ server.url }}
+Times: dns: {{ server.times.dns|round(1, 'floor') }} ms, total: {{ server.times.total|round(1, 'floor') }} ms, wait: {{ server.times.wait|round(1, 'floor') }} ms, firstByte: {{ server.times.firstByte|round(1, 'floor') }} ms
+Code: {{ server.statusCode }}
+
+{% endfor %}

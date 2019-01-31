@@ -1,0 +1,116 @@
+{
+    "name": "wdes-stats",
+    "version": "1.0.0",
+    "description": "The api of WdesStats",
+    "main": "server.js",
+    "private": true,
+    "readme": "https://gitlab.com/wdes/wdes-stats#readme",
+    "nyc": {
+        "exclude": [
+            "apidocs",
+            "db/migrations",
+            "test",
+            "config",
+            "coverage",
+            ".nyc_output"
+        ],
+        "reporter": [
+            "text",
+            "text-summary"
+        ]
+    },
+    "scripts": {
+        "apidoc": "apidoc --input src/ --output apidocs --private false",
+        "apidoc:private": "apidoc --input src/ --output apidocs --private true",
+        "test": "nyc --all mocha --ui tdd",
+        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
+        "migrate:production": "sequelize db:migrate --env production",
+        "migrate:test": "sequelize db:migrate --env test",
+        "migrate:development": "sequelize db:migrate --env development",
+        "migrate:production:reset": "sequelize db:migrate:undo:all --env production",
+        "migrate:test:reset": "sequelize db:migrate:undo:all --env test",
+        "migrate:development:reset": "sequelize db:migrate:undo:all --env development",
+        "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.js\" \"*.js\"",
+        "jshint": "jshint ./",
+        "install:service": "node service.js",
+        "start": "NODE_ENV=production node server.js",
+        "start:dev": "NODE_ENV=development node server.js",
+        "start:test": "NODE_ENV=test node server.js",
+        "service:start": "service wdesmenu start",
+        "service:stop": "service wdesmenu stop",
+        "heroku-prebuild": "echo 'Heroku pre build !'",
+        "heroku-postbuild": "npm run migrate:production",
+        "postinstall": "npm run apidoc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://gitlab.com/wdes/wdes-stats.git"
+    },
+    "keywords": [
+        "api"
+    ],
+    "license": "MPL-2.0",
+    "bugs": {
+        "url": "https://gitlab.com/wdes/wdes-stats/issues"
+    },
+    "homepage": "https://gitlab.com/wdes/wdes-stats#readme",
+    "dependencies": {
+        "@sentry/node": "^4.5.2",
+        "better-queue": "^3.8.10",
+        "body-parser": "^1.18.3",
+        "cluster": "^0.7.7",
+        "dotenv": "^6.2.0",
+        "errorhandler": "^1.5.0",
+        "express": "^4.16.4",
+        "joi": "^14.3.1",
+        "log4js": "^3.0.6",
+        "module-alias": "^2.1.0",
+        "mysql2": "^1.6.4",
+        "node-cron": "^2.0.3",
+        "node-linux": "^0.1.11",
+        "path-to-regexp": "^3.0.0",
+        "request": "^2.88.0",
+        "sequelize": "^4.42.0",
+        "sequelize-cli": "^5.4.0",
+        "time": "^0.12.0",
+        "twig": "^1.13.2",
+        "vhost": "^3.0.2"
+    },
+    "devDependencies": {
+        "apidoc": "^0.17.7",
+        "chai": "^4.2.0",
+        "jshint": "^2.9.7",
+        "mocha": "^5.2.0",
+        "nyc": "^13.1.0",
+        "prettier": "^1.16.0",
+        "sinon": "^7.2.3"
+    },
+    "prettier": {
+        "singleQuote": true,
+        "proseWrap": "never",
+        "trailingComma": "es5",
+        "bracketSpacing": true,
+        "printWidth": 95
+    },
+    "engines": {
+        "node": ">=10.10.0"
+    },
+    "apidoc": {
+        "title": "WdesStats",
+        "url": "https://wdes-stats.wdes.eu"
+    },
+    "_moduleAliases": {
+        "@lib": "src/lib",
+        "@static": "src/static",
+        "@util": "src/util",
+        "@api": "src/api",
+        "@src": "src",
+        "@test": "test",
+        "@middlewares": "src/middlewares",
+        "@root": "./",
+        "@templates": "templates",
+        "@db": "db",
+        "@models": "db/models",
+        "@config": "config"
+    }
+}

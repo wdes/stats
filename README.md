@@ -1,2 +1,2 @@
-# stats
-Wdes stats
+# wdes-stats
+WdesStats server
