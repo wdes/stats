@@ -93,7 +93,7 @@
         "printWidth": 95
     },
     "engines": {
-        "node": ">=10.10.0"
+        "node": "10.10.x"
     },
     "apidoc": {
         "title": "WdesStats",
