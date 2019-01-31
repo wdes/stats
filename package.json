@@ -40,7 +40,8 @@
         "service:stop": "service wdesmenu stop",
         "heroku-prebuild": "echo 'Heroku pre build !'",
         "heroku-postbuild": "npm run migrate:production",
-        "postinstall": "npm run apidoc"
+        "postinstall": "npm run apidoc",
+        "sentry-sync-commits": "VERSION=$(node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
     },
     "repository": {
         "type": "git",
@@ -77,6 +78,7 @@
         "vhost": "^3.0.2"
     },
     "devDependencies": {
+        "@sentry/cli": "^1.37.4",
         "apidoc": "^0.17.7",
         "chai": "^4.2.0",
         "jshint": "^2.9.7",
