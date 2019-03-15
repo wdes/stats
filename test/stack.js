@@ -8,7 +8,7 @@ module.exports = function() {
     suite('stack timers scheduler calls', function() {
         var timers = null;
         var spy = null;
-        beforeEach(function() {
+        setup(function() {
             timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
                 shouldAdvanceTime: true,
@@ -41,14 +41,14 @@ module.exports = function() {
             done();
         });
 
-        afterEach(function() {
+        teardown(function() {
             stack.stop();
             sinon.restore();
         });
     });
 
     suite('stack timers', function() {
-        beforeEach(function() {
+        setup(function() {
             stack.init(30, () => {}, () => {});
         });
 
@@ -163,7 +163,7 @@ module.exports = function() {
             done();
         });
 
-        afterEach(function() {
+        teardown(function() {
             stack.stop();
             sinon.restore();
         });

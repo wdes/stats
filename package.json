@@ -24,7 +24,7 @@
         "changelog-file": "npm run --silent changelog > CHANGELOG.md",
         "apidoc": "apidoc --input src/ --output apidocs --private false",
         "apidoc:private": "apidoc --input src/ --output apidocs --private true",
-        "test": "nyc --all mocha --ui tdd",
+        "test": "nyc --all mocha --ui tdd --exit",
         "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
         "migrate:production": "sequelize db:migrate --env production",
         "migrate:test": "sequelize db:migrate --env test",
