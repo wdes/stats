@@ -20,6 +20,8 @@
         ]
     },
     "scripts": {
+        "changelog": "changelog-generator-twig --owner wdes --repo changelog --repoDir ./ --baseCommit 16179d5a534b34f29915590c8e75579b547ebb4a",
+        "changelog-file": "npm run --silent changelog > CHANGELOG.md",
         "apidoc": "apidoc --input src/ --output apidocs --private false",
         "apidoc:private": "apidoc --input src/ --output apidocs --private true",
         "test": "nyc --all mocha --ui tdd",
@@ -56,45 +58,44 @@
     },
     "homepage": "https://gitlab.com/wdes/wdes-stats#readme",
     "dependencies": {
-        "@sentry/node": "^4.5.2",
-        "azure-storage": "^2.10.2",
-        "azurite": "^2.7.0",
+        "@sentry/node": "^4.6.4",
         "better-queue": "^3.8.10",
         "body-parser": "^1.18.3",
         "cluster": "^0.7.7",
-        "dotenv": "^6.2.0",
+        "dotenv": "^7.0.0",
         "errorhandler": "^1.5.0",
         "express": "^4.16.4",
         "joi": "^14.3.1",
-        "log4js": "^3.0.6",
-        "module-alias": "^2.1.0",
-        "mysql2": "^1.6.4",
+        "log4js": "^4.0.2",
+        "module-alias": "^2.2.0",
+        "mysql2": "^1.6.5",
         "node-cron": "^2.0.3",
-        "node-linux": "^0.1.11",
+        "node-linux": "^0.1.12",
         "path-to-regexp": "^3.0.0",
         "request": "^2.88.0",
-        "sequelize": "^4.42.0",
+        "sequelize": "^5.1.0",
         "sequelize-cli": "^5.4.0",
         "time": "^0.12.0",
         "twig": "^1.13.2",
         "vhost": "^3.0.2"
     },
     "devDependencies": {
-        "@sentry/cli": "^1.37.4",
+        "@sentry/cli": "^1.40.0",
         "apidoc": "^0.17.7",
         "chai": "^4.2.0",
-        "jshint": "^2.9.7",
-        "mocha": "^5.2.0",
-        "nyc": "^13.1.0",
-        "prettier": "^1.16.0",
-        "sinon": "^7.2.3"
+        "changelog-generator-twig": "^1.1.0",
+        "jshint": "^2.10.2",
+        "mocha": "^6.0.2",
+        "nyc": "^13.3.0",
+        "prettier": "^1.16.4",
+        "sinon": "^7.2.7"
     },
     "prettier": {
         "singleQuote": true,
         "proseWrap": "never",
         "trailingComma": "es5",
         "bracketSpacing": true,
-        "printWidth": 95
+        "printWidth": 120
     },
     "engines": {
         "node": "10.10.x"
