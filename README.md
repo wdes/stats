@@ -5,6 +5,6 @@
 [![Lines of Code shield](https://5ezz6jithh.execute-api.us-east-1.amazonaws.com/prod/lambda-shield-redirect?user=wdes&repo=stats)](https://github.com/raptortech-js/sloc-shields)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwdes%2Fstats.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwdes%2Fstats?ref=badge_shield)
 [![Known Vulnerabilities](https://snyk.io/test/github/wdes/changelog/badge.svg)](https://snyk.io/test/github/wdes/changelog)
-[![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
+[![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/) [![Greenkeeper badge](https://badges.greenkeeper.io/wdes/stats.svg)](https://greenkeeper.io/)
 
 WdesStats server
