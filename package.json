@@ -80,7 +80,7 @@
         "vhost": "^3.0.2"
     },
     "devDependencies": {
-        "@sentry/cli": "^1.41.0",
+        "@sentry/cli": "^1.41.2",
         "apidoc": "^0.17.7",
         "chai": "^4.2.0",
         "changelog-generator-twig": "^1.1.0",
