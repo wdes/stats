@@ -86,7 +86,7 @@
         "changelog-generator-twig": "^1.1.0",
         "jshint": "^2.10.2",
         "mocha": "^6.1.2",
-        "nyc": "^13.3.0",
+        "nyc": "^14.0.0",
         "prettier": "^1.16.4",
         "sinon": "^7.3.1"
     },
