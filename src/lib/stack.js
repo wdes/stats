@@ -2,12 +2,12 @@
 
 const cron = require('node-cron');
 
-var task = null;
-
-var tasks = [];
-
-var _maxLength = 0;
-
+/**
+ * Chunk a string
+ * @param {String} str The string
+ * @param {Number} size The size of a chunk
+ * @returns {String[]} The array of chunks
+ */
 function chunkSubstr(str, size) {
     const numChunks = Math.ceil(str.length / size);
     const chunks = new Array(numChunks);
@@ -19,54 +19,49 @@ function chunkSubstr(str, size) {
     return chunks;
 }
 
+/**
+ * @callback emptyQueueCallback
+ * @param {String[]} chunks The chunks to send
+ */
 
-const emptyAndSendStack = function(emptyQueue) {
-    emptyQueue(chunkSubstr(tasks.join("\n--\n"), _maxLength));
+/**
+ *
+ * @param {String[]} tasks The tasks
+ * @param {Number} maxLength The max length
+ * @param {emptyQueueCallback} emptyQueue
+ */
+const emptyAndSendStack = function(tasks, maxLength, emptyQueue) {
+    emptyQueue(chunkSubstr(tasks.join('\n--\n'), maxLength));
     tasks = [];
 };
 
-const init = function(maxLength, cbTickSuccess, cbEmptyQueue) {
-    _maxLength = maxLength;
-    tasks = [];
-    task = cron.schedule('*/30 * * * * *', () => {
-        emptyAndSendStack(cbEmptyQueue);
-        cbTickSuccess();
-    });
-};
+module.exports = () => {
+    var task = null;
 
-const addToStack = function(message) {
-    tasks.push(message);
-};
+    var tasks = [];
 
-const stop = function() {
-    /* istanbul ignore next */
-    if (task) {
-        task.stop();
-    }
-};
+    var _maxLength = 0;
 
-const getMaxLength = function() {
-    return _maxLength;
-};
-
-const getTasksCount = function() {
-    return tasks.length;
-};
-
-const getTasks = function() {
-    return tasks.slice(0);
-};
-
-const getCronTask = function() {
-    return task;
-};
-
-module.exports = {
-    addToStack: addToStack,
-    init: init,
-    stop: stop,
-    getCronTask: getCronTask,
-    getMaxLength: getMaxLength,
-    getTasksCount: getTasksCount,
-    getTasks: getTasks,
+    return {
+        chunkSubstr: chunkSubstr,
+        addToStack: message => tasks.push(message),
+        init: (maxLength, cbTickSuccess, cbEmptyQueue) => {
+            _maxLength = maxLength;
+            tasks = [];
+            task = cron.schedule('*/30 * * * * *', () => {
+                emptyAndSendStack(tasks, maxLength, cbEmptyQueue);
+                cbTickSuccess();
+            });
+        },
+        stop: () => {
+            /* istanbul ignore next */
+            if (task) {
+                task.stop();
+            }
+        },
+        getCronTask: () => task,
+        getMaxLength: () => _maxLength,
+        getTasksCount: () => tasks.length,
+        getTasks: () => tasks.slice(0),
+    };
 };

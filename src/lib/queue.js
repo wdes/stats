@@ -3,7 +3,7 @@
 const Queue = require('better-queue');
 const crypto = require('crypto');
 const Sms = require('@lib/Sms');
-const smsStack = require('@lib/stack');
+const stack = require('@lib/stack');
 
 const takeNextN = function(first, groupName) {
     return function(n, cb) {
@@ -143,22 +143,38 @@ const getStore = function(groupName) {
 
 module.exports = {
     emailQueue: localLogger => {
+        let emailStack = stack().init(
+            1000,
+            () => {
+                //Tick callback
+            },
+            messages => {
+                messages.forEach(message => {
+                    sendmail() //TODO: here
+                        .then((response, body) => {
+                            //localLogger.debug(response.statusCode, response.body);
+                        })
+                        .catch(err => {
+                            localLogger.error(err);
+                        });
+                });
+            }
+        );
         return new Queue(
             (input, cb) => {
-                //global.logger = localLogger;
-                //TODO: email logic
-                //TODO: implement emails !
+                emailStack.addToStack(input);
+                cb(null, {});
             },
             {
                 batchSize: 1,
                 concurrent: 1,
                 filo: true,
-                store: getStore('sms'),
+                store: getStore('email'),
             }
         );
     },
     smsQueue: localLogger => {
-        smsStack.init(
+        let smsStack = stack().init(
             1000,
             () => {
                 //Tick callback
