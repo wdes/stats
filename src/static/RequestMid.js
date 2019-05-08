@@ -83,19 +83,13 @@ const RequestMid = {
                     },
                     function(code) {
                         if (code === 500) {
-                            Sentry.captureMessage(
-                                'Token verification failed.',
-                                Sentry.Severity.Critical
-                            );
+                            Sentry.captureMessage('Token verification failed.', Sentry.Severity.Critical);
                             return res.status(500).send({
                                 success: false,
                                 message: 'Token verification failed.',
                             });
                         } else if (code === 498) {
-                            Sentry.captureMessage(
-                                'Invalid token for requested scope.',
-                                Sentry.Severity.Debug
-                            );
+                            Sentry.captureMessage('Invalid token for requested scope.', Sentry.Severity.Debug);
                             return res.status(498).send({
                                 success: false,
                                 message: 'Invalid token for requested scope.',

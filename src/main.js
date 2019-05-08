@@ -9,11 +9,7 @@ global.Sentry = require('@sentry/node');
 
 // https://devcenter.heroku.com/articles/dyno-metadata
 //TODO: if env empty no append if not empty join array using dash (-)
-const envDesc =
-    '-' +
-    (process.env.HEROKU_APP_NAME || '') +
-    '-' +
-    (process.env.HEROKU_RELEASE_VERSION || '');
+const envDesc = '-' + (process.env.HEROKU_APP_NAME || '') + '-' + (process.env.HEROKU_RELEASE_VERSION || '');
 const sentryconfig = {
     release: packageJson.name + '@' + packageJson.version,
     environment: process.env.NODE_ENV + envDesc,
@@ -68,9 +64,7 @@ app.all('/*', function(req, res, next) {
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(
-    require('vhost')(process.env.APIDOCS_DOMAIN, express.static(__dirname + '/../apidocs'))
-);
+app.use(require('vhost')(process.env.APIDOCS_DOMAIN, express.static(__dirname + '/../apidocs')));
 app.use(express.static(__dirname + '/../public'));
 
 require('glob')

@@ -16,11 +16,7 @@ const serverExists = require('@middlewares/serverExists');
  *      "statusCode": 200
  *    }
  */
-app.get('/api/10/server/lastStatusCode', serverExists('query', 'id'), function(
-    req,
-    res,
-    next
-) {
+app.get('/api/10/server/lastStatusCode', serverExists('query', 'id'), function(req, res, next) {
     Servers.lastStatusCode(req.query.id)
         .then(statusCode => {
             res.send({ statusCode: statusCode });

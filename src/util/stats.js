@@ -11,12 +11,7 @@
 const recordStat = function(basicDB, idServer, totalTime, statusCode, onError) {
     let d = new Date();
     d.setTimezone('UTC');
-    basicDB.Procedure(
-        'recordStat(?,?,?,?)',
-        [idServer, d, totalTime, statusCode],
-        () => {},
-        err => onError(err)
-    );
+    basicDB.Procedure('recordStat(?,?,?,?)', [idServer, d, totalTime, statusCode], () => {}, err => onError(err));
 };
 
 module.exports = {

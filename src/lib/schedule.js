@@ -15,12 +15,7 @@ module.exports = {
             .then(servers => {
                 servers.forEach(server => {
                     if (cron.validate(server.monitoringInterval)) {
-                        logger.debug(
-                            'Server',
-                            server.id,
-                            'scheduled:',
-                            server.monitoringInterval
-                        );
+                        logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
                         serversTasks.push(
                             cron.schedule(server.monitoringInterval, () => {
                                 Status.getServerStatus(server.url, 'HEAD')
@@ -63,12 +58,7 @@ module.exports = {
                             })
                         );
                     } else {
-                        logger.debug(
-                            'Server',
-                            server.id,
-                            'has a bad monitoring interval',
-                            server.monitoringInterval
-                        );
+                        logger.debug('Server', server.id, 'has a bad monitoring interval', server.monitoringInterval);
                     }
                 });
             })

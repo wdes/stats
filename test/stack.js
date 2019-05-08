@@ -84,27 +84,18 @@ module.exports = function() {
                 'Test message\nzd\nza\n',
                 'random\ndata\n',
                 'Èval\n^ëçç\nza\nsde\n',
-                'ab'
+                'ab',
             ]);
             timers.tick('01:00');
             sinon.assert.calledTwice(spyTimer);
-            expect(spyTimer.getCalls()[0].args).to.deep.equal([
-
-            ]);
+            expect(spyTimer.getCalls()[0].args).to.deep.equal([]);
             expect(spy.getCalls()[0].args).to.deep.equal([
-                [
-                    "Test message\nzd\nza\n\n--\nrandom\n",
-                    "data\n\n--\nÈval\n^ëçç\nza\nsde\n\n--\n",
-                    "ab"
-                ]
+                ['Test message\nzd\nza\n\n--\nrandom\n', 'data\n\n--\nÈval\n^ëçç\nza\nsde\n\n--\n', 'ab'],
             ]);
             spy.getCalls()[0].args[0].forEach(arg => {
                 expect(arg.length).to.be.below(31);
             });
-            expect(spy.getCalls()[1].args).to.deep.equal([
-                [
-                ]
-            ]);
+            expect(spy.getCalls()[1].args).to.deep.equal([[]]);
 
             done();
         });
@@ -130,30 +121,25 @@ module.exports = function() {
             stack.addToStack('[Stats] Just a ping.');
             stack.addToStack('[Stats] Just a pong.');
             expect(stack.getTasks()).to.deep.equal([
-                "[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.",
-                "[Stats] A message for you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.",
-                "[Stats] Just a ping.",
-                "[Stats] Just a pong."
+                '[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.',
+                '[Stats] A message for you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.',
+                '[Stats] Just a ping.',
+                '[Stats] Just a pong.',
             ]);
             timers.tick('01:00');
             sinon.assert.calledTwice(spyTimer);
-            expect(spyTimer.getCalls()[0].args).to.deep.equal([
-
-            ]);
+            expect(spyTimer.getCalls()[0].args).to.deep.equal([]);
             expect(spy.getCalls()[0].args).to.deep.equal([
                 [
-                    "[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.\n--\n[Stats] A message f",
-                    "or you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.\n--\n[Stats] Just a ping.\n--\n[Stats] Just a p",
-                    "ong."
-                ]
+                    '[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.\n--\n[Stats] A message f',
+                    'or you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.\n--\n[Stats] Just a ping.\n--\n[Stats] Just a p',
+                    'ong.',
+                ],
             ]);
             spy.getCalls()[0].args[0].forEach(arg => {
                 expect(arg.length).to.be.below(101);
             });
-            expect(spy.getCalls()[1].args).to.deep.equal([
-                [
-                ]
-            ]);
+            expect(spy.getCalls()[1].args).to.deep.equal([[]]);
 
             done();
         });

@@ -13,8 +13,6 @@ module.exports = {
     },
 
     down: (queryInterface, Sequelize) => {
-        return queryInterface.sequelize.query(
-            'DROP PROCEDURE percentageOfStatusCodesByServer'
-        );
+        return queryInterface.sequelize.query('DROP PROCEDURE percentageOfStatusCodesByServer');
     },
 };
