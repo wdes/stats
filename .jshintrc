@@ -15,6 +15,7 @@
         "sequelize": false,
         "Sentry": false,
         "queue": false,
-        "smsQueue": false
+        "smsQueue": false,
+        "emailQueue": false
     }
 }
