@@ -151,13 +151,7 @@ module.exports = {
             },
             messages => {
                 messages.forEach(message => {
-                    sendmail() //TODO: here
-                        .then((response, body) => {
-                            //localLogger.debug(response.statusCode, response.body);
-                        })
-                        .catch(err => {
-                            localLogger.error(err);
-                        });
+                    //TODO: implement email sending
                 });
             }
         );
