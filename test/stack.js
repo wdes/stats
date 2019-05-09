@@ -8,13 +8,15 @@ module.exports = function() {
     suite('stack timers scheduler calls', function() {
         var timers = null;
         var spy = null;
+        var stackTest = null;
         setup(function() {
             timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
                 shouldAdvanceTime: true,
             });
             spy = sinon.spy();
-            stack.init(
+            stackTest = stack();
+            stackTest.init(
                 30,
                 () => {
                     spy();
@@ -23,51 +25,54 @@ module.exports = function() {
             );
         });
 
-        test('cb calls each half second', function(done) {
+        test('cb calls each half second', done => {
             timers.tick('01:00');
             expect(spy.callCount).to.equal(2);
             done();
         });
 
-        test('cb calls each half second on more time', function(done) {
+        test('cb calls each half second on more time', done => {
             timers.tick('04:00');
             expect(spy.callCount).to.equal(8);
             done();
         });
 
-        test('cb calls each half second on some hours', function(done) {
+        test('cb calls each half second on some hours', done => {
             timers.tick('01:00:00');
             expect(spy.callCount).to.equal(120);
             done();
         });
 
         teardown(function() {
-            stack.stop();
+            stackTest.stop();
             sinon.restore();
         });
     });
 
     suite('stack timers', function() {
+        var stackTest = null;
         setup(function() {
-            stack.init(30, () => {}, () => {});
+            stackTest = stack();
+            stackTest.init(30, () => {}, () => {});
         });
 
-        test('add to stack', function(done) {
-            expect(stack.getTasks()).to.deep.equal([]);
-            stack.addToStack('Test message');
-            expect(stack.getTasks()).to.deep.equal(['Test message']);
-            expect(stack.getMaxLength()).to.equal(30);
+        test('add to stack', done => {
+            expect(stackTest.getTasks()).to.deep.equal([]);
+            stackTest.addToStack('Test message');
+            expect(stackTest.getTasks()).to.deep.equal(['Test message']);
+            expect(stackTest.getMaxLength()).to.equal(30);
             done();
         });
 
-        test('Test to group messages', function(done) {
+        test('Test to group messages', done => {
             var spy = sinon.spy();
             var spyTimer = sinon.spy();
             var timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
                 shouldAdvanceTime: true,
             });
-            stack.init(
+            stackTest = stack();
+            stackTest.init(
                 30,
                 () => {
                     spyTimer();
@@ -76,11 +81,11 @@ module.exports = function() {
                     spy(taskMessage);
                 }
             );
-            stack.addToStack('Test message\nzd\nza\n');
-            stack.addToStack('random\ndata\n');
-            stack.addToStack('Èval\n^ëçç\nza\nsde\n');
-            stack.addToStack('ab');
-            expect(stack.getTasks()).to.deep.equal([
+            stackTest.addToStack('Test message\nzd\nza\n');
+            stackTest.addToStack('random\ndata\n');
+            stackTest.addToStack('Èval\n^ëçç\nza\nsde\n');
+            stackTest.addToStack('ab');
+            expect(stackTest.getTasks()).to.deep.equal([
                 'Test message\nzd\nza\n',
                 'random\ndata\n',
                 'Èval\n^ëçç\nza\nsde\n',
@@ -100,14 +105,15 @@ module.exports = function() {
             done();
         });
 
-        test('Test to group messages (dataset: 2)', function(done) {
+        test('Test to group messages (dataset: 2)', done => {
             var spy = sinon.spy();
             var spyTimer = sinon.spy();
             var timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
                 shouldAdvanceTime: true,
             });
-            stack.init(
+            stackTest = stack();
+            stackTest.init(
                 100,
                 () => {
                     spyTimer();
@@ -116,11 +122,11 @@ module.exports = function() {
                     spy(taskMessage);
                 }
             );
-            stack.addToStack('[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.');
-            stack.addToStack('[Stats] A message for you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.');
-            stack.addToStack('[Stats] Just a ping.');
-            stack.addToStack('[Stats] Just a pong.');
-            expect(stack.getTasks()).to.deep.equal([
+            stackTest.addToStack('[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.');
+            stackTest.addToStack('[Stats] A message for you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.');
+            stackTest.addToStack('[Stats] Just a ping.');
+            stackTest.addToStack('[Stats] Just a pong.');
+            expect(stackTest.getTasks()).to.deep.equal([
                 '[Stats] A message for you, server: x is now down.\nAt 01:01:00 YYYY-MM-DD\nBye.',
                 '[Stats] A message for you, server: x is now up.\nAt 01:02:00 YYYY-MM-DD\nBye.',
                 '[Stats] Just a ping.',
@@ -144,13 +150,13 @@ module.exports = function() {
             done();
         });
 
-        test('cron task getter', function(done) {
-            stack.getCronTask().start();
+        test('cron task getter', done => {
+            stackTest.getCronTask().start();
             done();
         });
 
         teardown(function() {
-            stack.stop();
+            stackTest.stop();
             sinon.restore();
         });
     });

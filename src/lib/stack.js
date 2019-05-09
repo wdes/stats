@@ -30,14 +30,16 @@ function chunkSubstr(str, size) {
  * @param {Number} maxLength The max length
  * @param {emptyQueueCallback} emptyQueue
  */
-const emptyAndSendStack = function(tasks, maxLength, emptyQueue) {
+const sendStack = function(tasks, maxLength, emptyQueue) {
     emptyQueue(chunkSubstr(tasks.join('\n--\n'), maxLength));
-    tasks = [];
 };
 
 module.exports = () => {
     var task = null;
 
+    /**
+     * @type {String[]} The tasks
+     */
     var tasks = [];
 
     var _maxLength = 0;
@@ -49,7 +51,8 @@ module.exports = () => {
             _maxLength = maxLength;
             tasks = [];
             task = cron.schedule('*/30 * * * * *', () => {
-                emptyAndSendStack(tasks, maxLength, cbEmptyQueue);
+                sendStack(tasks, maxLength, cbEmptyQueue);
+                tasks = [];
                 cbTickSuccess();
             });
         },
@@ -62,6 +65,6 @@ module.exports = () => {
         getCronTask: () => task,
         getMaxLength: () => _maxLength,
         getTasksCount: () => tasks.length,
-        getTasks: () => tasks.slice(0),
+        getTasks: () => tasks,
     };
 };

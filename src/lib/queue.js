@@ -143,7 +143,8 @@ const getStore = function(groupName) {
 
 module.exports = {
     emailQueue: localLogger => {
-        let emailStack = stack().init(
+        let emailStack = stack();
+        emailStack.init(
             1000,
             () => {
                 //Tick callback
@@ -174,7 +175,8 @@ module.exports = {
         );
     },
     smsQueue: localLogger => {
-        let smsStack = stack().init(
+        let smsStack = stack();
+        smsStack.init(
             1000,
             () => {
                 //Tick callback
