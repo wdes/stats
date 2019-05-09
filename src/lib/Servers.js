@@ -129,4 +129,12 @@ module.exports = {
     ) {
         return sequelize.monitoring__servers.findAll(options);
     },
+    addServer: function(name, url, cron, disabled) {
+        return sequelize.monitoring__servers.create({
+            name: name,
+            url: url,
+            monitoringInterval: cron,
+            disabled: disabled,
+        });
+    },
 };
