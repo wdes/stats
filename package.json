@@ -71,6 +71,7 @@
         "mysql2": "^1.6.5",
         "node-cron": "^2.0.3",
         "node-linux": "^0.1.12",
+        "passport-http": "^0.3.0",
         "path-to-regexp": "^3.0.0",
         "request": "^2.88.0",
         "sequelize": "^5.8.2",
