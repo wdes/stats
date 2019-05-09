@@ -1,0 +1,30 @@
+{% extends 'basic.twig' %}
+{% block title %}Administration - Serveurs | {{ parent() }}{% endblock %}
+{% block body %}
+<div class="col-md-12 mt-4">
+    <table class="table table-hover table-inverse table-responsive">
+        <thead class="thead-inverse">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Cron</th>
+                <th>Disabled ?</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for server in servers %}
+                    <tr>
+                        <td scope="row">{{server.id}}</td>
+                        <td>{{server.name}}</td>
+                        <td>{{server.url}}</td>
+                        <td>{{server.monitoringInterval}}</td>
+                        <td>{{server.disabled}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+    <hr/>
+    <a href="/admin/addserver">Ajouter un serveur</a>
+</div>
+{% endblock %}

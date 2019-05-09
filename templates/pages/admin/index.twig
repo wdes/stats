@@ -1,0 +1,10 @@
+{% extends 'basic.twig' %}
+{% block title %}Administration | {{ parent() }}{% endblock %}
+{% block body %}
+<div class="col-md-12">
+    <ul>
+        <li><a href="/admin/servers">Servers</a></li>
+        <li><a href="/admin/operations">Operations</a></li>
+    </ul>
+</div>
+{% endblock %}

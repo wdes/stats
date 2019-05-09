@@ -1,0 +1,8 @@
+{% extends 'basic.twig' %}
+{% block title %}Queues |{{ parent() }}{% endblock %}
+{% block body %}
+    <div class="col-md-12 mt-4">
+        sms: {{ smsQueueTasksCount }}
+        email: {{ emailQueueTasksCount }}
+    </div>
+{% endblock %}
