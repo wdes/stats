@@ -76,7 +76,7 @@
         "sequelize": "^5.8.2",
         "sequelize-cli": "^5.4.0",
         "time": "^0.12.0",
-        "twig": "^1.13.2",
+        "twig": "^1.13.3",
         "vhost": "^3.0.2"
     },
     "devDependencies": {
