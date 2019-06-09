@@ -2,9 +2,11 @@
 {% block title %}Administration | {{ parent() }}{% endblock %}
 {% block body %}
 <div class="col-md-12">
+    <h2>Hello @{{username}}</h2>
     <ul>
         <li><a href="/admin/servers">Servers</a></li>
         <li><a href="/admin/operations">Operations</a></li>
+        <li><a href="/logout">Logout</a></li>
     </ul>
 </div>
 {% endblock %}

@@ -3,12 +3,12 @@
     {{ parent() }}
 {% endblock %}
 {% block body %}
-    {% for message in messages %}
-        <div class="alert alert-{{message.level}}" role="alert">{{message.message}}</div>
-    {% endfor %}
     <div class="container">
         <div class="mt-4">
-            <div class="card">
+            {% for message in messages %}
+                <div class="alert alert-{{message.level}}" role="alert">{{message.message}}</div>
+            {% endfor %}
+            <div class="card mt-2">
                 <div class="card-body">
                     <a href="/auth/github">Login with GitHub</a>
                 </div>
