@@ -3,6 +3,7 @@
 const packageJson = require('@root/package.json');
 const express = require('express');
 const path = require('path');
+const githubAuth = require('@src/middlewares/github-auth');
 global.joi = require('joi');
 global.app = express();
 global.Sentry = require('@sentry/node');
@@ -66,6 +67,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require('vhost')(process.env.APIDOCS_DOMAIN, express.static(__dirname + '/../apidocs')));
 app.use(express.static(__dirname + '/../public'));
+app.use(githubAuth.passport.initialize());
+
+app.use(
+    require('cookie-session')({
+        name: 'session',
+        keys: [process.env.COOKIE_SECRET],
+
+        // Cookie Options
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    })
+);
 
 require('glob')
     .sync(__dirname + '/../src/pages/**/*.js')
