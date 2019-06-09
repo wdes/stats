@@ -129,6 +129,13 @@ module.exports = {
     ) {
         return sequelize.monitoring__servers.findAll(options);
     },
+    countServers: function(
+        options = {
+            where: { disabled: 0 },
+        }
+    ) {
+        return sequelize.monitoring__servers.count(options);
+    },
     addServer: function(name, url, cron, disabled) {
         return sequelize.monitoring__servers.create({
             name: name,
