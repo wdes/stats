@@ -29,10 +29,23 @@ const isAuthenticated = (req, res, next) => {
         if (githubUsers.indexOf(req.session.githubUsername) !== -1) {
             return next();
         } else {
-            return next(new Error('Not admin.'));
+            req.session.messages = [
+                {
+                    message: 'Not admin.',
+                    level: 'danger',
+                },
+            ];
+            return res.redirect('/login');
         }
     } else {
-        res.redirect('/?status=notauth');
+        req.session.fromPath = req.url !== '/login' ? req.url : '/';
+        req.session.messages = [
+            {
+                message: 'Not connected.',
+                level: 'warning',
+            },
+        ];
+        return res.redirect('/login');
     }
 };
 

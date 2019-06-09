@@ -79,6 +79,8 @@ app.use(
     })
 );
 
+app.all('/admin/*', githubAuth.isAuthenticated);
+
 require('glob')
     .sync(__dirname + '/../src/pages/**/*.js')
     .forEach(function(file) {
