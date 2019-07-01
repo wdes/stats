@@ -64,7 +64,7 @@
         "errorhandler": "^1.5.1",
         "express": "^4.17.1",
         "joi": "^14.3.1",
-        "log4js": "^4.3.1",
+        "log4js": "^4.4.0",
         "module-alias": "^2.2.0",
         "mysql2": "^1.6.5",
         "node-cron": "^2.0.3",
