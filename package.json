@@ -1,121 +1,125 @@
 {
-    "name": "wdes-stats",
-    "repository": "wdes/wdes-stats",
-    "version": "1.0.0",
-    "description": "The api of WdesStats",
-    "main": "server.js",
-    "private": true,
-    "readme": "https://gitlab.com/wdes/wdes-stats#readme",
-    "nyc": {
-        "exclude": [
-            "apidocs",
-            "db/migrations",
-            "test",
-            "config",
-            "coverage",
-            ".nyc_output"
-        ],
-        "reporter": [
-            "text",
-            "text-summary"
-        ]
-    },
-    "scripts": {
-        "changelog": "changelog-generator-twig --owner wdes --repo changelog --repoDir ./ --baseCommit 16179d5a534b34f29915590c8e75579b547ebb4a",
-        "changelog-file": "npm run --silent changelog > CHANGELOG.md",
-        "apidoc": "apidoc --input src/ --output apidocs --private false",
-        "apidoc:private": "apidoc --input src/ --output apidocs --private true",
-        "test": "nyc --all mocha --ui tdd --exit",
-        "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
-        "migrate:production": "sequelize db:migrate --env production",
-        "migrate:test": "sequelize db:migrate --env test",
-        "migrate:development": "sequelize db:migrate --env development",
-        "migrate:production:reset": "sequelize db:migrate:undo:all --env production",
-        "migrate:test:reset": "sequelize db:migrate:undo:all --env test",
-        "migrate:development:reset": "sequelize db:migrate:undo:all --env development",
-        "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.js\" \"*.js\"",
-        "jshint": "jshint ./",
-        "install:service": "node service.js",
-        "start": "NODE_ENV=production node server.js",
-        "start:dev": "NODE_ENV=development node server.js",
-        "start:test": "NODE_ENV=test node server.js",
-        "service:start": "service wdesmenu start",
-        "service:stop": "service wdesmenu stop",
-        "heroku-prebuild": "echo 'Heroku pre build !'",
-        "heroku-postbuild": "npm run migrate:production",
-        "postinstall": "npm run apidoc",
-        "sentry-sync-commits": "VERSION=$(node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
-    },
-    "keywords": [
-        "api"
+  "name": "wdes-stats",
+  "repository": "wdes/wdes-stats",
+  "version": "1.0.0",
+  "description": "The api of WdesStats",
+  "main": "server.js",
+  "private": true,
+  "readme": "https://gitlab.com/wdes/wdes-stats#readme",
+  "nyc": {
+    "exclude": [
+      "apidocs",
+      "db/migrations",
+      "test",
+      "config",
+      "coverage",
+      ".nyc_output"
     ],
-    "license": "MPL-2.0",
-    "bugs": {
-        "url": "https://gitlab.com/wdes/wdes-stats/issues"
-    },
-    "homepage": "https://gitlab.com/wdes/wdes-stats#readme",
-    "dependencies": {
-        "@sentry/node": "^5.4.3",
-        "better-queue": "^3.8.10",
-        "body-parser": "^1.19.0",
-        "cluster": "^0.7.7",
-        "cookie-session": "^1.3.3",
-        "dotenv": "^8.0.0",
-        "errorhandler": "^1.5.1",
-        "express": "^4.17.1",
-        "joi": "^14.3.1",
-        "log4js": "^4.4.0",
-        "module-alias": "^2.2.0",
-        "mysql2": "^1.6.5",
-        "node-cron": "^2.0.3",
-        "node-linux": "^0.1.12",
-        "passport": "^0.4.0",
-        "passport-github": "^1.1.0",
-        "path-to-regexp": "^3.0.0",
-        "request": "^2.88.0",
-        "sequelize": "^5.9.0",
-        "sequelize-cli": "^5.5.0",
-        "time": "^0.12.0",
-        "twig": "^1.13.3",
-        "vhost": "^3.0.2"
-    },
-    "devDependencies": {
-        "@sentry/cli": "^1.46.0",
-        "apidoc": "^0.17.7",
-        "chai": "^4.2.0",
-        "changelog-generator-twig": "^1.2.0",
-        "jshint": "^2.10.2",
-        "mocha": "^6.1.4",
-        "nyc": "^14.1.1",
-        "prettier": "^1.18.2",
-        "sinon": "^7.3.2"
-    },
-    "prettier": {
-        "singleQuote": true,
-        "proseWrap": "never",
-        "trailingComma": "es5",
-        "bracketSpacing": true,
-        "printWidth": 120
-    },
-    "engines": {
-        "node": "10.10.x"
-    },
-    "apidoc": {
-        "title": "WdesStats",
-        "url": "https://wdes-stats.wdes.eu"
-    },
-    "_moduleAliases": {
-        "@lib": "src/lib",
-        "@static": "src/static",
-        "@util": "src/util",
-        "@api": "src/api",
-        "@src": "src",
-        "@test": "test",
-        "@middlewares": "src/middlewares",
-        "@root": "./",
-        "@templates": "templates",
-        "@db": "db",
-        "@models": "db/models",
-        "@config": "config"
-    }
+    "reporter": [
+      "text",
+      "text-summary"
+    ]
+  },
+  "scripts": {
+    "changelog": "changelog-generator-twig --owner wdes --repo changelog --repoDir ./ --baseCommit 16179d5a534b34f29915590c8e75579b547ebb4a",
+    "changelog-file": "npm run --silent changelog > CHANGELOG.md",
+    "apidoc": "apidoc --input src/ --output apidocs --private false",
+    "apidoc:private": "apidoc --input src/ --output apidocs --private true",
+    "test": "nyc --all mocha --ui tdd --exit",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
+    "migrate:production": "sequelize db:migrate --env production",
+    "migrate:test": "sequelize db:migrate --env test",
+    "migrate:development": "sequelize db:migrate --env development",
+    "migrate:production:reset": "sequelize db:migrate:undo:all --env production",
+    "migrate:test:reset": "sequelize db:migrate:undo:all --env test",
+    "migrate:development:reset": "sequelize db:migrate:undo:all --env development",
+    "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.js\" \"*.js\"",
+    "jshint": "jshint ./",
+    "install:service": "node service.js",
+    "start": "NODE_ENV=production node server.js",
+    "start:dev": "NODE_ENV=development node server.js",
+    "start:test": "NODE_ENV=test node server.js",
+    "service:start": "service wdesmenu start",
+    "service:stop": "service wdesmenu stop",
+    "heroku-prebuild": "echo 'Heroku pre build !'",
+    "heroku-postbuild": "npm run migrate:production",
+    "postinstall": "npm run apidoc",
+    "sentry-sync-commits": "VERSION=$(node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "keywords": [
+    "api"
+  ],
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://gitlab.com/wdes/wdes-stats/issues"
+  },
+  "homepage": "https://gitlab.com/wdes/wdes-stats#readme",
+  "dependencies": {
+    "@sentry/node": "^5.4.3",
+    "better-queue": "^3.8.10",
+    "body-parser": "^1.19.0",
+    "cluster": "^0.7.7",
+    "cookie-session": "^1.3.3",
+    "dotenv": "^8.0.0",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "joi": "^14.3.1",
+    "log4js": "^4.4.0",
+    "module-alias": "^2.2.0",
+    "mysql2": "^1.6.5",
+    "node-cron": "^2.0.3",
+    "node-linux": "^0.1.12",
+    "passport": "^0.4.0",
+    "passport-github": "^1.1.0",
+    "path-to-regexp": "^3.0.0",
+    "request": "^2.88.0",
+    "sequelize": "^5.9.0",
+    "sequelize-cli": "^5.5.0",
+    "time": "^0.12.0",
+    "twig": "^1.13.3",
+    "vhost": "^3.0.2",
+    "snyk": "^1.189.0"
+  },
+  "devDependencies": {
+    "@sentry/cli": "^1.46.0",
+    "apidoc": "^0.17.7",
+    "chai": "^4.2.0",
+    "changelog-generator-twig": "^1.2.0",
+    "jshint": "^2.10.2",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "prettier": "^1.18.2",
+    "sinon": "^7.3.2"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "proseWrap": "never",
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "printWidth": 120
+  },
+  "engines": {
+    "node": "10.10.x"
+  },
+  "apidoc": {
+    "title": "WdesStats",
+    "url": "https://wdes-stats.wdes.eu"
+  },
+  "_moduleAliases": {
+    "@lib": "src/lib",
+    "@static": "src/static",
+    "@util": "src/util",
+    "@api": "src/api",
+    "@src": "src",
+    "@test": "test",
+    "@middlewares": "src/middlewares",
+    "@root": "./",
+    "@templates": "templates",
+    "@db": "db",
+    "@models": "db/models",
+    "@config": "config"
+  },
+  "snyk": true
 }
