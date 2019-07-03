@@ -9,3 +9,15 @@ app.get('/admin/servers', (req, res, next) => {
         });
     });
 });
+
+app.post('/admin/servers/enable', (req, res, next) => {
+    Servers.setDisabled(req.body.id, false).then(() => {
+        res.redirect('/admin/servers');
+    });
+});
+
+app.post('/admin/servers/disable', (req, res, next) => {
+    Servers.setDisabled(req.body.id, true).then(() => {
+        res.redirect('/admin/servers');
+    });
+});

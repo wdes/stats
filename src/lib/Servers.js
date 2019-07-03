@@ -144,4 +144,10 @@ module.exports = {
             disabled: disabled,
         });
     },
+    setDisabled: function(id, disabled) {
+        return sequelize.monitoring__servers.update({
+            disabled: disabled,
+        },
+        { where: { id: id } });
+    },
 };
