@@ -2,15 +2,28 @@
 
 const UA_STRING = 'Mozilla/5.0 (compatible; wdes-stats bot; +https://wdes-stats.wdes.eu)';
 const U_EMAIL = 'williamdes@wdes.fr';
-const request = require('request');
+import * as request from 'request';
+
+export interface ServerStatRecord {
+    id: number;
+    name: string;
+    url: string;
+    statusCode: number;
+    times?: {
+        wait: number;
+        dns: number;
+        tcp: number;
+        firstByte: number;
+        download: number;
+        total: number;
+    };
+}
 
 /**
  * Get the server status
- * @param {object} server The server object
- * @param {string} method The HTTP method
  */
-const getServerStatus = function(server, method = 'HEAD') {
-    return new Promise((resolve, reject) => {
+const getServerStatus = function(server, method: string = 'HEAD') {
+    return new Promise((resolve: (data: ServerStatRecord) => void, reject) => {
         request(
             server.url,
             {
@@ -50,7 +63,7 @@ const getServerStatus = function(server, method = 'HEAD') {
  * @param {function} cbSuccess On success of all requests
  */
 const getServersStatus = function(servers, cbSuccess) {
-    var status = [];
+    var status: Promise<ServerStatRecord>[] = [];
     for (var server in servers) {
         status.push(getServerStatus(servers[server]));
     }

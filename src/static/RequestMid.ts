@@ -1,6 +1,12 @@
 'use strict';
 
-const pathToRegexp = require('path-to-regexp');
+import sequelize from '@static/sequelize';
+import logger from '@util/logger';
+import * as Sentry from '@sentry/node';
+import { QueryTypes } from 'sequelize';
+import { Request, Response } from 'express';
+
+import * as pathToRegexp from 'path-to-regexp';
 const RequestMid = {
     tokenExists: function(token, onSuccess, onError) {
         if (token.length > 32) {
@@ -10,7 +16,7 @@ const RequestMid = {
         sequelize.sequelize
             .query('SELECT tokenExists(?) as `tokenExists`;', {
                 replacements: [token],
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 plain: true,
             })
             .then(function(data) {
@@ -30,12 +36,12 @@ const RequestMid = {
         sequelize.sequelize
             .query('SELECT hasPermission(?,?) as `hasPermission`;', {
                 replacements: [token, scope],
-                type: sequelize.QueryTypes.SELECT,
+                type: QueryTypes.SELECT,
                 plain: true,
             })
             .then(function(data) {
                 if (data.hasPermission === 1) {
-                    req._token.valid = true;
+                    req.params._token.valid = true;
                     onSuccess();
                 } else {
                     onError(498);
@@ -47,7 +53,7 @@ const RequestMid = {
                 onError(500);
             });
     },
-    tokenMid: function(req, res, next) {
+    tokenMid: function(req: Request, res: Response, next: Function) {
         //logger.debug("Start check.");
         var token = req.body.token || req.query.token || req.headers.authorization;
         if (!token) {
@@ -55,7 +61,7 @@ const RequestMid = {
         } else {
             token = token.replace('Bearer ', '');
         }
-        req._token = { token: token };
+        req.params._token = { token: token };
 
         var keys = [];
         var re = pathToRegexp('/api/:version(\\d+)/:section/:action*', keys);
@@ -109,4 +115,4 @@ const RequestMid = {
         );
     },
 };
-module.exports = RequestMid;
+export default RequestMid;

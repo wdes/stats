@@ -4,37 +4,34 @@ require('dotenv').config({ path: __dirname + '/../.env' });
 require('module-alias/register');
 
 // Include the cluster module
-global.cluster = require('cluster');
-const log4js = require('log4js');
+import * as cluster from 'cluster';
+import * as log4js from 'log4js';
+import { cpus } from 'os';
 log4js.configure({
     appenders: {
         out: { type: 'stdout' },
     },
     categories: { default: { appenders: ['out'], level: 'debug' } },
 });
-let serverLogger = log4js.getLogger('server');
-let queueLib = require('@lib/queue');
-global.sequelize = require('@static/sequelize')(serverLogger);
-global.smsQueue = queueLib.smsQueue(serverLogger);
-global.emailQueue = queueLib.emailQueue(serverLogger);
-const schedule = require('@lib/schedule');
+
+import schedule from '@lib/schedule';
 
 var restartWorkers = true;
-let logger; // jshint ignore:line
 
-var workers = [];
+var workers: cluster.Worker[] = [];
 
 if (cluster.isMaster) {
     // Code to run if we're in the master process
     process.title = 'M:WdesStats';
+    let logger = log4js.getLogger('server');
     var stdin = process.openStdin();
     const stopServer = function(allowRestart = false) {
         logger.debug('Received stop command !');
         restartWorkers = allowRestart;
         for (var workerId in cluster.workers) {
-            if (cluster.workers[workerId].isDead() === false) {
+            if (cluster.workers[workerId]!.isDead() === false) {
                 try {
-                    cluster.workers[workerId].send({
+                    cluster.workers[workerId]!.send({
                         type: 'appStop',
                     });
                     //cluster.workers[workerId].kill();
@@ -67,8 +64,7 @@ if (cluster.isMaster) {
         }
     });
     logger = log4js.getLogger('master');
-    var cpuCount = require('os').cpus().length;
-    for (var i = 0; i < cpuCount; i++) {
+    for (var i = 0; i < cpus().length; i++) {
         var thread = cluster.fork();
         workers.push(thread);
     }
@@ -99,12 +95,9 @@ if (cluster.isMaster) {
         }
     });
     logger.info('master is done', process.pid);
-    schedule.init(logger, smsQueue);
-    return;
+    schedule.init();
 } else if (cluster.isWorker) {
     process.title = 'W' + cluster.worker.id + ':WdesStats';
-    logger = log4js.getLogger('api [' + cluster.worker.id + ']');
-    global.logger = logger;
     //Workers code
     require('@src/main');
 }

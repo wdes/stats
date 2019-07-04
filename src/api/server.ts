@@ -1,8 +1,9 @@
 'use strict';
 
-const Servers = require('@lib/Servers');
-
-const serverExists = require('@middlewares/serverExists');
+import Servers from '@lib/Servers';
+import app from '@static/Express';
+import { Request, Response } from 'express';
+import serverExists from '@middlewares/serverExists';
 
 /**
  * @api {get} /api/01/server/lastStatusCode Get last status code
@@ -16,7 +17,11 @@ const serverExists = require('@middlewares/serverExists');
  *      "statusCode": 200
  *    }
  */
-app.get('/api/10/server/lastStatusCode', serverExists('query', 'id'), function(req, res, next) {
+app.get('/api/10/server/lastStatusCode', serverExists('query', 'id'), function(
+    req: Request,
+    res: Response,
+    next: Function
+) {
     Servers.lastStatusCode(req.query.id)
         .then(statusCode => {
             res.send({ statusCode: statusCode });

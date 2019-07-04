@@ -1,12 +1,16 @@
 'use strict';
 
-module.exports = {
-    lastStatusCode: function(serverId) {
+import sequelize from '@static/sequelize';
+import { QueryTypes } from 'sequelize';
+import MonitoringServers from '@models/monitoring__servers';
+
+export default {
+    lastStatusCode: function(serverId: number) {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('SELECT getLastStatusCode(?) as `lastStatusCode`;', {
                     replacements: [serverId],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                     plain: true,
                 })
                 .then(function(data) {
@@ -19,10 +23,10 @@ module.exports = {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL getMonitoringAvgTimes();', {
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 })
                 .then(function(data) {
-                    var serversTimes = [];
+                    var serversTimes: object[] = [];
                     for (var key in data[0]) {
                         let element = data[0][key];
                         let server = {
@@ -39,15 +43,15 @@ module.exports = {
                 .catch(err => reject(err));
         });
     },
-    getMonitoringTimes: function(serverId) {
+    getMonitoringTimes: function(serverId: number) {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL getMonitoringTimes(?);', {
                     replacements: [serverId],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 })
                 .then(function(data) {
-                    const timesByDate = [];
+                    const timesByDate: object[] = [];
                     for (var key in data[0]) {
                         let element = data[0][key];
                         timesByDate.push({
@@ -60,15 +64,15 @@ module.exports = {
                 .catch(err => reject(err));
         });
     },
-    percentageOfStatusCodesByServer: function(serverId) {
+    percentageOfStatusCodesByServer: function(serverId: number) {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL percentageOfStatusCodesByServer(?);', {
                     replacements: [serverId],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                 })
                 .then(function(data) {
-                    const percentagesByCodes = [];
+                    const percentagesByCodes: object[] = [];
                     for (var key in data[0]) {
                         let element = data[0][key];
                         percentagesByCodes.push({
@@ -81,12 +85,12 @@ module.exports = {
                 .catch(err => reject(err));
         });
     },
-    serverExists: function(serverId) {
+    serverExists: function(serverId: number) {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('SELECT serverExists(?) as `exists`;', {
                     replacements: [serverId],
-                    type: sequelize.QueryTypes.SELECT,
+                    type: QueryTypes.SELECT,
                     plain: true,
                 })
                 .then(function(data) {
@@ -95,7 +99,7 @@ module.exports = {
                 .catch(err => reject(err));
         });
     },
-    recordStat: function(serverId, tstamp, totalTime, statusCodeIN) {
+    recordStat: function(serverId: number, tstamp: number, totalTime: number, statusCodeIN: number) {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL recordStat(?, FROM_UNIXTIME(?), ?, ?);', {
@@ -127,17 +131,17 @@ module.exports = {
             raw: true,
         }
     ) {
-        return sequelize.monitoring__servers.findAll(options);
+        return MonitoringServers.findAll(options);
     },
     countServers: function(
         options = {
             where: { disabled: 0 },
         }
     ) {
-        return sequelize.monitoring__servers.count(options);
+        return MonitoringServers.count(options);
     },
     addServer: function(name, url, cron, disabled) {
-        return sequelize.monitoring__servers.create({
+        return MonitoringServers.create({
             name: name,
             url: url,
             monitoringInterval: cron,
@@ -145,9 +149,11 @@ module.exports = {
         });
     },
     setDisabled: function(id, disabled) {
-        return sequelize.monitoring__servers.update({
-            disabled: disabled,
-        },
-        { where: { id: id } });
+        return MonitoringServers.update(
+            {
+                disabled: disabled,
+            },
+            { where: { id: id } }
+        );
     },
 };

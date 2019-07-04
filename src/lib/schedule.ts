@@ -1,27 +1,28 @@
 'use strict';
 
-const Servers = require('@lib/Servers');
-const Status = require('@lib/Status');
-const Sms = require('@lib/Sms');
-const cron = require('node-cron');
-const serversTasks = [];
+import Servers from '@lib/Servers';
+import Status from '@lib/Status';
+import Sms from '@lib/Sms';
+import logger from '@util/logger';
+import smsQueue from '@static/smsQueue';
+import { ScheduledTask, validate, schedule } from 'node-cron';
+const serversTasks: ScheduledTask[] = [];
 
 /**
  * Request and record a stat for a server
- * @param {Logger} logger The log4js instance
  * @param {Server} server The server object
  * @return {void}
  */
-const recordStatForServer = function(logger, server) {
+const recordStatForServer = function(server) {
     Status.getServerStatus(server.url, 'HEAD')
-        .then((response, body) => {
+        .then(data => {
             Servers.recordStat(
                 server.id,
-                parseInt(new Date().getTime() / 1000),
-                response.timingPhases.total,
-                response.statusCode
+                new Date().getTime() / 1000,
+                data.response.timingPhases!.total,
+                data.response.statusCode
             )
-                .then(dataChanged => {
+                .then((dataChanged: any) => {
                     if (dataChanged && dataChanged.name && dataChanged.name === 'STATUS_CHANGED') {
                         logger.warn(smsQueue.getStats());
                         smsQueue
@@ -50,16 +51,15 @@ const recordStatForServer = function(logger, server) {
 
 /**
  * Schedule a server
- * @param {Logger} logger The log4js instance
  * @param {Server} server The server object
  * @return {void}
  */
-const scheduleServer = function(logger, server) {
-    if (cron.validate(server.monitoringInterval)) {
+const scheduleServer = function(server) {
+    if (validate(server.monitoringInterval)) {
         logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
         serversTasks.push(
-            cron.schedule(server.monitoringInterval, () => {
-                recordStatForServer(logger, server);
+            schedule(server.monitoringInterval, () => {
+                recordStatForServer(server);
             })
         );
     } else {
@@ -67,15 +67,12 @@ const scheduleServer = function(logger, server) {
     }
 };
 
-module.exports = {
-    init: (logger, smsQueue) => {
-        //smsQueue.push('Démarrage du worker n°'+cluster.worker.id);
-        //emailQueue.push('Démarrage du worker n°'+cluster.worker.id);
-        //queue.push('Démarrage du worker n°'+cluster.worker.id);
+export default {
+    init: () => {
         Servers.listServers()
             .then(servers => {
                 servers.forEach(server => {
-                    scheduleServer(logger, server);
+                    scheduleServer(server);
                 });
             })
             .catch(err => {

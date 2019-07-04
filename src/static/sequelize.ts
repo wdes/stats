@@ -1,41 +1,26 @@
 'use strict';
 
-const Sequelize = require('sequelize');
-const env = process.env.NODE_ENV;
-const config = require('@config/db')[env];
+import config from '@config/db';
+import logger from '@util/logger';
+import { Sequelize } from 'sequelize';
 
-module.exports = logger => {
-    if (env !== 'production') {
-        config.logging = msg => logger.debug(msg);
-        config.logging = false;
-    } else {
-        config.logging = false;
-    }
-    const sequelizeInstance = new Sequelize(config);
+const env = process.env.NODE_ENV || '';
+const dbConfig = config[env];
+if (env !== 'production') {
+    dbConfig.logging = msg => logger.debug(msg);
+    dbConfig.logging = false;
+} else {
+    dbConfig.logging = false;
+}
 
-    const sequelizerc = require('@root/.sequelizerc');
+const sequelizeInstance = new Sequelize(dbConfig);
 
-    const models = {};
-
-    require('glob')
-        .sync(sequelizerc['models-path'] + '/**/*.js')
-        .forEach(file => {
-            //logger.info("Loaded : "+file);
-            var model = sequelizeInstance['import'](file);
-            models[model.name] = model;
-        });
-
-    Object.keys(models).forEach(modelName => {
-        if (models[modelName].associate) {
-            models[modelName].associate(models);
-        }
-    });
-    return Object.assign(
-        {
-            sequelize: sequelizeInstance,
-            Sequelize: Sequelize,
-            QueryTypes: sequelizeInstance.QueryTypes,
-        },
-        models
-    );
+const sq: {
+    sequelize: Sequelize;
+    Sequelize: any;
+} = {
+    sequelize: sequelizeInstance,
+    Sequelize: Sequelize,
 };
+
+export default sq;

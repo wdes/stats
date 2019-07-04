@@ -1,6 +1,6 @@
 'use strict';
 
-const cron = require('node-cron');
+import * as cron from 'node-cron';
 
 /**
  * Chunk a string
@@ -34,19 +34,19 @@ const sendStack = function(tasks, maxLength, emptyQueue) {
     emptyQueue(chunkSubstr(tasks.join('\n--\n'), maxLength));
 };
 
-module.exports = () => {
-    var task = null;
+export default () => {
+    var task: cron.ScheduledTask;
 
     /**
-     * @type {String[]} The tasks
+     * @var {string[]} tasks The tasks
      */
-    var tasks = [];
+    var tasks: string[] = [];
 
     var _maxLength = 0;
 
     return {
         chunkSubstr: chunkSubstr,
-        addToStack: message => tasks.push(message),
+        addToStack: (message: string) => tasks.push(message),
         init: (maxLength, cbTickSuccess, cbEmptyQueue) => {
             _maxLength = maxLength;
             tasks = [];

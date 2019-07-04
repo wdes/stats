@@ -1,9 +1,10 @@
 'use strict';
 
-const Servers = require('@lib/Servers');
+import Servers from '@lib/Servers';
+import { Request, Response } from 'express';
 
-module.exports = (type, key) => {
-    return (req, res, next) => {
+export default (type, key) => {
+    return (req: Request, res: Response, next: Function) => {
         Servers.serverExists(req[type][key])
             .then(exists => {
                 if (exists) {

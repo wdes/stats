@@ -1,13 +1,20 @@
 'use strict';
 
+import { Request, Response } from 'express';
+import * as joi from 'joi';
+
 /**
  * Default Validation Callback.
- * @param req {Object} request
- * @param res {Object} response
- * @param next {Function} next function
+ * @param {Object} req request
+ * @param {Object} res response
+ * @param {Function} next next function
  * @returns {Function}
  */
-const validationCallback = function(req, res, next) {
+function validationCallback(
+    req: Request,
+    res: Response,
+    next: Function
+): (error: joi.ValidationError, value: any) => void {
     return (err, value) => {
         // Check if error
         if (err) {
@@ -23,16 +30,15 @@ const validationCallback = function(req, res, next) {
             return;
         }
     };
-};
+}
 
 /**
  * Middleware function.
- * @param schema {Object} Schema to validate
- * @param joi {Object} Joi library
+ * @param {Object} schema Schema to validate
  * @returns {Function}
  */
-function middleware(schema, joi) {
-    return (req, res, next) => {
+function middleware(schema): (req: Request, res: Response, next: Function) => void {
+    return (req: Request, res: Response, next: Function) => {
         const objectToValidate = {};
         ['params', 'body', 'query', 'headers'].forEach(key => {
             if (schema[key]) {
@@ -44,6 +50,4 @@ function middleware(schema, joi) {
     };
 }
 
-module.exports = function(joi) {
-    return schema => middleware(schema, joi);
-};
+export default schema => middleware(schema);

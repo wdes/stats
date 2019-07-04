@@ -1,39 +1,39 @@
 'use strict';
 
-const Queue = require('better-queue');
-const crypto = require('crypto');
-const Sms = require('@lib/Sms');
-const stack = require('@lib/stack');
+import * as BetterQueue from 'better-queue';
+import { randomBytes } from 'crypto';
+import Sms from '@lib/Sms';
+import stack from '@lib/stack';
+import Queue from '@models/queue';
+import logger from '@util/logger';
 
 const takeNextN = function(first, groupName) {
     return function(n, cb) {
         //(error: any, lockId: string)
-        sequelize.queue
-            .findAll({
-                where: {
-                    lock: '',
-                    groupName: groupName,
-                },
-                order: [['priority', 'DESC'], ['added', first ? 'ASC' : 'DESC']],
-                limit: n,
-                attributes: ['id'],
-            })
+        Queue.findAll({
+            where: {
+                lock: '',
+                groupName: groupName,
+            },
+            order: [['priority', 'DESC'], ['added', first ? 'ASC' : 'DESC']],
+            limit: n,
+            attributes: ['id'],
+        })
             .then(ids => {
-                let lockId = crypto.randomBytes(16).toString('hex');
-                sequelize.queue
-                    .update(
-                        {
-                            lock: lockId,
+                let lockId = randomBytes(16).toString('hex');
+                Queue.update(
+                    {
+                        lock: lockId,
+                    },
+                    {
+                        where: {
+                            lock: '',
+                            groupName: groupName,
+                            id: ids.map(ids => ids.id),
                         },
-                        {
-                            where: {
-                                lock: '',
-                                groupName: groupName,
-                                id: ids.map(ids => ids.id),
-                            },
-                            fields: ['lock'],
-                        }
-                    )
+                        fields: ['lock'],
+                    }
+                )
                     .then(infos => {
                         // affectedCount, affectedRows
                         cb(null, infos[0] > 0 ? lockId : '');
@@ -48,12 +48,11 @@ const getStore = function(groupName) {
     return {
         connect: cb => {
             //connect(cb: (error: any, length: number) => void): void;
-            sequelize.queue
-                .count({
-                    where: {
-                        groupName: groupName,
-                    },
-                })
+            Queue.count({
+                where: {
+                    groupName: groupName,
+                },
+            })
                 .then(c => {
                     cb(null, c);
                 })
@@ -61,11 +60,10 @@ const getStore = function(groupName) {
         },
         getTask: (taskId, cb) => {
             //getTask(taskId: any, cb: (error: any, task: T) => void): void;
-            sequelize.queue
-                .findOne({
-                    where: { id: taskId, groupName: groupName },
-                    attributes: ['task'],
-                })
+            Queue.findOne({
+                where: { id: taskId, groupName: groupName },
+                attributes: ['task'],
+            })
                 .then(task => {
                     cb(null, JSON.parse(task.task));
                 })
@@ -73,14 +71,13 @@ const getStore = function(groupName) {
         },
         putTask: (taskId, task, priority, cb) => {
             //putTask(taskId: any, task: T, priority: number, cb: (error: any) => void): void;
-            sequelize.queue
-                .create({
-                    id: taskId,
-                    task: JSON.stringify(task),
-                    priority: priority || 1,
-                    lock: '',
-                    groupName: groupName,
-                })
+            Queue.create({
+                id: taskId,
+                task: JSON.stringify(task),
+                priority: priority || 1,
+                lock: '',
+                groupName: groupName,
+            })
                 .then(() => {
                     cb(null);
                 })
@@ -90,8 +87,7 @@ const getStore = function(groupName) {
         takeLastN: takeNextN(false, groupName), //takeLastN(n: number, cb: (error: any, lockId: string) => void): void;
         deleteTask: (taskId, cb) => {
             //deleteTask(taskId: any, cb: () => void): void;
-            sequelize.queue
-                .destroy({ where: { id: taskId, groupName: groupName } })
+            Queue.destroy({ where: { id: taskId, groupName: groupName } })
                 .then(() => {
                     cb(null);
                 })
@@ -99,8 +95,7 @@ const getStore = function(groupName) {
         },
         getLock: (lockId, cb) => {
             //getLock(lockId: string, cb: (error: any, tasks: { [taskId: string]: T }) => void): void;
-            sequelize.queue
-                .findAll({ where: { lock: lockId, groupName: groupName } })
+            Queue.findAll({ where: { lock: lockId, groupName: groupName } })
                 .then(rows => {
                     var tasks = {};
                     rows.forEach(function(row) {
@@ -112,19 +107,17 @@ const getStore = function(groupName) {
         },
         releaseLock: (lockId, cb) => {
             //releaseLock(lockId: string, cb: (error: any) => void): void;
-            sequelize.queue
-                .destroy({ where: { lock: lockId, groupName: groupName } })
+            Queue.destroy({ where: { lock: lockId, groupName: groupName } })
                 .then(() => {
                     cb(null);
                 })
                 .catch(cb);
         },
         getRunningTasks: function(cb) {
-            sequelize.queue
-                .findAll({
-                    attributes: ['id', 'task', 'lock'],
-                    where: { groupName: groupName },
-                })
+            Queue.findAll({
+                attributes: ['id', 'task', 'lock'],
+                where: { groupName: groupName },
+            })
                 .then(function(rows) {
                     var tasks = {};
                     rows.forEach(function(row) {
@@ -141,8 +134,8 @@ const getStore = function(groupName) {
     };
 };
 
-module.exports = {
-    emailQueue: localLogger => {
+export default {
+    emailQueue: () => {
         let emailStack = stack();
         emailStack.init(
             1000,
@@ -155,7 +148,7 @@ module.exports = {
                 });
             }
         );
-        return new Queue(
+        return new BetterQueue(
             (input, cb) => {
                 emailStack.addToStack(input);
                 cb(null, {});
@@ -168,7 +161,7 @@ module.exports = {
             }
         );
     },
-    smsQueue: localLogger => {
+    smsQueue: () => {
         let smsStack = stack();
         smsStack.init(
             1000,
@@ -178,16 +171,16 @@ module.exports = {
             messages => {
                 messages.forEach(message => {
                     Sms.sendSms(message)
-                        .then((response, body) => {
-                            //localLogger.debug(response.statusCode, response.body);
+                        .then(data => {
+                            //localLogger.debug(data.response.statusCode, data.response.body);
                         })
                         .catch(err => {
-                            localLogger.error(err);
+                            logger.error(err);
                         });
                 });
             }
         );
-        return new Queue(
+        return new BetterQueue(
             (input, cb) => {
                 smsStack.addToStack(input);
                 cb(null, {});

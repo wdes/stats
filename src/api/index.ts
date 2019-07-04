@@ -1,5 +1,7 @@
 'use strict';
 
+import app from '@static/Express';
+
 /**
  * @api {get} /api/10/api/index The api status
  * @apiGroup Api

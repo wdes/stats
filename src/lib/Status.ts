@@ -1,12 +1,12 @@
 'use strict';
 
-const request = require('request');
+import * as request from 'request';
 const UA_STRING = 'Mozilla/5.0 (compatible; wdes-stats bot; +https://wdes-stats.wdes.eu)';
 const U_EMAIL = 'williamdes@wdes.fr';
 
-module.exports = {
-    getServerStatus: function(url, method) {
-        return new Promise((resolve, reject) => {
+export default {
+    getServerStatus: (url: string, method: string) => {
+        return new Promise((resolve: (data: { response: request.Response; body: any }) => void, reject) => {
             request(
                 {
                     url: url,
@@ -19,11 +19,11 @@ module.exports = {
                         From: U_EMAIL,
                     },
                 },
-                function(error, response, body) {
+                (error: any, response: request.Response, body: any) => {
                     if (error) {
                         reject(error);
                     } else {
-                        resolve(response, body);
+                        resolve({ response, body });
                     }
                 }
             );

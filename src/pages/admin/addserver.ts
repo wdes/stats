@@ -1,13 +1,16 @@
 'use strict';
 
-const Servers = require('@lib/Servers');
-const schedule = require('@lib/schedule');
+import Servers from '@lib/Servers';
+import schedule from '@lib/schedule';
+import app from '@static/Express';
+import { Request, Response } from 'express';
+import smsQueue from '@static/smsQueue';
 
-app.get('/admin/addserver', (req, res, next) => {
+app.get('/admin/addserver', (req: Request, res: Response, next: Function) => {
     res.render('pages/admin/addserver.twig');
 });
 
-app.post('/admin/addserver', (req, res, next) => {
+app.post('/admin/addserver', (req: Request, res: Response, next: Function) => {
     const isDisabled = typeof req.body.disabled === 'string' && req.body.disabled === 'true';
     Servers.addServer(req.body.name, req.body.url, req.body.cron, isDisabled)
         .then(server => {
@@ -22,7 +25,7 @@ app.post('/admin/addserver', (req, res, next) => {
                     isDisabled
             );
             if (!isDisabled) {
-                schedule.recordStatForServer(logger, server);
+                schedule.recordStatForServer(server);
             }
             res.redirect('/admin/servers');
         })

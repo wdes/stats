@@ -1,20 +1,21 @@
 'use strict';
 
-const passport = require('passport');
-const GitHubStrategy = require('passport-github').Strategy;
+import * as passport from 'passport';
+import { Strategy as GitHubStrategy } from 'passport-github';
+import { Request, Response } from 'express';
 var githubAdmins = process.env.GITHUB_ADMINS || '';
 
 const githubUsers = githubAdmins.split(',').map(user => user.trim());
 
 const strategy = new GitHubStrategy(
     {
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        clientID: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
         callbackURL: process.env.GITHUB_CALLBACK_URL,
         passReqToCallback: true,
     },
-    function(req, accessToken, refreshToken, profile, cb) {
-        if (githubUsers.indexOf(profile.username) !== -1) {
+    function(req: Request, accessToken, refreshToken, profile, cb: Function) {
+        if (githubUsers.indexOf(profile.username || '') !== -1) {
             return cb(null, profile);
         } else {
             return cb(new Error('Not admin.'), null);
@@ -24,12 +25,12 @@ const strategy = new GitHubStrategy(
 
 passport.use(strategy);
 
-const isAuthenticated = (req, res, next) => {
-    if (typeof req.session.userId === 'string' && typeof req.session.githubUsername === 'string') {
-        if (githubUsers.indexOf(req.session.githubUsername) !== -1) {
+const isAuthenticated = (req: Request, res: Response, next: Function) => {
+    if (typeof req.session!.userId === 'string' && typeof req.session!.githubUsername === 'string') {
+        if (githubUsers.indexOf(req.session!.githubUsername) !== -1) {
             return next();
         } else {
-            req.session.messages = [
+            req.session!.messages = [
                 {
                     message: 'Not admin.',
                     level: 'danger',
@@ -38,8 +39,8 @@ const isAuthenticated = (req, res, next) => {
             return res.redirect('/login');
         }
     } else {
-        req.session.fromPath = req.url !== '/login' ? req.url : '/';
-        req.session.messages = [
+        req.session!.fromPath = req.url !== '/login' ? req.url : '/';
+        req.session!.messages = [
             {
                 message: 'Not connected.',
                 level: 'warning',
@@ -49,7 +50,7 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-module.exports = {
+export default {
     isAuthenticated,
     passport,
     strategy,

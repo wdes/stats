@@ -1,9 +1,11 @@
 'use strict';
 
-const Servers = require('@lib/Servers');
+import Servers from '@lib/Servers';
+import app from '@static/Express';
+import { Request, Response } from 'express';
 
-app.get('/', (req, res) => {
-    const loggedIn = typeof req.session.githubUsername === 'string';
+app.get('/', (req: Request, res: Response) => {
+    const loggedIn = typeof req.session!.githubUsername === 'string';
     if (loggedIn) {
         Servers.countServers().then(nbrServers => {
             Servers.countServers({

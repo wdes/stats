@@ -1,10 +1,11 @@
 'use strict';
 
-const Servers = require('@lib/Servers');
+import Servers from '@lib/Servers';
+import app from '@static/Express';
+import { Request, Response } from 'express';
+import serverExists from '@src/middlewares/serverExists';
 
-const serverExists = require('@middlewares/serverExists');
-
-app.get('/stats/:idServer', serverExists('params', 'idServer'), (req, res, next) => {
+app.get('/stats/:idServer', serverExists('params', 'idServer'), (req: Request, res: Response, next: Function) => {
     Servers.getMonitoringTimes(req.params.idServer)
         .then(monitoringTimes => {
             Servers.percentageOfStatusCodesByServer(req.params.idServer)
