@@ -6,3 +6,4 @@ node_modules/
 /apidocs
 /coverage
 /build
+/dist

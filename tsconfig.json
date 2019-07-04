@@ -14,6 +14,15 @@
         "target": "es2017",
         "baseUrl": "./",
         "paths": {
+            "@lib/*": ["./src/lib/*"],
+            "@static/*": ["./src/static/*"],
+            "@util/*": ["./src/util/*"],
+            "@api/*": ["./src/api/*"],
+            "@middlewares/*": ["./src/middlewares/*"],
+            "@templates/*": ["./templates/*"],
+            "@db/*": ["./db/*"],
+            "@models/*": ["./db/models/*"],
+            "@config/*": ["./config/*"],
             "@src/*": ["./src/*"],
             "@root/*": ["./*"],
             "@test/*": ["./test/*"],
@@ -22,6 +31,9 @@
     },
     "include": [
         "./*",
+        "./src/**/*",
+        "./utils/**/*",
+        "./config/**/*",
         "./src/**/*",
         "./test/**/*"
     ]
