@@ -3,14 +3,14 @@
         "outDir": "./dist",
         "allowJs": false,
         "resolveJsonModule": true,
-        "strict": false,
+        "strict": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "noImplicitAny": false,
         "strictNullChecks": true,
         "lib": ["es2017"],
         "module": "commonjs",
-        "skipLibCheck": true,
+        "skipLibCheck": false,
         "target": "es2017",
         "baseUrl": "./",
         "paths": {
@@ -25,14 +25,14 @@
             "@config/*": ["./config/*"],
             "@src/*": ["./src/*"],
             "@root/*": ["./*"],
-            "@test/*": ["./test/*"],
-            "@utils/*": ["./utils/*"]
+            "@test/*": ["./test/*"]
         }
     },
     "include": [
         "./*",
         "./src/**/*",
         "./utils/**/*",
+        "./config/*",
         "./config/**/*",
         "./src/**/*",
         "./test/**/*"

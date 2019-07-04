@@ -34,18 +34,18 @@
         "migrate:production:reset": "sequelize db:migrate:undo:all --env production",
         "migrate:test:reset": "sequelize db:migrate:undo:all --env test",
         "migrate:development:reset": "sequelize db:migrate:undo:all --env development",
-        "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.js\" \"*.js\"",
+        "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.ts\" \"*.ts\"",
         "jshint": "jshint ./",
-        "install:service": "node service.js",
-        "start": "NODE_ENV=production node server.js",
-        "start:dev": "NODE_ENV=development node server.js",
-        "start:test": "NODE_ENV=test node server.js",
+        "install:service": "ts-node service.ts",
+        "start": "NODE_ENV=production ts-node server.ts",
+        "start:dev": "NODE_ENV=development ts-node server.ts",
+        "start:test": "NODE_ENV=test ts-node server.ts",
         "service:start": "service wdesmenu start",
         "service:stop": "service wdesmenu stop",
         "heroku-prebuild": "echo 'Heroku pre build !'",
         "heroku-postbuild": "npm run migrate:production",
         "postinstall": "npm run apidoc",
-        "sentry-sync-commits": "VERSION=$(node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
+        "sentry-sync-commits": "VERSION=$(ts-node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
     },
     "keywords": [
         "api"
