@@ -57,7 +57,6 @@ export default () => {
             });
         },
         stop: () => {
-            /* istanbul ignore next */
             if (task) {
                 task.stop();
             }

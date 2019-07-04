@@ -1,14 +1,14 @@
 'use strict';
 
-const stack = require('@lib/stack');
-const expect = require('chai').expect;
-const sinon = require('sinon');
+import stack from '@lib/stack';
+import { expect } from 'chai';
+import * as sinon from 'sinon';
 
-module.exports = function() {
+export default () => {
     suite('stack timers scheduler calls', function() {
-        var timers = null;
-        var spy = null;
-        var stackTest = null;
+        var timers: sinon.SinonFakeTimers;
+        var spy: sinon.SinonSpy<any[], any>;
+        var stackTest;
         setup(function() {
             timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
@@ -44,19 +44,25 @@ module.exports = function() {
         });
 
         teardown(function() {
+            timers.restore();
             stackTest.stop();
             sinon.restore();
         });
     });
 
     suite('stack timers', function() {
-        var stackTest = null;
+        var timers: sinon.SinonFakeTimers;
+
         setup(function() {
-            stackTest = stack();
-            stackTest.init(30, () => {}, () => {});
+            timers = sinon.useFakeTimers({
+                now: new Date().getTime(),
+                shouldAdvanceTime: true,
+            });
         });
 
         test('add to stack', done => {
+            var stackTest = stack();
+            stackTest.init(30, () => {}, () => {});
             expect(stackTest.getTasks()).to.deep.equal([]);
             stackTest.addToStack('Test message');
             expect(stackTest.getTasks()).to.deep.equal(['Test message']);
@@ -67,11 +73,7 @@ module.exports = function() {
         test('Test to group messages', done => {
             var spy = sinon.spy();
             var spyTimer = sinon.spy();
-            var timers = sinon.useFakeTimers({
-                now: new Date().getTime(),
-                shouldAdvanceTime: true,
-            });
-            stackTest = stack();
+            var stackTest = stack();
             stackTest.init(
                 30,
                 () => {
@@ -81,6 +83,7 @@ module.exports = function() {
                     spy(taskMessage);
                 }
             );
+
             stackTest.addToStack('Test message\nzd\nza\n');
             stackTest.addToStack('random\ndata\n');
             stackTest.addToStack('Èval\n^ëçç\nza\nsde\n');
@@ -101,18 +104,13 @@ module.exports = function() {
                 expect(arg.length).to.be.below(31);
             });
             expect(spy.getCalls()[1].args).to.deep.equal([[]]);
-
             done();
         });
 
         test('Test to group messages (dataset: 2)', done => {
             var spy = sinon.spy();
             var spyTimer = sinon.spy();
-            var timers = sinon.useFakeTimers({
-                now: new Date().getTime(),
-                shouldAdvanceTime: true,
-            });
-            stackTest = stack();
+            var stackTest = stack();
             stackTest.init(
                 100,
                 () => {
@@ -146,17 +144,18 @@ module.exports = function() {
                 expect(arg.length).to.be.below(101);
             });
             expect(spy.getCalls()[1].args).to.deep.equal([[]]);
-
             done();
         });
 
         test('cron task getter', done => {
+            var stackTest = stack();
+            stackTest.init(100, () => {}, taskMessage => {});
             stackTest.getCronTask().start();
             done();
         });
 
         teardown(function() {
-            stackTest.stop();
+            timers.restore();
             sinon.restore();
         });
     });
