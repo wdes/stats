@@ -17,7 +17,7 @@ const define = {
     timestamps: true,
 };
 
-export default {
+const config = {
     development: {
         username: process.env.DB_DEV_USER,
         password: process.env.DB_DEV_PASS,
@@ -52,3 +52,6 @@ export default {
         define: define,
     },
 };
+
+export default config;
+module.exports = config;
