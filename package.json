@@ -3,12 +3,17 @@
     "repository": "wdes/wdes-stats",
     "version": "1.0.0",
     "description": "The api of WdesStats",
-    "main": "server.js",
+    "main": "server.ts",
     "private": true,
     "readme": "https://gitlab.com/wdes/wdes-stats#readme",
     "nyc": {
+        "extension": [
+            ".ts",
+            ".tsx"
+        ],
         "exclude": [
             "apidocs",
+            "dist",
             "db/migrations",
             "test",
             "config",
@@ -18,7 +23,8 @@
         "reporter": [
             "text",
             "text-summary"
-        ]
+        ],
+        "all": true
     },
     "scripts": {
         "build": "tsc",
@@ -26,7 +32,7 @@
         "changelog-file": "npm run --silent changelog > CHANGELOG.md",
         "apidoc": "apidoc --input src/ --output apidocs --private false",
         "apidoc:private": "apidoc --input src/ --output apidocs --private true",
-        "test": "nyc --all mocha --ui tdd --exit",
+        "test": "NODE_ENV=test nyc mocha --require ts-node/register --require source-map-support/register --ui tdd test/index.ts",
         "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov",
         "migrate:production": "ts-node ./node_modules/.bin/sequelize db:migrate --config config/db.ts --env production",
         "migrate:test": "ts-node ./node_modules/.bin/sequelize db:migrate --config config/db.ts --env test",
@@ -91,6 +97,8 @@
     },
     "devDependencies": {
         "@sentry/cli": "^1.46.0",
+        "@types/mocha": "^5.2.7",
+        "@types/sinon": "^7.0.13",
         "apidoc": "^0.17.7",
         "chai": "^4.2.0",
         "changelog-generator-twig": "^1.2.0",
