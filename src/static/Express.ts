@@ -24,6 +24,7 @@ app.set('views', require('path').resolve(__dirname, '..', 'templates'));
 app.set('env', process.env.NODE_ENV || 'ZOMBIE');
 
 import * as bodyParser from 'body-parser';
+import { AddressInfo } from 'net';
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require('vhost')(process.env.APIDOCS_DOMAIN, staticModule(__dirname + '/../apidocs')));
@@ -136,8 +137,12 @@ app.use(function(err, req: Request, res: Response, next: Function) {
 logger.debug('Start the express server');
 const PORT = process.env.PORT || 4500;
 let _server = app.listen(PORT, () => {
-    //var port = _server.address().port;
-    //logger.info('Serveur WdesStats démarré sur le port : %s', port);
+    let serverAddress = _server.address();
+    if (typeof serverAddress === 'object' && serverAddress !== null) {
+        let address: AddressInfo = serverAddress;
+        var port = address.port;
+        logger.info('Serveur WdesStats démarré sur le port : %s', port);
+    }
     app.emit('appStarted');
 });
 
