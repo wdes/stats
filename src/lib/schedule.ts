@@ -6,7 +6,13 @@ import Sms from '@lib/Sms';
 import logger from '@util/logger';
 import smsQueue from '@static/smsQueue';
 import { ScheduledTask, validate, schedule } from 'node-cron';
-const serversTasks: ScheduledTask[] = [];
+import { MonitoringServerModel } from '@db/models/monitoring__servers';
+import { AppMessage, AppMessageTypes } from './interfaces';
+const serversTasks: {
+    server: MonitoringServerModel;
+    task: ScheduledTask;
+}[] = [];
+import * as cluster from 'cluster';
 
 /**
  * Request and record a stat for a server
@@ -51,19 +57,50 @@ const recordStatForServer = function(server) {
 
 /**
  * Schedule a server
- * @param {Server} server The server object
+ * @param {MonitoringServerModel} server The server model
  * @return {void}
  */
-const scheduleServer = function(server) {
-    if (validate(server.monitoringInterval)) {
-        logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
-        serversTasks.push(
-            schedule(server.monitoringInterval, () => {
-                recordStatForServer(server);
-            })
-        );
+const scheduleServer = function(server: MonitoringServerModel) {
+    let scheduleRequest: AppMessage = {
+        topic: AppMessageTypes.SCHEDULE_SERVER,
+        body: server,
+    };
+    if (cluster.isMaster) {
+        let serverSearch = serversTasks.find(obj => obj.server.id === server.id);
+        if (serverSearch !== undefined) {
+            serverSearch.task.start();
+        } else {
+            if (validate(server.monitoringInterval)) {
+                logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
+                serversTasks.push({
+                    task: schedule(server.monitoringInterval, () => {
+                        recordStatForServer(server);
+                    }),
+                    server: server,
+                });
+            } else {
+                logger.debug('Server', server.id, 'has a bad monitoring interval', server.monitoringInterval);
+            }
+        }
     } else {
-        logger.debug('Server', server.id, 'has a bad monitoring interval', server.monitoringInterval);
+        logger.info('Sending a request to master process', scheduleRequest);
+        (<any>process).send(scheduleRequest); //FIXME: bad hack
+    }
+};
+
+const unScheduleServer = function(server: MonitoringServerModel): void {
+    let unScheduleRequest: AppMessage = {
+        topic: AppMessageTypes.UNSCHEDULE_SERVER,
+        body: server,
+    };
+    if (cluster.isMaster) {
+        let serverSearch = serversTasks.find(obj => obj.server.id === server.id);
+        if (serverSearch !== undefined) {
+            serverSearch.task.stop();
+        }
+    } else {
+        logger.info('Sending a request to master process', unScheduleRequest);
+        (<any>process).send(unScheduleRequest); //FIXME: bad hack
     }
 };
 
@@ -80,6 +117,7 @@ export default {
             });
     },
     scheduleServer: scheduleServer,
+    unScheduleServer: unScheduleServer,
     recordStatForServer: recordStatForServer,
     serversTasks: serversTasks,
 };

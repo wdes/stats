@@ -2,7 +2,7 @@
 
 import sequelize from '@static/sequelize';
 import { QueryTypes } from 'sequelize';
-import MonitoringServers from '@models/monitoring__servers';
+import MonitoringServers, { MonitoringServerModel } from '@models/monitoring__servers';
 
 export default {
     lastStatusCode: function(serverId: number) {
@@ -130,7 +130,7 @@ export default {
         options = {
             raw: true,
         }
-    ) {
+    ): Promise<MonitoringServerModel[]> {
         return MonitoringServers.findAll(options);
     },
     countServers: function(

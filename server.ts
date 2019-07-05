@@ -15,6 +15,7 @@ log4js.configure({
 });
 
 import schedule from '@lib/schedule';
+import { AppMessage, AppMessageTypes } from '@lib/interfaces';
 
 var restartWorkers = true;
 
@@ -31,9 +32,10 @@ if (cluster.isMaster) {
         for (var workerId in cluster.workers) {
             if (cluster.workers[workerId]!.isDead() === false) {
                 try {
-                    cluster.workers[workerId]!.send({
-                        type: 'appStop',
-                    });
+                    let appMessage: AppMessage = {
+                        topic: AppMessageTypes.APP_STOP,
+                    };
+                    cluster.workers[workerId]!.send(appMessage);
                     //cluster.workers[workerId].kill();
                 } catch (error) {}
             }
@@ -66,6 +68,20 @@ if (cluster.isMaster) {
     logger = log4js.getLogger('master');
     for (var i = 0; i < cpus().length; i++) {
         var thread = cluster.fork();
+        thread.on('message', (data: AppMessage) => {
+            if (typeof data === 'object') {
+                switch (data.topic) {
+                    case AppMessageTypes.SCHEDULE_SERVER:
+                        logger.debug('Received ', data.topic);
+                        schedule.scheduleServer(data.body);
+                        break;
+                    case AppMessageTypes.UNSCHEDULE_SERVER:
+                        logger.debug('Received ', data.topic);
+                        schedule.unScheduleServer(data.body);
+                        break;
+                }
+            }
+        });
         workers.push(thread);
     }
     cluster.on('exit', (worker, code, signal) => {

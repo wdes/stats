@@ -10,6 +10,7 @@ import * as path from 'path';
 import * as packageJson from '@root/package.json';
 import { Request, Response } from 'express';
 import { AddressInfo } from 'net';
+import { AppMessage, AppMessageTypes } from '@lib/interfaces';
 
 // https://devcenter.heroku.com/articles/dyno-metadata
 //TODO: if env empty no append if not empty join array using dash (-)
@@ -78,7 +79,7 @@ let _server = app.listen(PORT, () => {
     app.emit('appStarted');
 });
 
-app.on('appStop', () => {
+app.on(AppMessageTypes.APP_STOP, () => {
     logger.info('Received (appStop) ...');
     _server.close(() => {
         logger.info('Express is closed.');
@@ -86,8 +87,8 @@ app.on('appStop', () => {
     app.emit('close');
 });
 
-process.on('message', function(message) {
-    app.emit(message.type, message); // Retransmission de l'event dans expressJS
+process.on('message', function(message: AppMessage) {
+    app.emit(message.topic, message); // Retransmission de l'event dans expressJS
 });
 process.on('SIGTERM', function() {
     logger.info('Terminating (SIGTERM) ...');
