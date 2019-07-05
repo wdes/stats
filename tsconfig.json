@@ -8,6 +8,7 @@
         "preserveConstEnums": true,
         "noImplicitAny": false,
         "strictNullChecks": true,
+        "alwaysStrict": true,
         "lib": ["es2017"],
         "module": "commonjs",
         "skipLibCheck": false,
