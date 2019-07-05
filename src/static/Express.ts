@@ -55,7 +55,7 @@ app.use(
     })
 );
 
-app.all('/admin/*', githubAuth.isAuthenticated);
+app.all(['/admin/*', '/admin/'], githubAuth.isAuthenticated);
 
 /**
  * @apiDefine 202AcceptedSuccess
