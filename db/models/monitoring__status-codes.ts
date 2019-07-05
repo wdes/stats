@@ -43,7 +43,7 @@ const MonitoringStatusCode = <MonitoringStatusCodeStatic>Sequelize.sequelize.def
         freezeTableName: true,
     }
 );
-MonitoringStatusCode.belongsTo(MonitoringServer, {
+MonitoringStatusCode.belongsTo(MonitoringServerModel, {
     foreignKey: 'idServer',
     targetKey: 'id',
     as: 'server',
