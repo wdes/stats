@@ -20,7 +20,6 @@
             "@util/*": ["./src/util/*"],
             "@api/*": ["./src/api/*"],
             "@middlewares/*": ["./src/middlewares/*"],
-            "@templates/*": ["./templates/*"],
             "@db/*": ["./db/*"],
             "@models/*": ["./db/models/*"],
             "@config/*": ["./config/*"],

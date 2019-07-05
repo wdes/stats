@@ -131,7 +131,6 @@
         "@test": "test",
         "@middlewares": "src/middlewares",
         "@root": "./",
-        "@templates": "templates",
         "@db": "db",
         "@models": "db/models",
         "@config": "config"
