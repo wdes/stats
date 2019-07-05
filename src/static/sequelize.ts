@@ -1,6 +1,6 @@
 'use strict';
 
-import config from '@config/db';
+import * as config from '@config/db';
 import logger from '@util/logger';
 import { Sequelize } from 'sequelize';
 
