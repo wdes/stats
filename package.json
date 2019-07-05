@@ -123,17 +123,17 @@
         "url": "https://wdes-stats.wdes.eu"
     },
     "_moduleAliases": {
-        "@lib": "dist/src/lib",
-        "@static": "dist/src/static",
-        "@util": "dist/src/util",
-        "@api": "dist/src/api",
-        "@src": "dist/src",
-        "@test": "dist/test",
-        "@middlewares": "dist/src/middlewares",
-        "@root": "./dist/",
-        "@templates": "dist/templates",
-        "@db": "dist/db",
-        "@models": "dist/db/models",
-        "@config": "dist/config"
+        "@lib": "src/lib",
+        "@static": "src/static",
+        "@util": "src/util",
+        "@api": "src/api",
+        "@src": "src",
+        "@test": "test",
+        "@middlewares": "src/middlewares",
+        "@root": "./",
+        "@templates": "templates",
+        "@db": "db",
+        "@models": "db/models",
+        "@config": "config"
     }
 }
