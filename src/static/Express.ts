@@ -6,7 +6,6 @@ import * as express from 'express';
 import logger from '@util/logger';
 import sequelize from '@static/sequelize';
 import githubAuth from '@src/middlewares/github-auth';
-import * as Sentry from '@sentry/node';
 let app: express.Express = express();
 logger.debug('Loading the express app');
 
@@ -20,11 +19,10 @@ logger.debug('Loading the express app');
 app.disable('x-powered-by');
 app.disable('etag');
 app.set('view engine', 'twig');
-app.set('views', require('path').resolve(__dirname, '..', 'templates'));
+app.set('views', require('path').resolve(__dirname, '..', '..', '..', 'templates'));
 app.set('env', process.env.NODE_ENV || 'ZOMBIE');
 
 import * as bodyParser from 'body-parser';
-import { AddressInfo } from 'net';
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require('vhost')(process.env.APIDOCS_DOMAIN, staticModule(__dirname + '/../apidocs')));
@@ -110,12 +108,7 @@ app.all('/admin/*', githubAuth.isAuthenticated);
  *      "success": false
  *    }
  */
-app.use(function(req, res) {
-    res.status(404).send({ msg: '404: Page not Found' });
-});
-if (app.get('env') == 'development') {
-    app.use(require('errorhandler')());
-}
+
 /**
  * @apiDefine MsgError
  * @apiError (500) {String} msg The error message
@@ -127,32 +120,7 @@ if (app.get('env') == 'development') {
  *      "success": false
  *    }
  */
-app.use(function(err, req: Request, res: Response, next: Function) {
-    // if (app.get('env') == 'test') {
-    //logger.error(err);
-    // }
-    res.status(500).send({ success: false, msg: err.message });
-    Sentry.captureException(err);
-});
-logger.debug('Start the express server');
-const PORT = process.env.PORT || 4500;
-let _server = app.listen(PORT, () => {
-    let serverAddress = _server.address();
-    if (typeof serverAddress === 'object' && serverAddress !== null) {
-        let address: AddressInfo = serverAddress;
-        var port = address.port;
-        logger.info('Serveur WdesStats démarré sur le port : %s', port);
-    }
-    app.emit('appStarted');
-});
 
-app.on('appStop', () => {
-    logger.info('Received (appStop) ...');
-    _server.close(() => {
-        logger.info('Express is closed.');
-    });
-    app.emit('close');
-});
 app.on('close', () => {
     logger.info('Closing database ...');
     sequelize.sequelize.close().then(() => {
