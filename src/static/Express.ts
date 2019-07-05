@@ -3,12 +3,12 @@
 import { Request, Response, static as staticModule } from 'express';
 import * as express from 'express';
 
-import * as path from 'path';
 import logger from '@util/logger';
 import sequelize from '@static/sequelize';
 import githubAuth from '@src/middlewares/github-auth';
 import * as Sentry from '@sentry/node';
-const app = express();
+let app: express.Express = express();
+logger.debug('Loading the express app');
 
 /**
  * @apiDefine TokenAuth
@@ -16,7 +16,6 @@ const app = express();
  * @apiHeaderExample {String} Authorization
  * Authorization: Bearer {token}
  */
-import RequestMid from '@static/RequestMid';
 
 app.disable('x-powered-by');
 app.disable('etag');
@@ -58,22 +57,6 @@ app.use(
 );
 
 app.all('/admin/*', githubAuth.isAuthenticated);
-
-require('glob')
-    .sync(__dirname + '/../src/pages/**/*.js')
-    .forEach(function(file) {
-        //logger.info("Loaded page: "+file);
-        require(path.resolve(file));
-    });
-
-app.use(RequestMid.tokenMid);
-
-require('glob')
-    .sync(__dirname + '/../src/api/**/*.js')
-    .forEach(function(file) {
-        //logger.info("Loaded : "+file);
-        require(path.resolve(file));
-    });
 
 /**
  * @apiDefine 202AcceptedSuccess
@@ -150,6 +133,7 @@ app.use(function(err, req: Request, res: Response, next: Function) {
     res.status(500).send({ success: false, msg: err.message });
     Sentry.captureException(err);
 });
+logger.debug('Start the express server');
 const PORT = process.env.PORT || 4500;
 let _server = app.listen(PORT, () => {
     //var port = _server.address().port;

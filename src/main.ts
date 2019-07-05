@@ -4,7 +4,9 @@ import * as cluster from 'cluster';
 import * as Sentry from '@sentry/node';
 import app from '@static/Express';
 import logger from '@util/logger';
+import RequestMid from '@static/RequestMid';
 
+import * as path from 'path';
 import * as packageJson from '@root/package.json';
 
 // https://devcenter.heroku.com/articles/dyno-metadata
@@ -30,6 +32,23 @@ Sentry.init(sentryconfig);
 logger.info('Démarrage du worker n°%d', cluster.worker.id);
 
 logger.info('Environnement : %s', app.get('env'));
+
+logger.debug('Loading pages');
+require('glob')
+    .sync(__dirname + '/../../src/pages/**/*.js')
+    .forEach(function(file) {
+        logger.info('Loaded page: ' + file);
+        require(path.resolve(file));
+    });
+
+app.use(RequestMid.tokenMid);
+logger.debug('Loading api endpoints');
+require('glob')
+    .sync(__dirname + '/../../src/api/**/*.js')
+    .forEach(function(file) {
+        logger.info('Loaded : ' + file);
+        require(path.resolve(file));
+    });
 
 process.on('message', function(message) {
     app.emit(message.type, message); // Retransmission de l'event dans expressJS
