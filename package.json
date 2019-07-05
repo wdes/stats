@@ -3,7 +3,7 @@
     "repository": "wdes/wdes-stats",
     "version": "1.0.0",
     "description": "The api of WdesStats",
-    "main": "server.ts",
+    "main": "dist/server.js",
     "private": true,
     "readme": "https://gitlab.com/wdes/wdes-stats#readme",
     "nyc": {
@@ -43,12 +43,12 @@
         "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.ts\" \"*.ts\" \"*/**/*.js\" \"*.js\"",
         "jshint": "jshint ./",
         "install:service": "ts-node service.ts",
-        "start": "NODE_ENV=production ts-node server.ts",
-        "start:dev": "NODE_ENV=development ts-node server.ts",
-        "start:test": "NODE_ENV=test ts-node server.ts",
+        "start": "NODE_ENV=production node dist/server.js",
+        "start:dev": "NODE_ENV=development node dist/server.js",
+        "start:test": "NODE_ENV=test node dist/server.js",
         "service:start": "service wdesmenu start",
         "service:stop": "service wdesmenu stop",
-        "heroku-prebuild": "echo 'Heroku pre build !'",
+        "heroku-prebuild": "npm run build",
         "heroku-postbuild": "npm run migrate:production",
         "postinstall": "npm run apidoc",
         "sentry-sync-commits": "VERSION=$(ts-node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
@@ -123,17 +123,17 @@
         "url": "https://wdes-stats.wdes.eu"
     },
     "_moduleAliases": {
-        "@lib": "src/lib",
-        "@static": "src/static",
-        "@util": "src/util",
-        "@api": "src/api",
-        "@src": "src",
-        "@test": "test",
-        "@middlewares": "src/middlewares",
-        "@root": "./",
-        "@templates": "templates",
-        "@db": "db",
-        "@models": "db/models",
-        "@config": "config"
+        "@lib": "dist/src/lib",
+        "@static": "dist/src/static",
+        "@util": "dist/src/util",
+        "@api": "dist/src/api",
+        "@src": "dist/src",
+        "@test": "dist/test",
+        "@middlewares": "dist/src/middlewares",
+        "@root": "./dist/",
+        "@templates": "dist/templates",
+        "@db": "dist/db",
+        "@models": "dist/db/models",
+        "@config": "dist/config"
     }
 }
