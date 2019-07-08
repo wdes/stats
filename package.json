@@ -46,9 +46,9 @@
         "start": "NODE_ENV=production node dist/server.js",
         "start:dev": "NODE_ENV=development node dist/server.js",
         "start:test": "NODE_ENV=test node dist/server.js",
-        "service:start": "service wdesmenu start",
-        "service:stop": "service wdesmenu stop",
-        "heroku-prebuild": "npm run build",
+        "service:start": "service wdesstats start",
+        "service:stop": "service wdesstats stop",
+        "heroku-prebuild": "npm ci && npm run build",
         "heroku-postbuild": "npm run migrate:production",
         "postinstall": "npm run apidoc",
         "sentry-sync-commits": "VERSION=$(ts-node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
