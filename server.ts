@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config({ path: __dirname + '/../.env' });
-const moduleAlias = require('module-alias')(__dirname);
+require('module-alias')(__dirname);
 
 // Include the cluster module
 import * as cluster from 'cluster';

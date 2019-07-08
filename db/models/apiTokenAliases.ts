@@ -25,7 +25,7 @@ const ApiTokenAliases = <ApiTokenAliasesStatic>Sequelize.sequelize.define(
     },
     {
         tableName: 'Api__TokenAliases',
-        timestamps: false,
+        timestamps: true,
         freezeTableName: true,
     }
 );

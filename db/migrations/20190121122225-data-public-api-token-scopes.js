@@ -1,23 +1,25 @@
 'use strict';
 
+const ApiTokenScopes = require('@models/apiTokenScopes');
+
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        const Api__TokenScopes = queryInterface.sequelize.import(__dirname + '/../models/api__tokenscopes');
-        return Api__TokenScopes.create({
+        return ApiTokenScopes.default.create({
             name: 'api.index',
             groupName: 'public',
         });
     },
 
     down: (queryInterface, Sequelize) => {
-        const Api__TokenScopes = queryInterface.sequelize.import(__dirname + '/../models/api__tokenscopes');
-        return Api__TokenScopes.findOne({
-            where: {
-                name: 'api.index',
-                groupName: 'public',
-            },
-        }).then(model => {
-            model.destroy();
-        });
+        return ApiTokenScopes.default
+            .findOne({
+                where: {
+                    name: 'api.index',
+                    groupName: 'public',
+                },
+            })
+            .then(model => {
+                model.destroy();
+            });
     },
 };

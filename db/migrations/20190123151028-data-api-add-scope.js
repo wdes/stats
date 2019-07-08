@@ -1,17 +1,17 @@
 'use strict';
 
+const ApiScopes = require('@models/apiScopes');
+
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        const Api__Scopes = queryInterface.sequelize.import(__dirname + '/../models/api__scopes');
-        return Api__Scopes.create({
+        return ApiScopes.default.create({
             name: 'server.laststatuscode',
             description: 'Get last status code from a server',
         });
     },
 
     down: (queryInterface, Sequelize) => {
-        const Api__Scopes = queryInterface.sequelize.import(__dirname + '/../models/api__scopes');
-        return Api__Scopes.findByPk('server.laststatuscode').then(model => {
+        return ApiScopes.default.findByPk('server.laststatuscode').then(model => {
             model.destroy();
         });
     },

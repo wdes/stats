@@ -25,7 +25,7 @@ const ApiTokenExpirations = <ApiTokenExpirationsStatic>Sequelize.sequelize.defin
     },
     {
         tableName: 'Api__TokenExpirations',
-        timestamps: false,
+        timestamps: true,
         freezeTableName: true,
     }
 );

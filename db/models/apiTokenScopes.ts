@@ -28,7 +28,7 @@ const ApiTokenScopes = <ApiTokenScopesStatic>Sequelize.sequelize.define(
     },
     {
         tableName: 'Api__TokenScopes',
-        timestamps: false,
+        timestamps: true,
         freezeTableName: true,
     }
 );

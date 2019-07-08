@@ -1,4 +1,5 @@
 require('dotenv').config({ path: __dirname + '/../.env' });
+require('module-alias')(__dirname + '/../');
 
 const pool = {
     max: 5,
