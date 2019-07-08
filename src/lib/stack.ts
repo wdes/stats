@@ -21,7 +21,7 @@ function chunkSubstr(str: string, size: number): string[] {
 
 /**
  * @callback emptyQueueCallback
- * @param {String[]} chunks The chunks to send
+ * @param {string[]} chunks The chunks to send
  */
 
 /**
@@ -30,7 +30,7 @@ function chunkSubstr(str: string, size: number): string[] {
  * @param {number} maxLength The max length
  * @param {emptyQueueCallback} emptyQueue
  */
-const sendStack = (tasks: string[], maxLength: number, emptyQueue): void => {
+const sendStack = (tasks: string[], maxLength: number, emptyQueue: (chunks: string[]) => void): void => {
     emptyQueue(chunkSubstr(tasks.join('\n--\n'), maxLength));
 };
 
@@ -47,7 +47,7 @@ export default () => {
     return {
         chunkSubstr: chunkSubstr,
         addToStack: (message: string) => tasks.push(message),
-        init: (maxLength, cbTickSuccess, cbEmptyQueue): void => {
+        init: (maxLength: number, cbTickSuccess: () => void, cbEmptyQueue: (messages: string[]) => void): void => {
             _maxLength = maxLength;
             tasks = [];
             task = cron.schedule('*/30 * * * * *', () => {

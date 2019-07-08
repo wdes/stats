@@ -1,9 +1,9 @@
 'use strict';
 
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, BuildOptions } from 'sequelize';
 import Sequelize from '@static/sequelize';
 
-export default class Queue extends Model {
+export class QueueModel extends Model {
     public id!: number;
     public groupName!: string;
     public task!: string;
@@ -14,7 +14,12 @@ export default class Queue extends Model {
     public static associations: {};
 }
 
-Queue.init(
+export type QueueStatic = typeof Model & {
+    new (values?: object, options?: BuildOptions): QueueModel;
+};
+
+const Queue = <QueueStatic>Sequelize.sequelize.define(
+    'Queue',
     {
         id: {
             primaryKey: false,
@@ -48,6 +53,8 @@ Queue.init(
     {
         tableName: 'queue',
         freezeTableName: true,
-        sequelize: Sequelize.sequelize,
+        timestamps: false,
     }
 );
+
+export default Queue;
