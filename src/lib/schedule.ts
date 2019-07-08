@@ -12,8 +12,8 @@ const serversTasks: {
     server: MonitoringServerModel;
     task: ScheduledTask;
     taskState: {
-        destroyed: boolean,
-        scheduled: boolean,
+        destroyed: boolean;
+        scheduled: boolean;
     };
 }[] = [];
 import * as cluster from 'cluster';
@@ -78,14 +78,20 @@ const scheduleServer = function(server: MonitoringServerModel) {
             if (validate(server.monitoringInterval)) {
                 logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
                 serversTasks.push({
-                    task: schedule(server.monitoringInterval, () => {
-                        recordStatForServer(server);
-                    }),
+                    task: schedule(
+                        server.monitoringInterval,
+                        () => {
+                            recordStatForServer(server);
+                        },
+                        {
+                            scheduled: server.disabled === false,
+                        }
+                    ),
                     server: server,
                     taskState: {
                         destroyed: false,
-                        scheduled: true,
-                    }
+                        scheduled: server.disabled === false,
+                    },
                 });
             } else {
                 logger.debug('Server', server.id, 'has a bad monitoring interval', server.monitoringInterval);
@@ -118,14 +124,14 @@ const getTasks = function() {
     let serversTasksToSend: {
         server: MonitoringServerModel;
         taskState: {
-            destroyed: boolean,
-            scheduled: boolean,
+            destroyed: boolean;
+            scheduled: boolean;
         };
     }[] = [];
     serversTasks.forEach(serversTask => {
         serversTasksToSend.push({
             server: serversTask.server,
-            taskState: serversTask.taskState
+            taskState: serversTask.taskState,
         });
     });
     let tasksListResponse: AppMessage = {
