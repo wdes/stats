@@ -49,8 +49,7 @@
         "service:start": "service wdesstats start",
         "service:stop": "service wdesstats stop",
         "heroku-prebuild": "npm ci && npm run build",
-        "heroku-postbuild": "npm run migrate:production",
-        "postinstall": "npm run apidoc",
+        "heroku-postbuild": "npm run migrate:production && npm run apidoc",
         "sentry-sync-commits": "VERSION=$(ts-node -p \"require('./package.json').version\") && sentry-cli releases --project 'wdes-stats' --org wdes new $VERSION && sentry-cli releases --org wdes set-commits $VERSION"
     },
     "keywords": [
