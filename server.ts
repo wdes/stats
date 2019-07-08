@@ -70,17 +70,26 @@ if (cluster.isMaster) {
     });
     logger = log4js.getLogger('master');
     for (var i = 0; i < cpus().length; i++) {
-        var thread = cluster.fork();
+        let thread = cluster.fork();
         thread.on('message', (data: AppMessage) => {
             if (typeof data === 'object') {
                 switch (data.topic) {
                     case AppMessageTypes.SCHEDULE_SERVER:
-                        logger.debug('Received ', data.topic);
+                        logger.debug('Received ', data.topic, ' from ', thread.id);
                         schedule.scheduleServer(data.body);
                         break;
                     case AppMessageTypes.UNSCHEDULE_SERVER:
-                        logger.debug('Received ', data.topic);
+                        logger.debug('Received ', data.topic, ' from ', thread.id);
                         schedule.unScheduleServer(data.body);
+                        break;
+                    case AppMessageTypes.ASK_TASKS_LIST:
+                        logger.debug('Received ', data.topic, ' from ', thread.id);
+                        let worker = cluster.workers[thread.id];
+                        if (worker !== undefined) {
+                            if (worker.isDead() === false && worker.isConnected()) {
+                                worker.send(schedule.getTasks());
+                            }
+                        }
                         break;
                 }
             }

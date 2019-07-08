@@ -1,0 +1,25 @@
+{% extends 'basic.twig' %}
+{% block title %}Administration - Tâches | {{ parent() }}{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="col-md-12 mt-4">
+        <table class="table table-hover table-inverse">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>#</th>
+                    <th>Server name</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td scope="row">{{task.server.id}}</td>
+                            <td>{{task.server.name}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+        <hr/>
+    </div>
+</div>
+{% endblock %}

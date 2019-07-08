@@ -104,6 +104,32 @@ const unScheduleServer = function(server: MonitoringServerModel): void {
     }
 };
 
+const getTasks = function() {
+    let serversTasksToSend: {
+        server: MonitoringServerModel;
+    }[] = [];
+    serversTasks.forEach(serversTask => {
+        serversTasksToSend.push({
+            server: serversTask.server,
+        });
+    });
+    let tasksListResponse: AppMessage = {
+        topic: AppMessageTypes.TASKS_LIST,
+        body: serversTasksToSend,
+    };
+    return tasksListResponse;
+};
+
+const askForServersTasks = function(): void {
+    if (cluster.isMaster === false) {
+        let askForTasks: AppMessage = {
+            topic: AppMessageTypes.ASK_TASKS_LIST,
+        };
+        //logger.debug('Sending a request to master process', askForTasks);
+        (<any>process).send(askForTasks); //FIXME: bad hack
+    }
+};
+
 export default {
     init: () => {
         Servers.listServers()
@@ -116,6 +142,8 @@ export default {
                 logger.error(err);
             });
     },
+    askForServersTasks: askForServersTasks,
+    getTasks: getTasks,
     scheduleServer: scheduleServer,
     unScheduleServer: unScheduleServer,
     recordStatForServer: recordStatForServer,
