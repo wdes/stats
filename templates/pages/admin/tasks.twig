@@ -8,6 +8,8 @@
                 <tr>
                     <th>#</th>
                     <th>Server name</th>
+                    <th>Destroyed</th>
+                    <th>Scheduled</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -15,6 +17,8 @@
                         <tr>
                             <td scope="row">{{task.server.id}}</td>
                             <td>{{task.server.name}}</td>
+                            <td>{{task.taskState.destroyed ? 'yes' : 'no'}}</td>
+                            <td>{{task.taskState.scheduled ? 'yes' : 'no'}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

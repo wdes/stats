@@ -11,6 +11,10 @@ import { AppMessage, AppMessageTypes } from './interfaces';
 const serversTasks: {
     server: MonitoringServerModel;
     task: ScheduledTask;
+    taskState: {
+        destroyed: boolean,
+        scheduled: boolean,
+    };
 }[] = [];
 import * as cluster from 'cluster';
 
@@ -69,6 +73,7 @@ const scheduleServer = function(server: MonitoringServerModel) {
         let serverSearch = serversTasks.find(obj => obj.server.id === server.id);
         if (serverSearch !== undefined) {
             serverSearch.task.start();
+            serverSearch.taskState.scheduled = true;
         } else {
             if (validate(server.monitoringInterval)) {
                 logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
@@ -77,6 +82,10 @@ const scheduleServer = function(server: MonitoringServerModel) {
                         recordStatForServer(server);
                     }),
                     server: server,
+                    taskState: {
+                        destroyed: false,
+                        scheduled: true,
+                    }
                 });
             } else {
                 logger.debug('Server', server.id, 'has a bad monitoring interval', server.monitoringInterval);
@@ -97,6 +106,7 @@ const unScheduleServer = function(server: MonitoringServerModel): void {
         let serverSearch = serversTasks.find(obj => obj.server.id === server.id);
         if (serverSearch !== undefined) {
             serverSearch.task.stop();
+            serverSearch.taskState.scheduled = false;
         }
     } else {
         logger.info('Sending a request to master process', unScheduleRequest);
@@ -107,10 +117,15 @@ const unScheduleServer = function(server: MonitoringServerModel): void {
 const getTasks = function() {
     let serversTasksToSend: {
         server: MonitoringServerModel;
+        taskState: {
+            destroyed: boolean,
+            scheduled: boolean,
+        };
     }[] = [];
     serversTasks.forEach(serversTask => {
         serversTasksToSend.push({
             server: serversTask.server,
+            taskState: serversTask.taskState
         });
     });
     let tasksListResponse: AppMessage = {
