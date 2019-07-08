@@ -76,7 +76,7 @@ const scheduleServer = function(server: MonitoringServerModel) {
             serverSearch.taskState.scheduled = true;
         } else {
             if (validate(server.monitoringInterval)) {
-                logger.debug('Server', server.id, 'scheduled:', server.monitoringInterval);
+                logger.debug('Server', server.id, ', scheduled:', server.monitoringInterval, ', enabled: ' + server.disabled);
                 serversTasks.push({
                     task: schedule(
                         server.monitoringInterval,

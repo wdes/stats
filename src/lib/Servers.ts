@@ -128,7 +128,7 @@ export default {
     },
     listServers: function(
         options = {
-            raw: true,
+            raw: false,
         }
     ): Promise<MonitoringServerModel[]> {
         return MonitoringServers.findAll(options);
