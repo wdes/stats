@@ -1,17 +1,14 @@
 'use strict';
 
-import { Model, DataTypes, Association, BuildOptions } from 'sequelize';
+import { Model, DataTypes, BuildOptions } from 'sequelize';
 import Sequelize from '@static/sequelize';
-import { MonitoringServerModel } from '@models/monitoring__servers';
 
 export class MonitoringStatusCodeModel extends Model {
     public idServer!: number;
     public time!: Date;
     public statusCode!: number;
 
-    public static associations: {
-        server: Association<MonitoringStatusCodeModel, MonitoringServerModel>;
-    };
+    public static associations: {};
 }
 
 export type MonitoringStatusCodeStatic = typeof Model & {
@@ -43,11 +40,7 @@ const MonitoringStatusCode = <MonitoringStatusCodeStatic>Sequelize.sequelize.def
         freezeTableName: true,
     }
 );
-MonitoringStatusCode.belongsTo(MonitoringServerModel, {
-    foreignKey: 'idServer',
-    targetKey: 'id',
-    as: 'server',
-});
+
 MonitoringStatusCode.removeAttribute('id');
 
 export default MonitoringStatusCode;

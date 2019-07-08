@@ -1,17 +1,14 @@
 'use strict';
 
-import { Model, DataTypes, Association, BuildOptions } from 'sequelize';
+import { Model, DataTypes, BuildOptions } from 'sequelize';
 import Sequelize from '@static/sequelize';
-import MonitoringServer from '@models/monitoring__servers';
 
 export class MonitoringTimeModel extends Model {
     public idServer!: number;
     public time!: Date;
     public totalTime!: number;
 
-    public static associations: {
-        //server: Association<MonitoringTime, MonitoringServer>;
-    };
+    public static associations: {};
 }
 
 export type MonitoringTimeStatic = typeof Model & {
@@ -43,11 +40,7 @@ const MonitoringTime = <MonitoringTimeStatic>Sequelize.sequelize.define(
         freezeTableName: true,
     }
 );
-MonitoringTime.hasOne(MonitoringServer, {
-    sourceKey: 'idServer',
-    foreignKey: 'id',
-    as: 'server',
-});
+
 MonitoringTime.removeAttribute('id');
 
 export default MonitoringTime;
