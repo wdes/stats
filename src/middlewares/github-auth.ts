@@ -2,7 +2,7 @@
 
 import * as passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 var githubAdmins = process.env.GITHUB_ADMINS || '';
 
 const githubUsers = githubAdmins.split(',').map(user => user.trim());
@@ -25,7 +25,7 @@ const strategy = new GitHubStrategy(
 
 passport.use(strategy);
 
-const isAuthenticated = (req: Request, res: Response, next: Function) => {
+const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     if (typeof req.session!.userId === 'string' && typeof req.session!.githubUsername === 'string') {
         if (githubUsers.indexOf(req.session!.githubUsername) !== -1) {
             return next();

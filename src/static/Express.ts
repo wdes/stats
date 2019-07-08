@@ -1,6 +1,6 @@
 'use strict';
 
-import { Request, Response, static as staticModule } from 'express';
+import { Request, Response, static as staticModule, NextFunction } from 'express';
 import * as express from 'express';
 
 import logger from '@util/logger';
@@ -29,7 +29,7 @@ app.use(require('vhost')(process.env.APIDOCS_DOMAIN, staticModule(__dirname + '/
 app.use(staticModule(__dirname + '/../public'));
 app.use(githubAuth.passport.initialize());
 
-app.all('/*', function(req: Request, res: Response, next: Function) {
+app.all('/*', function(req: Request, res: Response, next: NextFunction) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'DELETE,GET,POST,OPTIONS');
     res.header(

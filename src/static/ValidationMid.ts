@@ -1,19 +1,19 @@
 'use strict';
 
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as joi from 'joi';
 
 /**
  * Default Validation Callback.
  * @param {Object} req request
  * @param {Object} res response
- * @param {Function} next next function
+ * @param {NextFunction} next next function
  * @returns {Function}
  */
 function validationCallback(
     req: Request,
     res: Response,
-    next: Function
+    next: NextFunction
 ): (error: joi.ValidationError, value: any) => void {
     return (err, value) => {
         // Check if error
@@ -35,10 +35,9 @@ function validationCallback(
 /**
  * Middleware function.
  * @param {Object} schema Schema to validate
- * @returns {Function}
  */
-function middleware(schema): (req: Request, res: Response, next: Function) => void {
-    return (req: Request, res: Response, next: Function) => {
+function middleware(schema): (req: Request, res: Response, next: NextFunction) => void {
+    return (req: Request, res: Response, next: NextFunction) => {
         const objectToValidate = {};
         ['params', 'body', 'query', 'headers'].forEach(key => {
             if (schema[key]) {

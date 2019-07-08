@@ -4,7 +4,7 @@ import sequelize from '@static/sequelize';
 import logger from '@util/logger';
 import * as Sentry from '@sentry/node';
 import { QueryTypes } from 'sequelize';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import * as pathToRegexp from 'path-to-regexp';
 const RequestMid = {
@@ -53,7 +53,7 @@ const RequestMid = {
                 onError(500);
             });
     },
-    tokenMid: function(req: Request, res: Response, next: Function) {
+    tokenMid: function(req: Request, res: Response, next: NextFunction) {
         //logger.debug("Start check.");
         var token = req.body.token || req.query.token || req.headers.authorization;
         if (!token) {

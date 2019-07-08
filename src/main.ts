@@ -8,7 +8,7 @@ import RequestMid from '@static/RequestMid';
 
 import * as path from 'path';
 import * as packageJson from '@root/package.json';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { AddressInfo } from 'net';
 import { AppMessage, AppMessageTypes } from '@lib/interfaces';
 
@@ -59,7 +59,7 @@ app.use(function(req, res) {
 if (app.get('env') == 'development') {
     app.use(require('errorhandler')());
 }
-app.use(function(err, req: Request, res: Response, next: Function) {
+app.use(function(err, req: Request, res: Response, next: NextFunction) {
     // if (app.get('env') == 'test') {
     //logger.error(err);
     // }
