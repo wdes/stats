@@ -42,6 +42,7 @@
         "migrate:development:reset": "NODE_ENV=development ts-node ./node_modules/.bin/sequelize db:migrate:undo:all --config config/db.ts --env development",
         "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.ts\" \"*.ts\" \"*/**/*.js\" \"*.js\"",
         "jshint": "jshint ./",
+        "tslint": "tslint -c tslint.json --project ./",
         "install:service": "ts-node service.ts",
         "start": "NODE_ENV=production node dist/server.js",
         "start:dev": "NODE_ENV=development node dist/server.js",
@@ -107,7 +108,9 @@
         "mocha": "^6.1.4",
         "nyc": "^14.1.1",
         "prettier": "^1.18.2",
-        "sinon": "^7.3.2"
+        "sinon": "^7.3.2",
+        "tslint": "^5.18.0",
+        "tslint-config-prettier": "^1.18.0"
     },
     "prettier": {
         "singleQuote": true,

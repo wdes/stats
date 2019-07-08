@@ -52,6 +52,10 @@ jobs:
           script:
               - npm run jshint
         - stage: lint
+          name: 'Run tslint'
+          script:
+              - npm run tslint
+        - stage: lint
           name: 'Build typescript'
           script:
               - npm run build
