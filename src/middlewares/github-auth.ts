@@ -3,7 +3,7 @@
 import * as passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github';
 import { Request, Response, NextFunction } from 'express';
-var githubAdmins = process.env.GITHUB_ADMINS || '';
+const githubAdmins = process.env.GITHUB_ADMINS || '';
 
 const githubUsers = githubAdmins.split(',').map(user => user.trim());
 
@@ -14,7 +14,7 @@ const strategy = new GitHubStrategy(
         callbackURL: process.env.GITHUB_CALLBACK_URL,
         passReqToCallback: true,
     },
-    (req: Request, accessToken, refreshToken, profile, cb: Function) => {
+    (req: Request, accessToken, refreshToken, profile, cb: (err: Error | null, data: any) => void) => {
         if (githubUsers.indexOf(profile.username || '') !== -1) {
             return cb(null, profile);
         } else {

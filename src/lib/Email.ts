@@ -1,8 +1,8 @@
 'use strict';
 
 export default {
-    emailChangeStatusCode: function(name: string, prevCode: string, actualCode: string, timestamp: number) {
-        var timeEvent = new Date(timestamp * 1000);
+    emailChangeStatusCode: (name: string, prevCode: string, actualCode: string, timestamp: number): string => {
+        const timeEvent = new Date(timestamp * 1000);
         return (
             '[WDES-STATS]\r\n' +
             'The status of server ' +

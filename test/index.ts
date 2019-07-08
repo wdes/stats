@@ -1,11 +1,11 @@
 'use strict';
 
 process.env.TZ = 'UTC';
-require('module-alias/register');
+require('module-alias')(__dirname + '/../');
 import stack from '@test/stack';
 import logger from '@test/logger';
 
-suite('WdesStats', function() {
+suite('WdesStats', () => {
     stack();
     logger();
 }).beforeAll('Load ENV', done => {

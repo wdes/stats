@@ -1,12 +1,13 @@
 'use strict';
 
 import { Request, Response, static as staticModule, NextFunction } from 'express';
+// tslint:disable-next-line: no-duplicate-imports
 import * as express from 'express';
 
 import logger from '@util/logger';
 import sequelize from '@static/sequelize';
-import githubAuth from '@src/middlewares/github-auth';
-let app: express.Express = express();
+import githubAuth from '@middlewares/github-auth';
+const app: express.Express = express();
 logger.debug('Loading the express app');
 
 /**
@@ -38,7 +39,7 @@ app.all('/*', (req: Request, res: Response, next: NextFunction): void => {
     );
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow, noimageindex');
-    if (req.method == 'OPTIONS') {
+    if (req.method === 'OPTIONS') {
         res.status(200).end();
     } else {
         next();

@@ -7,9 +7,9 @@ import stack from '@lib/stack';
 import Queue, { QueueModel } from '@models/queue';
 import logger from '@util/logger';
 
-const takeNextN = function(first: boolean, groupName: string) {
+const takeNextN = (first: boolean, groupName: string) => {
     return (n: number, cb: (error: any, lockId: string) => void): void => {
-        //(error: any, lockId: string)
+        // (error: any, lockId: string)
         Queue.findAll({
             where: {
                 lock: '',
@@ -20,7 +20,7 @@ const takeNextN = function(first: boolean, groupName: string) {
             attributes: ['id'],
         })
             .then((queues: QueueModel[]) => {
-                let lockId = randomBytes(16).toString('hex');
+                const lockId = randomBytes(16).toString('hex');
                 Queue.update(
                     {
                         lock: lockId,
@@ -44,33 +44,33 @@ const takeNextN = function(first: boolean, groupName: string) {
     };
 };
 
-export const getStore = function(groupName: string) {
-    interface tasks {
+export const getStore = (groupName: string) => {
+    interface Tasks {
         [lockId: string]: {
             [rowId: string]: string;
         };
     }
-    const getRunningTasks = function(cb: (error: null, tasks: tasks) => void, data?: any): void {
+    const getRunningTasks = (cb: (error: null, tasks: Tasks) => void, data?: any): void => {
         Queue.findAll({
             attributes: ['id', 'task', 'lock'],
             where: { groupName: groupName },
         })
-            .then(function(rows) {
-                var tasks: tasks = {};
-                rows.forEach(function(row) {
+            .then(rows => {
+                const runningTasks: Tasks = {};
+                rows.forEach(row => {
                     if (!row.lock) {
                         return;
                     }
-                    tasks[row.lock] = tasks[row.lock] || [];
-                    tasks[row.lock][row.id] = JSON.parse(row.task);
+                    runningTasks[row.lock] = runningTasks[row.lock] || [];
+                    runningTasks[row.lock][row.id] = JSON.parse(row.task);
                 });
-                cb(null, tasks);
+                cb(null, runningTasks);
             })
             .error(cb);
     };
-    let store: BetterQueue.Store<string> = {
+    const store: BetterQueue.Store<string> = {
         connect: cb => {
-            //connect(cb: (error: any, length: number) => void): void;
+            // connect(cb: (error: any, length: number) => void): void;
             Queue.count({
                 where: {
                     groupName: groupName,
@@ -85,7 +85,7 @@ export const getStore = function(groupName: string) {
                 });
         },
         getTask: (taskId, cb) => {
-            //getTask(taskId: any, cb: (error: any, task: T) => void): void;
+            // getTask(taskId: any, cb: (error: any, task: T) => void): void;
             Queue.findOne({
                 where: { id: taskId, groupName: groupName },
                 attributes: ['task'],
@@ -99,7 +99,7 @@ export const getStore = function(groupName: string) {
                 });
         },
         putTask: (taskId, task, priority, cb) => {
-            //putTask(taskId: any, task: T, priority: number, cb: (error: any) => void): void;
+            // putTask(taskId: any, task: T, priority: number, cb: (error: any) => void): void;
             Queue.create({
                 id: taskId,
                 task: JSON.stringify(task),
@@ -115,10 +115,10 @@ export const getStore = function(groupName: string) {
                     cb(err);
                 });
         },
-        takeFirstN: takeNextN(true, groupName), //takeFirstN(n: number, cb: (error: any, lockId: string) => void): void;
-        takeLastN: takeNextN(false, groupName), //takeLastN(n: number, cb: (error: any, lockId: string) => void): void;
+        takeFirstN: takeNextN(true, groupName), // takeFirstN(n: number, cb: (error: any, lockId: string) => void): void;
+        takeLastN: takeNextN(false, groupName), // takeLastN(n: number, cb: (error: any, lockId: string) => void): void;
         deleteTask: (taskId, cb) => {
-            //deleteTask(taskId: any, cb: () => void): void;
+            // deleteTask(taskId: any, cb: () => void): void;
             Queue.destroy({ where: { id: taskId, groupName: groupName } })
                 .then(() => {
                     cb();
@@ -129,11 +129,11 @@ export const getStore = function(groupName: string) {
                 });
         },
         getLock: (lockId, cb) => {
-            //getLock(lockId: string, cb: (error: any, tasks: { [taskId: string]: T }) => void): void;
+            // getLock(lockId: string, cb: (error: any, tasks: { [taskId: string]: T }) => void): void;
             Queue.findAll({ where: { lock: lockId, groupName: groupName } })
                 .then(rows => {
-                    var tasks = {};
-                    rows.forEach(function(row) {
+                    const tasks = {};
+                    rows.forEach(row => {
                         tasks[row.id] = JSON.parse(row.task);
                     });
                     cb(null, tasks);
@@ -144,7 +144,7 @@ export const getStore = function(groupName: string) {
                 });
         },
         releaseLock: (lockId, cb) => {
-            //releaseLock(lockId: string, cb: (error: any) => void): void;
+            // releaseLock(lockId: string, cb: (error: any) => void): void;
             Queue.destroy({ where: { lock: lockId, groupName: groupName } })
                 .then(() => {
                     cb(null);
@@ -155,24 +155,24 @@ export const getStore = function(groupName: string) {
                 });
         },
     };
-    let astore: any = store;
+    const astore: any = store;
     astore.getRunningTasks = getRunningTasks;
     return astore;
 };
 
 export default {
     smsQueue: () => {
-        let smsStack = stack();
+        const smsStack = stack();
         smsStack.init(
             1000,
             () => {
-                //Tick callback
+                // Tick callback
             },
             messages => {
                 messages.forEach(message => {
                     Sms.sendSms(message)
                         .then(data => {
-                            //localLogger.debug(data.response.statusCode, data.response.body);
+                            // localLogger.debug(data.response.statusCode, data.response.body);
                         })
                         .catch(err => {
                             logger.error(err);

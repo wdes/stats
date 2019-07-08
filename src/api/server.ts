@@ -2,7 +2,7 @@
 
 import Servers from '@lib/Servers';
 import app from '@static/Express';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import serverExists from '@middlewares/serverExists';
 
 /**
@@ -17,14 +17,14 @@ import serverExists from '@middlewares/serverExists';
  *      "statusCode": 200
  *    }
  */
-app.get('/api/10/server/lastStatusCode', serverExists('query', 'id'), function(
-    req: Request,
-    res: Response,
-    next: Function
-) {
-    Servers.lastStatusCode(req.query.id)
-        .then(statusCode => {
-            res.send({ statusCode: statusCode });
-        })
-        .catch(err => next(err));
-});
+app.get(
+    '/api/10/server/lastStatusCode',
+    serverExists('query', 'id'),
+    (req: Request, res: Response, next: NextFunction) => {
+        Servers.lastStatusCode(req.query.id)
+            .then(statusCode => {
+                res.send({ statusCode: statusCode });
+            })
+            .catch(err => next(err));
+    }
+);

@@ -1,5 +1,5 @@
 'use strict';
-import githubAuth from '@src/middlewares/github-auth';
+import githubAuth from '@middlewares/github-auth';
 import app from '@static/Express';
 import { Request, Response } from 'express';
 

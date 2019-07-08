@@ -6,7 +6,7 @@ import Sms from '@lib/Sms';
 import logger from '@util/logger';
 import smsQueue from '@static/smsQueue';
 import { ScheduledTask, validate, schedule } from 'node-cron';
-import { MonitoringServerModel } from '@db/models/monitoring__servers';
+import { MonitoringServerModel } from '@models/monitoring__servers';
 import { AppMessage, AppMessageTypes } from './interfaces';
 const serversTasks: {
     server: MonitoringServerModel;
@@ -23,7 +23,7 @@ import * as cluster from 'cluster';
  * @param {Server} server The server object
  * @return {void}
  */
-const recordStatForServer = function(server) {
+const recordStatForServer = server => {
     Status.getServerStatus(server.url, 'HEAD')
         .then(data => {
             Servers.recordStat(
@@ -44,10 +44,10 @@ const recordStatForServer = function(server) {
                                     dataChanged.ts
                                 )
                             )
-                            .on('failed', function(err) {
+                            .on('failed', (err): void => {
                                 logger.error('task failed', err);
                             });
-                        //{"name": "STATUS_CHANGED", "prevCode": "204", "actualCode": "200", "ts": 1548288000}
+                        // {"name": "STATUS_CHANGED", "prevCode": "204", "actualCode": "200", "ts": 1548288000}
                     }
                 })
                 .catch(err => {
@@ -64,13 +64,13 @@ const recordStatForServer = function(server) {
  * @param {MonitoringServerModel} server The server model
  * @return {void}
  */
-const scheduleServer = function(server: MonitoringServerModel) {
-    let scheduleRequest: AppMessage = {
+const scheduleServer = (server: MonitoringServerModel): void => {
+    const scheduleRequest: AppMessage = {
         topic: AppMessageTypes.SCHEDULE_SERVER,
         body: server,
     };
     if (cluster.isMaster) {
-        let serverSearch = serversTasks.find(obj => obj.server.id === server.id);
+        const serverSearch = serversTasks.find(obj => obj.server.id === server.id);
         if (serverSearch !== undefined) {
             serverSearch.task.start();
             serverSearch.taskState.scheduled = true;
@@ -105,29 +105,29 @@ const scheduleServer = function(server: MonitoringServerModel) {
         }
     } else {
         logger.info('Sending a request to master process', scheduleRequest);
-        (<any>process).send(scheduleRequest); //FIXME: bad hack
+        (process as any).send(scheduleRequest); // FIXME: bad hack
     }
 };
 
-const unScheduleServer = function(server: MonitoringServerModel): void {
-    let unScheduleRequest: AppMessage = {
+const unScheduleServer = (server: MonitoringServerModel): void => {
+    const unScheduleRequest: AppMessage = {
         topic: AppMessageTypes.UNSCHEDULE_SERVER,
         body: server,
     };
     if (cluster.isMaster) {
-        let serverSearch = serversTasks.find(obj => obj.server.id === server.id);
+        const serverSearch = serversTasks.find(obj => obj.server.id === server.id);
         if (serverSearch !== undefined) {
             serverSearch.task.stop();
             serverSearch.taskState.scheduled = false;
         }
     } else {
         logger.info('Sending a request to master process', unScheduleRequest);
-        (<any>process).send(unScheduleRequest); //FIXME: bad hack
+        (process as any).send(unScheduleRequest); // FIXME: bad hack
     }
 };
 
-const getTasks = function() {
-    let serversTasksToSend: {
+const getTasks = () => {
+    const serversTasksToSend: {
         server: MonitoringServerModel;
         taskState: {
             destroyed: boolean;
@@ -140,20 +140,20 @@ const getTasks = function() {
             taskState: serversTask.taskState,
         });
     });
-    let tasksListResponse: AppMessage = {
+    const tasksListResponse: AppMessage = {
         topic: AppMessageTypes.TASKS_LIST,
         body: serversTasksToSend,
     };
     return tasksListResponse;
 };
 
-const askForServersTasks = function(): void {
+const askForServersTasks = (): void => {
     if (cluster.isMaster === false) {
-        let askForTasks: AppMessage = {
+        const askForTasks: AppMessage = {
             topic: AppMessageTypes.ASK_TASKS_LIST,
         };
-        //logger.debug('Sending a request to master process', askForTasks);
-        (<any>process).send(askForTasks); //FIXME: bad hack
+        // logger.debug('Sending a request to master process', askForTasks);
+        (process as any).send(askForTasks); // FIXME: bad hack
     }
 };
 

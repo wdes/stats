@@ -13,11 +13,10 @@ export class MonitoringServerModel extends Model {
     public static associations: {};
 }
 
-export type MonitoringServerStatic = typeof Model & {
-    new (values?: object, options?: BuildOptions): MonitoringServerModel;
-};
+export type MonitoringServerStatic = typeof Model &
+    (new (values?: object, options?: BuildOptions) => MonitoringServerModel);
 
-const MonitoringServer = <MonitoringServerStatic>Sequelize.sequelize.define(
+const MonitoringServer = Sequelize.sequelize.define(
     'MonitoringServer',
     {
         id: {
@@ -47,6 +46,6 @@ const MonitoringServer = <MonitoringServerStatic>Sequelize.sequelize.define(
         tableName: 'monitoring__servers',
         freezeTableName: true,
     }
-);
+) as MonitoringServerStatic;
 
 export default MonitoringServer;

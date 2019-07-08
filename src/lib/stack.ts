@@ -42,13 +42,13 @@ export default () => {
      */
     let tasks: string[] = [];
 
-    let _maxLength = 0;
+    let maxLength = 0;
 
     return {
         chunkSubstr: chunkSubstr,
         addToStack: (message: string) => tasks.push(message),
-        init: (maxLength: number, cbTickSuccess: () => void, cbEmptyQueue: (messages: string[]) => void): void => {
-            _maxLength = maxLength;
+        init: (maxiLength: number, cbTickSuccess: () => void, cbEmptyQueue: (messages: string[]) => void): void => {
+            maxLength = maxiLength;
             tasks = [];
             task = cron.schedule('*/30 * * * * *', () => {
                 sendStack(tasks, maxLength, cbEmptyQueue);
@@ -62,7 +62,7 @@ export default () => {
             }
         },
         getCronTask: () => task,
-        getMaxLength: (): number => _maxLength,
+        getMaxLength: (): number => maxLength,
         getTasksCount: (): number => tasks.length,
         getTasks: () => tasks,
     };

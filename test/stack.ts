@@ -5,11 +5,11 @@ import { expect } from 'chai';
 import * as sinon from 'sinon';
 
 export default () => {
-    suite('stack timers scheduler calls', function() {
-        var timers: sinon.SinonFakeTimers;
-        var spy: sinon.SinonSpy<any[], any>;
-        var stackTest;
-        setup(function() {
+    suite('stack timers scheduler calls', () => {
+        let timers: sinon.SinonFakeTimers;
+        let spy: sinon.SinonSpy<any[], any>;
+        let stackTest;
+        setup(() => {
             timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
                 shouldAdvanceTime: true,
@@ -43,17 +43,17 @@ export default () => {
             done();
         });
 
-        teardown(function() {
+        teardown(() => {
             timers.restore();
             stackTest.stop();
             sinon.restore();
         });
     });
 
-    suite('stack timers', function() {
-        var timers: sinon.SinonFakeTimers;
+    suite('stack timers', () => {
+        let timers: sinon.SinonFakeTimers;
 
-        setup(function() {
+        setup(() => {
             timers = sinon.useFakeTimers({
                 now: new Date().getTime(),
                 shouldAdvanceTime: true,
@@ -61,7 +61,7 @@ export default () => {
         });
 
         test('add to stack', done => {
-            var stackTest = stack();
+            const stackTest = stack();
             stackTest.init(30, () => {}, () => {});
             expect(stackTest.getTasks()).to.deep.equal([]);
             stackTest.addToStack('Test message');
@@ -71,9 +71,9 @@ export default () => {
         });
 
         test('Test to group messages', done => {
-            var spy = sinon.spy();
-            var spyTimer = sinon.spy();
-            var stackTest = stack();
+            const spy = sinon.spy();
+            const spyTimer = sinon.spy();
+            const stackTest = stack();
             stackTest.init(
                 30,
                 () => {
@@ -108,9 +108,9 @@ export default () => {
         });
 
         test('Test to group messages (dataset: 2)', done => {
-            var spy = sinon.spy();
-            var spyTimer = sinon.spy();
-            var stackTest = stack();
+            const spy = sinon.spy();
+            const spyTimer = sinon.spy();
+            const stackTest = stack();
             stackTest.init(
                 100,
                 () => {
@@ -148,13 +148,13 @@ export default () => {
         });
 
         test('cron task getter', done => {
-            var stackTest = stack();
+            const stackTest = stack();
             stackTest.init(100, () => {}, taskMessage => {});
             stackTest.getCronTask().start();
             done();
         });
 
-        teardown(function() {
+        teardown(() => {
             timers.restore();
             sinon.restore();
         });

@@ -3,29 +3,30 @@
 import * as BetterQueue from 'better-queue';
 import stack from '@lib/stack';
 import * as nodemailer from 'nodemailer';
+// tslint:disable-next-line: no-submodule-imports
 import { Attachment } from 'nodemailer/lib/mailer';
 import logger from '@util/logger';
 import { getStore } from '@lib/queue';
 
-export default class emailQueue {
+export default class EmailQueue {
     private static emailQueue: BetterQueue | null = null;
     public static getQueue() {
-        if (emailQueue.emailQueue === null) {
-            let emailStack = stack();
+        if (EmailQueue.emailQueue === null) {
+            const emailStack = stack();
             emailStack.init(
                 10000,
                 () => {
-                    //Tick callback
+                    // Tick callback
                 },
                 messages => {
                     messages.forEach(message => {
-                        emailQueue.sendEmail(message).catch(err => {
+                        EmailQueue.sendEmail(message).catch(err => {
                             logger.error(err);
                         });
                     });
                 }
             );
-            emailQueue.emailQueue = new BetterQueue(
+            EmailQueue.emailQueue = new BetterQueue(
                 (input, cb) => {
                     emailStack.addToStack(input);
                     cb(null, {});
@@ -38,11 +39,11 @@ export default class emailQueue {
                 }
             );
         }
-        return emailQueue.emailQueue;
+        return EmailQueue.emailQueue;
     }
     public static sendEmail(message: string) {
         const { EMAIL_FROM, EMAIL_TO } = process.env;
-        return emailQueue.getTransporter().sendMail({
+        return EmailQueue.getTransporter().sendMail({
             from: EMAIL_FROM,
             to: EMAIL_TO,
             subject: 'WdesStats',
@@ -51,7 +52,7 @@ export default class emailQueue {
     }
     public static sendBackupEmail(message: string, attachments: Attachment[]) {
         const { EMAIL_FROM, EMAIL_TO } = process.env;
-        return emailQueue.getTransporter().sendMail({
+        return EmailQueue.getTransporter().sendMail({
             from: EMAIL_FROM,
             to: EMAIL_TO,
             subject: 'WdesStats - Backup',
@@ -63,7 +64,7 @@ export default class emailQueue {
         const { EMAIL_HOST, EMAIL_PORT, EMAIL_SECURE, EMAIL_USER, EMAIL_PASSWORD } = process.env;
         return nodemailer.createTransport({
             host: EMAIL_HOST,
-            port: parseInt(EMAIL_PORT || ''),
+            port: parseInt(EMAIL_PORT || '', 10),
             secure: EMAIL_SECURE === 'YES',
             auth: {
                 user: EMAIL_USER,

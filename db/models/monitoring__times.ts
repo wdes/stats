@@ -11,11 +11,10 @@ export class MonitoringTimeModel extends Model {
     public static associations: {};
 }
 
-export type MonitoringTimeStatic = typeof Model & {
-    new (values?: object, options?: BuildOptions): MonitoringTimeModel;
-};
+export type MonitoringTimeStatic = typeof Model &
+    (new (values?: object, options?: BuildOptions) => MonitoringTimeModel);
 
-const MonitoringTime = <MonitoringTimeStatic>Sequelize.sequelize.define(
+const MonitoringTime = Sequelize.sequelize.define(
     'MonitoringTime',
     {
         idServer: {
@@ -39,7 +38,7 @@ const MonitoringTime = <MonitoringTimeStatic>Sequelize.sequelize.define(
         tableName: 'monitoring__times',
         freezeTableName: true,
     }
-);
+) as MonitoringTimeStatic;
 
 MonitoringTime.removeAttribute('id');
 

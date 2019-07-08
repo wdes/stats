@@ -14,11 +14,9 @@ export class QueueModel extends Model {
     public static associations: {};
 }
 
-export type QueueStatic = typeof Model & {
-    new (values?: object, options?: BuildOptions): QueueModel;
-};
+export type QueueStatic = typeof Model & (new (values?: object, options?: BuildOptions) => QueueModel);
 
-const Queue = <QueueStatic>Sequelize.sequelize.define(
+const Queue = Sequelize.sequelize.define(
     'Queue',
     {
         id: {
@@ -55,6 +53,6 @@ const Queue = <QueueStatic>Sequelize.sequelize.define(
         freezeTableName: true,
         timestamps: false,
     }
-);
+) as QueueStatic;
 
 export default Queue;

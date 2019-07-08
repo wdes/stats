@@ -18,19 +18,21 @@ const svc = new Service({
     },
 });
 
-svc.on('install', function() {
+svc.on('install', () => {
     svc.start();
 });
-svc.on('start', function() {
+svc.on('start', () => {
+    // tslint:disable-next-line: no-console
     console.log('Starting service');
 });
-svc.on('stop', function() {
+svc.on('stop', () => {
+    // tslint:disable-next-line: no-console
     console.log('Stopping service');
 });
-svc.on('doesnotexist', function() {
+svc.on('doesnotexist', () => {
     svc.install();
 });
-svc.on('uninstall', function() {
+svc.on('uninstall', () => {
     svc.install();
 });
 

@@ -5,14 +5,15 @@ import { Request, Response, NextFunction } from 'express';
 import MonitoringServer, { MonitoringServerModel } from '@models/monitoring__servers';
 import MonitoringStatusCode, { MonitoringStatusCodeModel } from '@models/monitoring__status-codes';
 import MonitoringTime, { MonitoringTimeModel } from '@models/monitoring__times';
-import emailQueue from '@static/emailQueue';
+import EmailQueue from '@static/emailQueue';
+// tslint:disable-next-line: no-submodule-imports
 import { Attachment } from 'nodemailer/lib/mailer';
 
 app.get('/admin/operations/backup', (req: Request, res: Response, next: NextFunction) => {
     Promise.all([MonitoringServer.findAll(), MonitoringStatusCode.findAll(), MonitoringTime.findAll()]).then(
         (models: [MonitoringServerModel[], MonitoringStatusCodeModel[], MonitoringTimeModel[]]) => {
-            let backupDate = new Date().toISOString();
-            let attachements: Attachment[] = [
+            const backupDate = new Date().toISOString();
+            const attachements: Attachment[] = [
                 {
                     filename: 'servers.json',
                     content: JSON.stringify(models[0]),
@@ -29,7 +30,7 @@ app.get('/admin/operations/backup', (req: Request, res: Response, next: NextFunc
                     contentType: 'application/json',
                 },
             ];
-            emailQueue.sendBackupEmail(
+            EmailQueue.sendBackupEmail(
                 'Here is your backup.\nCreated at: ' +
                     backupDate +
                     '\nServers: ' +

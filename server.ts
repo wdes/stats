@@ -17,48 +17,48 @@ log4js.configure({
 import schedule from '@lib/schedule';
 import { AppMessage, AppMessageTypes } from '@lib/interfaces';
 
-var restartWorkers = true;
+let restartWorkers = true;
 
-var workers: cluster.Worker[] = [];
+const workers: cluster.Worker[] = [];
 
 if (cluster.isMaster) {
     // Code to run if we're in the master process
     process.title = 'M:WdesStats';
     let logger = log4js.getLogger('server');
-    var stdin = process.openStdin();
-    const stopServer = function(allowRestart = false) {
+    const stdin = process.openStdin();
+    const stopServer = (allowRestart: boolean = false): void => {
         logger.debug('Received stop command !');
         restartWorkers = allowRestart;
-        for (var workerId in cluster.workers) {
-            let worker = cluster.workers[workerId];
+        for (const workerId in cluster.workers) {
+            const worker = cluster.workers[workerId];
             if (worker !== undefined) {
                 if (worker.isDead() === false && worker.isConnected()) {
                     try {
-                        let appMessage: AppMessage = {
+                        const appMessage: AppMessage = {
                             topic: AppMessageTypes.APP_STOP,
                         };
                         worker.send(appMessage);
-                        //cluster.workers[workerId].kill();
+                        // cluster.workers[workerId].kill();
                     } catch (error) {}
                 }
             }
         }
     };
-    process.on('SIGTERM', function() {
+    process.on('SIGTERM', () => {
         logger.debug('Received SIGTERM');
         stopServer();
     });
-    process.on('SIGINT', function() {
+    process.on('SIGINT', () => {
         logger.debug('Received SIGINT');
         stopServer();
     });
-    stdin.addListener('data', function(d) {
+    stdin.addListener('data', d => {
         // note:  d is an object, and when converted to a string it will
         // end with a linefeed.  so we (rather crudely) account for that
         // with toString() and then trim()
 
-        var input_str = d.toString().trim();
-        const args = input_str.split(' ');
+        const inputStr = d.toString().trim();
+        const args = inputStr.split(' ');
         switch (args[0]) {
             case 'reload':
                 stopServer(true);
@@ -69,8 +69,8 @@ if (cluster.isMaster) {
         }
     });
     logger = log4js.getLogger('master');
-    for (var i = 0; i < cpus().length; i++) {
-        let thread = cluster.fork();
+    for (let i = 0; i < cpus().length; i++) {
+        const thread = cluster.fork();
         thread.on('message', (data: AppMessage) => {
             if (typeof data === 'object') {
                 switch (data.topic) {
@@ -84,7 +84,7 @@ if (cluster.isMaster) {
                         break;
                     case AppMessageTypes.ASK_TASKS_LIST:
                         logger.debug('Received ', data.topic, ' from ', thread.id);
-                        let worker = cluster.workers[thread.id];
+                        const worker = cluster.workers[thread.id];
                         if (worker !== undefined) {
                             if (worker.isDead() === false && worker.isConnected()) {
                                 worker.send(schedule.getTasks());
@@ -105,16 +105,16 @@ if (cluster.isMaster) {
         if (restartWorkers) {
             workers.push(cluster.fork());
         }
-        var nbr = 0;
-        for (var workerId in workers) {
-            //Count alive workers
+        let nbr = 0;
+        for (const workerId in workers) {
+            // Count alive workers
             if (workers[workerId].isDead() === false) {
                 nbr++;
             }
         }
         if (nbr === 0) {
-            //Everybody dead, kill master process.
-            cluster.disconnect(function() {
+            // Everybody dead, kill master process.
+            cluster.disconnect(() => {
                 logger.info('Exit main process');
                 log4js.shutdown(() => {
                     process.exit(0);
@@ -126,6 +126,6 @@ if (cluster.isMaster) {
     schedule.init();
 } else if (cluster.isWorker) {
     process.title = 'W' + cluster.worker.id + ':WdesStats';
-    //Workers code
+    // Workers code
     require('@src/main');
 }

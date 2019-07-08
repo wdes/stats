@@ -11,11 +11,10 @@ export class MonitoringStatusCodeModel extends Model {
     public static associations: {};
 }
 
-export type MonitoringStatusCodeStatic = typeof Model & {
-    new (values?: object, options?: BuildOptions): MonitoringStatusCodeModel;
-};
+export type MonitoringStatusCodeStatic = typeof Model &
+    (new (values?: object, options?: BuildOptions) => MonitoringStatusCodeModel);
 
-const MonitoringStatusCode = <MonitoringStatusCodeStatic>Sequelize.sequelize.define(
+const MonitoringStatusCode = Sequelize.sequelize.define(
     'MonitoringStatusCode',
     {
         idServer: {
@@ -39,7 +38,7 @@ const MonitoringStatusCode = <MonitoringStatusCodeStatic>Sequelize.sequelize.def
         tableName: 'monitoring__status-codes',
         freezeTableName: true,
     }
-);
+) as MonitoringStatusCodeStatic;
 
 MonitoringStatusCode.removeAttribute('id');
 

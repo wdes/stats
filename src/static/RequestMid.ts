@@ -54,8 +54,9 @@ const RequestMid = {
             });
     },
     tokenMid: (req: Request, res: Response, next: NextFunction): void => {
-        //logger.debug("Start check.");
-        var token = req.body.token || req.query.token || req.headers.authorization;
+        // logger.debug("Start check.");
+        let token = req.body.token || req.query.token || req.headers.authorization;
+        // tslint:disable-next-line: prefer-conditional-expression
         if (!token) {
             token = 'PuBlIcWGESsra7tbxYsDQ8PQOhMT0KeN';
         } else {
@@ -63,9 +64,9 @@ const RequestMid = {
         }
         req.params._token = { token: token };
 
-        var keys = [];
-        var re = pathToRegexp('/api/:version(\\d+)/:section/:action*', keys);
-        var path = re.exec(req.path);
+        const keys = [];
+        const re = pathToRegexp('/api/:version(\\d+)/:section/:action*', keys);
+        const path = re.exec(req.path);
         if (path == null) {
             next();
             return;
@@ -74,9 +75,9 @@ const RequestMid = {
             next();
             return;
         }
-        var scope = path[2] + '.' + path[3];
-        Sentry.configureScope(scope => {
-            scope.setUser({ token: token, scope: scope }); //FIXME: remove token from sentry
+        const scope = path[2] + '.' + path[3];
+        Sentry.configureScope(sentryScope => {
+            sentryScope.setUser({ token: token, scope: scope }); // FIXME: remove token from sentry
         });
         RequestMid.tokenExists(
             token,

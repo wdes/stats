@@ -10,7 +10,7 @@ app.get('/admin/operations/sendsms', (req: Request, res: Response, next: NextFun
 });
 
 app.post('/admin/operations/sendsms', (req: Request, res: Response, next: NextFunction) => {
-    let msg = '[wdes-stats][admin-operations][test]' + req.body.textToSend;
+    const msg = '[wdes-stats][admin-operations][test]' + req.body.textToSend;
     if (req.body.sentToStack && req.body.sentToStack === 'true') {
         smsQueue.push('[queue] ' + msg);
     } else {

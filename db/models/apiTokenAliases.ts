@@ -10,11 +10,10 @@ export class ApiTokenAliasesModel extends Model {
     public static associations: {};
 }
 
-export type ApiTokenAliasesStatic = typeof Model & {
-    new (values?: object, options?: BuildOptions): ApiTokenAliasesModel;
-};
+export type ApiTokenAliasesStatic = typeof Model &
+    (new (values?: object, options?: BuildOptions) => ApiTokenAliasesModel);
 
-const ApiTokenAliases = <ApiTokenAliasesStatic>Sequelize.sequelize.define(
+const ApiTokenAliases = Sequelize.sequelize.define(
     'Api__TokenAliases',
     {
         token: DataTypes.STRING,
@@ -28,7 +27,7 @@ const ApiTokenAliases = <ApiTokenAliasesStatic>Sequelize.sequelize.define(
         timestamps: true,
         freezeTableName: true,
     }
-);
+) as ApiTokenAliasesStatic;
 ApiTokenAliases.removeAttribute('id');
 
 export default ApiTokenAliases;

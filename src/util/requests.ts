@@ -3,6 +3,7 @@
 const UA_STRING = 'Mozilla/5.0 (compatible; wdes-stats bot; +https://wdes-stats.wdes.eu)';
 const U_EMAIL = 'williamdes@wdes.fr';
 import * as request from 'request';
+import logger from '@util/logger';
 
 export interface ServerStatRecord {
     id: number;
@@ -38,7 +39,7 @@ const getServerStatus = (server, method: string = 'HEAD') => {
             },
             (error, response, body) => {
                 if (error) {
-                    console.log({ name: server.name, url: server.url });
+                    logger.debug({ name: server.name, url: server.url });
                     reject(error);
                 } else {
                     resolve({
@@ -49,9 +50,9 @@ const getServerStatus = (server, method: string = 'HEAD') => {
                         times: response.timingPhases,
                     });
                 }
-                //console.log('error:', error); // Print the error if one occurred
-                //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-                //console.log('body:', body); // Print the HTML for the Google homepage.
+                // logger.debug('error:', error); // Print the error if one occurred
+                // logger.debug('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+                // logger.debug('body:', body); // Print the HTML for the Google homepage.
             }
         );
     });
@@ -62,9 +63,9 @@ const getServerStatus = (server, method: string = 'HEAD') => {
  * @param {array} servers The servers
  * @param {function} cbSuccess On success of all requests
  */
-const getServersStatus = (servers, cbSuccess: Function): void => {
-    var status: Promise<ServerStatRecord>[] = [];
-    for (var server in servers) {
+const getServersStatus = (servers, cbSuccess: (data: any[]) => void): void => {
+    const status: Promise<ServerStatRecord>[] = [];
+    for (const server in servers) {
         status.push(getServerStatus(servers[server]));
     }
     Promise.all(status).then(values => {

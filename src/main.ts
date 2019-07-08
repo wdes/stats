@@ -13,7 +13,7 @@ import { AddressInfo } from 'net';
 import { AppMessage, AppMessageTypes } from '@lib/interfaces';
 
 // https://devcenter.heroku.com/articles/dyno-metadata
-//TODO: if env empty no append if not empty join array using dash (-)
+// TODO: if env empty no append if not empty join array using dash (-)
 const envDesc = '-' + (process.env.HEROKU_APP_NAME || '') + '-' + (process.env.HEROKU_RELEASE_VERSION || '');
 const sentryconfig: any = {
     release: packageJson.name + '@' + packageJson.version,
@@ -39,8 +39,8 @@ logger.info('Environnement : %s', app.get('env'));
 logger.debug('Loading pages');
 require('glob')
     .sync(__dirname + '/../src/pages/**/*.js')
-    .forEach(function(file) {
-        //logger.info('Loaded page: ' + file);
+    .forEach(file => {
+        // logger.info('Loaded page: ' + file);
         require(path.resolve(file));
     });
 
@@ -48,20 +48,20 @@ app.use(RequestMid.tokenMid);
 logger.debug('Loading api endpoints');
 require('glob')
     .sync(__dirname + '/../src/api/**/*.js')
-    .forEach(function(file) {
-        //logger.info('Loaded : ' + file);
+    .forEach(file => {
+        // logger.info('Loaded : ' + file);
         require(path.resolve(file));
     });
 
-app.use(function(req, res) {
+app.use((req: Request, res: Response): void => {
     res.status(404).send({ msg: '404: Page not Found' });
 });
-if (app.get('env') == 'development') {
+if (app.get('env') === 'development') {
     app.use(require('errorhandler')());
 }
-app.use(function(err, req: Request, res: Response, next: NextFunction) {
+app.use((err, req: Request, res: Response, next: NextFunction) => {
     // if (app.get('env') == 'test') {
-    //logger.error(err);
+    // logger.error(err);
     // }
     res.status(500).send({ success: false, msg: err.message });
     Sentry.captureException(err);
@@ -69,11 +69,11 @@ app.use(function(err, req: Request, res: Response, next: NextFunction) {
 
 logger.debug('Start the express server');
 const PORT = process.env.PORT || 4500;
-let _server = app.listen(PORT, () => {
-    let serverAddress = _server.address();
+const localServer = app.listen(PORT, () => {
+    const serverAddress = localServer.address();
     if (typeof serverAddress === 'object' && serverAddress !== null) {
-        let address: AddressInfo = serverAddress;
-        var port = address.port;
+        const address: AddressInfo = serverAddress;
+        const port = address.port;
         logger.info('Serveur WdesStats démarré sur le port : %s', port);
     }
     app.emit('appStarted');
@@ -81,16 +81,16 @@ let _server = app.listen(PORT, () => {
 
 app.on(AppMessageTypes.APP_STOP, () => {
     logger.info('Received (appStop) ...');
-    _server.close(() => {
+    localServer.close(() => {
         logger.info('Express is closed.');
     });
     app.emit('close');
 });
 
-process.on('message', function(message: AppMessage) {
+process.on('message', (message: AppMessage): void => {
     app.emit(message.topic, message); // Retransmission de l'event dans expressJS
 });
-process.on('SIGTERM', function() {
+process.on('SIGTERM', (): void => {
     logger.info('Terminating (SIGTERM) ...');
     app.emit('appStop');
 });

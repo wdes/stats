@@ -3,7 +3,7 @@
 import Servers from '@lib/Servers';
 import app from '@static/Express';
 import { Request, Response, NextFunction } from 'express';
-import MonitoringServer from '@db/models/monitoring__servers';
+import MonitoringServer from '@models/monitoring__servers';
 import schedule from '@lib/schedule';
 
 app.get('/admin/servers', (req: Request, res: Response, next: NextFunction) => {

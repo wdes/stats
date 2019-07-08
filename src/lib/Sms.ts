@@ -3,12 +3,12 @@
 import * as request from 'request';
 
 export default {
-    sendSms: function(message) {
+    sendSms: message => {
         const { FREE_SMS_API_USER, FREE_SMS_API_PASS } = process.env;
         return new Promise(
             (resolve: (data: { response: request.Response; body: any }) => void, reject: Error | string | any) => {
                 if (FREE_SMS_API_USER !== undefined && FREE_SMS_API_PASS !== undefined) {
-                    var msg = encodeURI(message);
+                    const msg = encodeURI(message);
                     request(
                         'https://smsapi.free-mobile.fr/sendmsg?user=' +
                             FREE_SMS_API_USER +
@@ -16,7 +16,7 @@ export default {
                             FREE_SMS_API_PASS +
                             '&msg=' +
                             msg,
-                        function(error, response, body) {
+                        (error, response, body): void => {
                             if (error) {
                                 reject(error);
                             } else {
@@ -30,8 +30,8 @@ export default {
             }
         );
     },
-    smsChangeStatusCode: function(name, prevCode, actualCode, timestamp) {
-        var timeEvent = new Date(timestamp * 1000);
+    smsChangeStatusCode: (name, prevCode, actualCode, timestamp): string => {
+        const timeEvent = new Date(timestamp * 1000);
         return (
             '[WDES-STATS]\r\n' +
             'The status of server ' +

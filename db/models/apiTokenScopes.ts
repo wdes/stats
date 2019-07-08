@@ -10,11 +10,10 @@ export class ApiTokenScopesModel extends Model {
     public static associations: {};
 }
 
-export type ApiTokenScopesStatic = typeof Model & {
-    new (values?: object, options?: BuildOptions): ApiTokenScopesModel;
-};
+export type ApiTokenScopesStatic = typeof Model &
+    (new (values?: object, options?: BuildOptions) => ApiTokenScopesModel);
 
-const ApiTokenScopes = <ApiTokenScopesStatic>Sequelize.sequelize.define(
+const ApiTokenScopes = Sequelize.sequelize.define(
     'Api__TokenScopes',
     {
         name: {
@@ -31,7 +30,7 @@ const ApiTokenScopes = <ApiTokenScopesStatic>Sequelize.sequelize.define(
         timestamps: true,
         freezeTableName: true,
     }
-);
+) as ApiTokenScopesStatic;
 ApiTokenScopes.removeAttribute('id');
 
 export default ApiTokenScopes;

@@ -3,7 +3,7 @@
 import Servers from '@lib/Servers';
 import app from '@static/Express';
 import { Request, Response, NextFunction } from 'express';
-import serverExists from '@src/middlewares/serverExists';
+import serverExists from '@middlewares/serverExists';
 
 app.get('/stats/:idServer', serverExists('params', 'idServer'), (req: Request, res: Response, next: NextFunction) => {
     Servers.getMonitoringTimes(req.params.idServer)

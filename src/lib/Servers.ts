@@ -5,7 +5,7 @@ import { QueryTypes } from 'sequelize';
 import MonitoringServers, { MonitoringServerModel } from '@models/monitoring__servers';
 
 export default {
-    lastStatusCode: function(serverId: number) {
+    lastStatusCode: (serverId: number) => {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('SELECT getLastStatusCode(?) as `lastStatusCode`;', {
@@ -13,23 +13,23 @@ export default {
                     type: QueryTypes.SELECT,
                     plain: true,
                 })
-                .then(function(data) {
+                .then(data => {
                     resolve(data.lastStatusCode);
                 })
                 .catch(err => reject(err));
         });
     },
-    getMonitoringAvgTimes: function() {
+    getMonitoringAvgTimes: () => {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL getMonitoringAvgTimes();', {
                     type: QueryTypes.SELECT,
                 })
-                .then(function(data) {
-                    var serversTimes: object[] = [];
-                    for (var key in data[0]) {
-                        let element = data[0][key];
-                        let server = {
+                .then(data => {
+                    const serversTimes: object[] = [];
+                    for (const key in data[0]) {
+                        const element = data[0][key];
+                        const server = {
                             idServer: element.id,
                             name: element.name,
                             avgTime: element.avgtime,
@@ -43,17 +43,17 @@ export default {
                 .catch(err => reject(err));
         });
     },
-    getMonitoringTimes: function(serverId: number) {
+    getMonitoringTimes: (serverId: number) => {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL getMonitoringTimes(?);', {
                     replacements: [serverId],
                     type: QueryTypes.SELECT,
                 })
-                .then(function(data) {
+                .then(data => {
                     const timesByDate: object[] = [];
-                    for (var key in data[0]) {
-                        let element = data[0][key];
+                    for (const key in data[0]) {
+                        const element = data[0][key];
                         timesByDate.push({
                             time: element.time,
                             totalTime: element.totalTime,
@@ -64,17 +64,17 @@ export default {
                 .catch(err => reject(err));
         });
     },
-    percentageOfStatusCodesByServer: function(serverId: number) {
+    percentageOfStatusCodesByServer: (serverId: number) => {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL percentageOfStatusCodesByServer(?);', {
                     replacements: [serverId],
                     type: QueryTypes.SELECT,
                 })
-                .then(function(data) {
+                .then(data => {
                     const percentagesByCodes: object[] = [];
-                    for (var key in data[0]) {
-                        let element = data[0][key];
+                    for (const key in data[0]) {
+                        const element = data[0][key];
                         percentagesByCodes.push({
                             value: element.percentage,
                             label: element.statusCode,
@@ -85,7 +85,7 @@ export default {
                 .catch(err => reject(err));
         });
     },
-    serverExists: function(serverId: number) {
+    serverExists: (serverId: number) => {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('SELECT serverExists(?) as `exists`;', {
@@ -93,26 +93,26 @@ export default {
                     type: QueryTypes.SELECT,
                     plain: true,
                 })
-                .then(function(data) {
+                .then(data => {
                     resolve(data.exists === 1);
                 })
                 .catch(err => reject(err));
         });
     },
-    recordStat: function(serverId: number, tstamp: number, totalTime: number, statusCodeIN: number) {
+    recordStat: (serverId: number, tstamp: number, totalTime: number, statusCodeIN: number) => {
         return new Promise((resolve, reject) => {
             sequelize.sequelize
                 .query('CALL recordStat(?, FROM_UNIXTIME(?), ?, ?);', {
                     replacements: [serverId, tstamp, totalTime, statusCodeIN],
                 })
-                .then(function(data) {
+                .then((data): void => {
                     resolve(data);
                 })
                 .catch(err => {
                     if (err.name && err.name === 'SequelizeDatabaseError' && err.parent) {
-                        if (err.parent.sqlState && err.parent.sqlState == 45000) {
+                        if (err.parent.sqlState && (err.parent.sqlState === 45000 || err.parent.sqlState === '45000')) {
                             try {
-                                //#30001 - {"name": "STATUS_CHANGED", "prevCode": "204", "actualCode": "200", "ts": 1548288000}
+                                // #30001 - {"name": "STATUS_CHANGED", "prevCode": "204", "actualCode": "200", "ts": 1548288000}
                                 resolve(JSON.parse(err.parent.sqlMessage));
                             } catch (error) {
                                 reject(error);
@@ -126,21 +126,21 @@ export default {
                 });
         });
     },
-    listServers: function(
+    listServers: (
         options = {
             raw: false,
         }
-    ): Promise<MonitoringServerModel[]> {
+    ): Promise<MonitoringServerModel[]> => {
         return MonitoringServers.findAll(options);
     },
-    countServers: function(
+    countServers: (
         options = {
             where: { disabled: 0 },
         }
-    ) {
+    ) => {
         return MonitoringServers.count(options);
     },
-    addServer: function(name, url, cron, disabled) {
+    addServer: (name, url, cron, disabled) => {
         return MonitoringServers.create({
             name: name,
             url: url,
@@ -148,7 +148,7 @@ export default {
             disabled: disabled,
         });
     },
-    setDisabled: function(id, disabled) {
+    setDisabled: (id, disabled) => {
         return MonitoringServers.update(
             {
                 disabled: disabled,
