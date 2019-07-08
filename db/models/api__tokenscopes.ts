@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true,
         }
     );
-    Api__TokenScopes.associate = function(models) {
+    Api__TokenScopes.associate = (_models: any) => {
         // associations can be defined here
     };
     return Api__TokenScopes;

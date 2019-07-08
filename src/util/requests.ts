@@ -22,7 +22,7 @@ export interface ServerStatRecord {
 /**
  * Get the server status
  */
-const getServerStatus = function(server, method: string = 'HEAD') {
+const getServerStatus = (server, method: string = 'HEAD') => {
     return new Promise((resolve: (data: ServerStatRecord) => void, reject) => {
         request(
             server.url,
@@ -62,7 +62,7 @@ const getServerStatus = function(server, method: string = 'HEAD') {
  * @param {array} servers The servers
  * @param {function} cbSuccess On success of all requests
  */
-const getServersStatus = function(servers, cbSuccess) {
+const getServersStatus = (servers, cbSuccess: Function): void => {
     var status: Promise<ServerStatRecord>[] = [];
     for (var server in servers) {
         status.push(getServerStatus(servers[server]));

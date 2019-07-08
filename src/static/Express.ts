@@ -29,7 +29,7 @@ app.use(require('vhost')(process.env.APIDOCS_DOMAIN, staticModule(__dirname + '/
 app.use(staticModule(__dirname + '/../public'));
 app.use(githubAuth.passport.initialize());
 
-app.all('/*', function(req: Request, res: Response, next: NextFunction) {
+app.all('/*', (req: Request, res: Response, next: NextFunction): void => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'DELETE,GET,POST,OPTIONS');
     res.header(

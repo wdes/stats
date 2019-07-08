@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             freezeTableName: true,
         }
     );
-    Api__TokenAliases.associate = function(models) {
+    Api__TokenAliases.associate = (_models: any) => {
         // associations can be defined here
     };
     return Api__TokenAliases;

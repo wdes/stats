@@ -7,7 +7,7 @@ app.get('/auth/github', githubAuth.passport.authenticate('github', { session: fa
 app.get(
     '/auth/github/callback',
     githubAuth.passport.authenticate('github', { session: false, failureRedirect: '/login' }),
-    function(req: Request, res: Response) {
+    (req: Request, res: Response): void => {
         req.session!.userId = req.user.id;
         req.session!.githubUsername = req.user.username;
         res.redirect('/admin/');

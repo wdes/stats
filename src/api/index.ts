@@ -1,6 +1,7 @@
 'use strict';
 
 import app from '@static/Express';
+import { Request, Response } from 'express';
 
 /**
  * @api {get} /api/10/api/index The api status
@@ -16,7 +17,7 @@ import app from '@static/Express';
  *      "description": "WdesStats API"
  *    }
  */
-app.get('/api/10/api/index', function(req, res) {
+app.get('/api/10/api/index', (req: Request, res: Response): void => {
     res.send({ status: 'online', description: 'WdesStats API' });
 });
 
@@ -27,7 +28,7 @@ app.get('/api/10/api/index', function(req, res) {
  * @apiVersion 1.0.0
  * @apiUse 202AcceptedSuccess
  */
-app.get('/api/10/api/stop', function(req, res) {
+app.get('/api/10/api/stop', (req: Request, res: Response): void => {
     app.emit('appStop');
     res.send({});
 });

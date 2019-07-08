@@ -4,11 +4,11 @@ import * as cron from 'node-cron';
 
 /**
  * Chunk a string
- * @param {String} str The string
- * @param {Number} size The size of a chunk
- * @returns {String[]} The array of chunks
+ * @param {string} str The string
+ * @param {number} size The size of a chunk
+ * @returns {string[]} The array of chunks
  */
-function chunkSubstr(str, size) {
+function chunkSubstr(str: string, size: number): string[] {
     const numChunks = Math.ceil(str.length / size);
     const chunks = new Array(numChunks);
 
@@ -26,11 +26,11 @@ function chunkSubstr(str, size) {
 
 /**
  *
- * @param {String[]} tasks The tasks
- * @param {Number} maxLength The max length
+ * @param {string[]} tasks The tasks
+ * @param {number} maxLength The max length
  * @param {emptyQueueCallback} emptyQueue
  */
-const sendStack = function(tasks, maxLength, emptyQueue) {
+const sendStack = (tasks: string[], maxLength: number, emptyQueue): void => {
     emptyQueue(chunkSubstr(tasks.join('\n--\n'), maxLength));
 };
 
@@ -47,7 +47,7 @@ export default () => {
     return {
         chunkSubstr: chunkSubstr,
         addToStack: (message: string) => tasks.push(message),
-        init: (maxLength, cbTickSuccess, cbEmptyQueue) => {
+        init: (maxLength, cbTickSuccess, cbEmptyQueue): void => {
             _maxLength = maxLength;
             tasks = [];
             task = cron.schedule('*/30 * * * * *', () => {
@@ -56,14 +56,14 @@ export default () => {
                 cbTickSuccess();
             });
         },
-        stop: () => {
+        stop: (): void => {
             if (task) {
                 task.stop();
             }
         },
         getCronTask: () => task,
-        getMaxLength: () => _maxLength,
-        getTasksCount: () => tasks.length,
+        getMaxLength: (): number => _maxLength,
+        getTasksCount: (): number => tasks.length,
         getTasks: () => tasks,
     };
 };

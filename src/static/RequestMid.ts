@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import * as pathToRegexp from 'path-to-regexp';
 const RequestMid = {
-    tokenExists: function(token, onSuccess, onError) {
+    tokenExists: (token, onSuccess, onError): void => {
         if (token.length > 32) {
             onError(400);
             return;
@@ -19,27 +19,27 @@ const RequestMid = {
                 type: QueryTypes.SELECT,
                 plain: true,
             })
-            .then(function(data) {
+            .then((data): void => {
                 if (data.tokenExists === 1) {
                     onSuccess();
                 } else {
                     onError();
                 }
             })
-            .catch(function(err) {
+            .catch((err): void => {
                 logger.error('Erreur tokenExists : ', err);
                 Sentry.captureException(err);
                 onError();
             });
     },
-    hasPermission: function(token, scope, onSuccess, onError, req) {
+    hasPermission: (token, scope, onSuccess, onError, req): void => {
         sequelize.sequelize
             .query('SELECT hasPermission(?,?) as `hasPermission`;', {
                 replacements: [token, scope],
                 type: QueryTypes.SELECT,
                 plain: true,
             })
-            .then(function(data) {
+            .then((data): void => {
                 if (data.hasPermission === 1) {
                     req.params._token.valid = true;
                     onSuccess();
@@ -47,13 +47,13 @@ const RequestMid = {
                     onError(498);
                 }
             })
-            .catch(function(err) {
+            .catch((err): void => {
                 logger.error('Erreur hasPermission : ', err);
                 Sentry.captureException(err);
                 onError(500);
             });
     },
-    tokenMid: function(req: Request, res: Response, next: NextFunction) {
+    tokenMid: (req: Request, res: Response, next: NextFunction): void => {
         //logger.debug("Start check.");
         var token = req.body.token || req.query.token || req.headers.authorization;
         if (!token) {
@@ -80,14 +80,14 @@ const RequestMid = {
         });
         RequestMid.tokenExists(
             token,
-            function() {
+            (): void => {
                 RequestMid.hasPermission(
                     token,
                     scope,
-                    function() {
+                    () => {
                         next();
                     },
-                    function(code) {
+                    code => {
                         if (code === 500) {
                             Sentry.captureMessage('Token verification failed.', Sentry.Severity.Critical);
                             return res.status(500).send({
@@ -105,7 +105,7 @@ const RequestMid = {
                     req
                 );
             },
-            function() {
+            (): Response => {
                 Sentry.captureMessage('Invalid token.', Sentry.Severity.Debug);
                 return res.status(401).send({
                     success: false,

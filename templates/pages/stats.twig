@@ -37,7 +37,7 @@ Morris.Line({
 Morris.Donut({
   element: 'codes',
   data: {{ rowsPercentageStatusCodes }},
-  formatter: function (value, data) { return Math.round(value,0) + '%'; }
+  formatter: (value, data) => Math.round(value,0) + '%'
 });
 
 </script>
