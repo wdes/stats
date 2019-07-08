@@ -3,7 +3,6 @@
 import * as BetterQueue from 'better-queue';
 import { randomBytes } from 'crypto';
 import Sms from '@lib/Sms';
-import Email from '@lib/Email';
 import stack from '@lib/stack';
 import Queue, { QueueModel } from '@models/queue';
 import logger from '@util/logger';
@@ -45,7 +44,7 @@ const takeNextN = function(first: boolean, groupName: string) {
     };
 };
 
-const getStore = function(groupName: string) {
+export const getStore = function(groupName: string) {
     interface tasks {
         [lockId: string]: {
             [rowId: string]: string;
@@ -162,34 +161,6 @@ const getStore = function(groupName: string) {
 };
 
 export default {
-    emailQueue: () => {
-        let emailStack = stack();
-        emailStack.init(
-            10000,
-            () => {
-                //Tick callback
-            },
-            messages => {
-                messages.forEach(message => {
-                    Email.sendEmail(message).catch(err => {
-                        logger.error(err);
-                    });
-                });
-            }
-        );
-        return new BetterQueue(
-            (input, cb) => {
-                emailStack.addToStack(input);
-                cb(null, {});
-            },
-            {
-                batchSize: 1,
-                concurrent: 1,
-                filo: true,
-                store: getStore('email'),
-            }
-        );
-    },
     smsQueue: () => {
         let smsStack = stack();
         smsStack.init(

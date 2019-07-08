@@ -1,14 +1,21 @@
 {% extends 'basic.twig' %}
 {% block title %}Administration | {{ parent() }}{% endblock %}
 {% block body %}
-<div class="col-md-12">
-    <h2>Hello @{{username}}</h2>
-    <ul>
-        <li><a href="/admin/servers">Servers</a></li>
-        <li><a href="/admin/operations">Operations</a></li>
-        <li><a href="/admin/tasks">Tasks</a></li>
-        <li><a href="/">Homepage</a></li>
-        <li><a href="/logout">Logout</a></li>
-    </ul>
+<div class="container">
+    <div class="mt-4">
+        {% for message in messages %}
+            <div class="alert alert-{{message.level}}" role="alert">{{message.message}}</div>
+        {% endfor %}
+    </div>
+    <div class="col-md-12">
+        <h2>Hello @{{username}}</h2>
+        <ul>
+            <li><a href="/admin/servers">Servers</a></li>
+            <li><a href="/admin/operations">Operations</a></li>
+            <li><a href="/admin/tasks">Tasks</a></li>
+            <li><a href="/">Homepage</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
