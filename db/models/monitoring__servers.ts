@@ -2,8 +2,8 @@
 
 import { Model, DataTypes, Association, BuildOptions } from 'sequelize';
 import Sequelize from '@static/sequelize';
-import MonitoringTime, { MonitoringTimeModel } from '@models/monitoring__times';
-import MonitoringStatusCode, { MonitoringStatusCodeModel } from '@models/monitoring__status-codes';
+import { MonitoringTimeModel } from '@models/monitoring__times';
+import { MonitoringStatusCodeModel } from '@models/monitoring__status-codes';
 
 export class MonitoringServerModel extends Model {
     public id!: number;
