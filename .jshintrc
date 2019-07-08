@@ -8,14 +8,5 @@
     "node": true,
     "noempty": true,
     "debug": false,
-    "globals": {
-        "logger": false,
-        "app": false,
-        "cluster": false,
-        "sequelize": false,
-        "Sentry": false,
-        "queue": false,
-        "smsQueue": false,
-        "emailQueue": false
-    }
+    "globals": {}
 }
