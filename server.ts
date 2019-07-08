@@ -30,14 +30,17 @@ if (cluster.isMaster) {
         logger.debug('Received stop command !');
         restartWorkers = allowRestart;
         for (var workerId in cluster.workers) {
-            if (cluster.workers[workerId]!.isDead() === false) {
-                try {
-                    let appMessage: AppMessage = {
-                        topic: AppMessageTypes.APP_STOP,
-                    };
-                    cluster.workers[workerId]!.send(appMessage);
-                    //cluster.workers[workerId].kill();
-                } catch (error) {}
+            let worker = cluster.workers[workerId];
+            if (worker !== undefined) {
+                if (worker.isDead() === false && worker.isConnected()) {
+                    try {
+                        let appMessage: AppMessage = {
+                            topic: AppMessageTypes.APP_STOP,
+                        };
+                        worker.send(appMessage);
+                        //cluster.workers[workerId].kill();
+                    } catch (error) {}
+                }
             }
         }
     };
