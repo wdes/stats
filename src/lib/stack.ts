@@ -35,14 +35,14 @@ const sendStack = (tasks: string[], maxLength: number, emptyQueue): void => {
 };
 
 export default () => {
-    var task: cron.ScheduledTask;
+    let task: cron.ScheduledTask;
 
     /**
      * @var {string[]} tasks The tasks
      */
-    var tasks: string[] = [];
+    let tasks: string[] = [];
 
-    var _maxLength = 0;
+    let _maxLength = 0;
 
     return {
         chunkSubstr: chunkSubstr,

@@ -3,6 +3,7 @@
 import * as BetterQueue from 'better-queue';
 import { randomBytes } from 'crypto';
 import Sms from '@lib/Sms';
+import Email from '@lib/Email';
 import stack from '@lib/stack';
 import Queue from '@models/queue';
 import logger from '@util/logger';
@@ -144,7 +145,10 @@ export default {
             },
             messages => {
                 messages.forEach(message => {
-                    //TODO: implement email sending
+                    Email.sendEmail(message)
+                        .catch(err => {
+                            logger.error(err);
+                        });
                 });
             }
         );

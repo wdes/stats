@@ -9,6 +9,6 @@ import emailQueue from '@static/emailQueue';
 app.get('/queues', githubAuth.isAuthenticated, (req: Request, res: Response, next: NextFunction) => {
     res.render('pages/queues.twig', {
         smsQueueTasksCount: smsQueue.getStats().total,
-        emailQueueTasksCount: emailQueue.getStats().total,
+        emailQueueTasksCount: emailQueue.getQueue().getStats().total,
     });
 });
