@@ -69,7 +69,7 @@ if (cluster.isMaster) {
         }
     });
     logger = log4js.getLogger('master');
-    for (let i = 0; i < cpus().length; i++) {
+    for (const _ of cpus()) {
         const thread = cluster.fork();
         thread.on('message', (data: AppMessage) => {
             if (typeof data === 'object') {

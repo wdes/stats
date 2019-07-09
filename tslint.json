@@ -13,7 +13,6 @@
         "no-implicit-dependencies": false,
         "no-var-requires": false,
         "forin": false,
-        "prefer-for-of": false,
         "interface-name": false,
         "member-ordering": [
             true,
