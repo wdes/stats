@@ -20,7 +20,7 @@ app.post('/admin/addserver', (req: Request, res: Response, next: NextFunction) =
                     ', url: ' +
                     server.url +
                     ', cron: ' +
-                    server.cron +
+                    server.monitoringInterval +
                     ', disabled: ' +
                     isDisabled
             );
