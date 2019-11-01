@@ -68,7 +68,7 @@
         "@types/express-session": "^1.15.14",
         "@types/joi": "^14.3.3",
         "@types/node-cron": "^2.0.2",
-        "@types/nodemailer": "^6.2.1",
+        "@types/nodemailer": "^6.2.2",
         "@types/passport-github": "^1.1.5",
         "@types/request": "^2.48.2",
         "better-queue": "^3.8.10",
