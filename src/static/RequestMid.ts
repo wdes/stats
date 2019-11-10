@@ -32,7 +32,7 @@ const RequestMid = {
                 onError();
             });
     },
-    hasPermission: (token, scope, onSuccess, onError, req): void => {
+    hasPermission: (token, scope, onSuccess, onError, req: Request): void => {
         sequelize.sequelize
             .query('SELECT hasPermission(?,?) as `hasPermission`;', {
                 replacements: [token, scope],
@@ -41,7 +41,7 @@ const RequestMid = {
             })
             .then((data): void => {
                 if (data.hasPermission === 1) {
-                    req.params._token.valid = true;
+                    req.params._token_valid = 'true';
                     onSuccess();
                 } else {
                     onError(498);
@@ -55,14 +55,14 @@ const RequestMid = {
     },
     tokenMid: (req: Request, res: Response, next: NextFunction): void => {
         // logger.debug("Start check.");
-        let token = req.body.token || req.query.token || req.headers.authorization;
+        let token: string = req.body.token || req.query.token || req.headers.authorization;
         // tslint:disable-next-line: prefer-conditional-expression
         if (!token) {
             token = 'PuBlIcWGESsra7tbxYsDQ8PQOhMT0KeN';
         } else {
             token = token.replace('Bearer ', '');
         }
-        req.params._token = { token: token };
+        req.params._token = token;
 
         const keys = [];
         const re = pathToRegexp('/api/:version(\\d+)/:section/:action*', keys);
