@@ -62,7 +62,11 @@ export default () => {
 
         test('add to stack', done => {
             const stackTest = stack();
-            stackTest.init(30, () => {}, () => {});
+            stackTest.init(
+                30,
+                () => {},
+                () => {}
+            );
             expect(stackTest.getTasks()).to.deep.equal([]);
             stackTest.addToStack('Test message');
             expect(stackTest.getTasks()).to.deep.equal(['Test message']);
@@ -149,7 +153,11 @@ export default () => {
 
         test('cron task getter', done => {
             const stackTest = stack();
-            stackTest.init(100, () => {}, taskMessage => {});
+            stackTest.init(
+                100,
+                () => {},
+                taskMessage => {}
+            );
             stackTest.getCronTask().start();
             done();
         });

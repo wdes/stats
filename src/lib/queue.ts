@@ -15,7 +15,10 @@ const takeNextN = (first: boolean, groupName: string) => {
                 lock: '',
                 groupName: groupName,
             },
-            order: [['priority', 'DESC'], ['added', first ? 'ASC' : 'DESC']],
+            order: [
+                ['priority', 'DESC'],
+                ['added', first ? 'ASC' : 'DESC'],
+            ],
             limit: n,
             attributes: ['id'],
         })
