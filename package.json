@@ -62,7 +62,7 @@
     },
     "homepage": "https://gitlab.com/wdes/wdes-stats#readme",
     "dependencies": {
-        "@sentry/node": "^5.7.1",
+        "@sentry/node": "^5.9.0",
         "@types/better-queue": "^3.8.1",
         "@types/express": "^4.17.2",
         "@types/express-session": "^1.15.15",
