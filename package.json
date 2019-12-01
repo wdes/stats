@@ -101,7 +101,7 @@
         "@sentry/cli": "^1.49.0",
         "@types/mocha": "^5.2.7",
         "@types/sinon": "^7.5.0",
-        "apidoc": "^0.17.7",
+        "apidoc": "^0.18.0",
         "chai": "^4.2.0",
         "changelog-generator-twig": "^1.2.0",
         "jshint": "^2.10.3",
