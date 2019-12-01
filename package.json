@@ -81,7 +81,7 @@
         "joi": "^14.3.1",
         "log4js": "^5.3.0",
         "module-alias": "^2.2.2",
-        "mysql2": "^2.0.0",
+        "mysql2": "^2.0.1",
         "node-cron": "^2.0.3",
         "node-linux": "^0.1.12",
         "nodemailer": "^6.3.1",
