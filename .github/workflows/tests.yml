@@ -32,7 +32,7 @@ jobs:
               uses: actions/cache@v1.0.3
               with:
                   path: ~/.npm/
-                  key: npm-cache
+                  key: npm-${{ matrix.node_version }}-cache
             - name: Install modules
               if: matrix.node_version != '8'
               run: npm ci
@@ -83,7 +83,7 @@ jobs:
               uses: actions/cache@v1.0.3
               with:
                   path: ~/.npm/
-                  key: npm-cache
+                  key: npm-${{ matrix.node_version }}-cache
             - name: Install modules
               if: matrix.node_version != '8'
               run: npm ci
