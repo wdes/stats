@@ -48,5 +48,5 @@ jobs:
                   key: npm-cache
             - name: Install modules
               run: npm ci
-            - name: Lint files
+            - name: Build
               run: npm run build

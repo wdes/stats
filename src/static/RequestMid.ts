@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/node';
 import { QueryTypes } from 'sequelize';
 import { Request, Response, NextFunction } from 'express';
 
-import * as pathToRegexp from 'path-to-regexp';
+import { pathToRegexp } from 'path-to-regexp';
 const RequestMid = {
     tokenExists: (token, onSuccess, onError): void => {
         if (token.length > 32) {
