@@ -1,5 +1,6 @@
 # wdes-stats
-[![Build Status](https://travis-ci.com/wdes/stats.svg?branch=master)](https://travis-ci.com/wdes/stats)
+[![Actions Status](https://github.com/wdes/stats/workflows/Run%20tests/badge.svg)](https://github.com/wdes/stats/actions)
+[![Actions Status](https://github.com/wdes/stats/workflows/Lint%20and%20build/badge.svg)](https://github.com/wdes/stats/actions)
 [![codecov](https://codecov.io/gh/wdes/stats/branch/master/graph/badge.svg)](https://codecov.io/gh/wdes/stats)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d4920a1e7a824e44a5fd5c70d32e5479)](https://www.codacy.com/app/wdes/stats?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=wdes/stats&amp;utm_campaign=Badge_Grade)
 [![Lines of Code shield](https://5ezz6jithh.execute-api.us-east-1.amazonaws.com/prod/lambda-shield-redirect?user=wdes&repo=stats)](https://github.com/raptortech-js/sloc-shields)
