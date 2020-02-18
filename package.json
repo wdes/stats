@@ -28,7 +28,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "changelog": "changelog-generator-twig --owner wdes --repo changelog --repoDir ./ --baseCommit 16179d5a534b34f29915590c8e75579b547ebb4a",
+        "changelog": "changelog-generator-twig --convention conventional+legacy --owner wdes --repo stats --repoDir ./ --baseCommit 16179d5a534b34f29915590c8e75579b547ebb4a",
         "changelog-file": "npm run --silent changelog > CHANGELOG.md",
         "apidoc": "apidoc --input src/ --output apidocs --private false",
         "apidoc:private": "apidoc --input src/ --output apidocs --private true",
