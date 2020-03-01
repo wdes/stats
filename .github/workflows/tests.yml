@@ -28,17 +28,18 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node_version }}
-            - name: Cache module
-              uses: actions/cache@v1.0.3
+            - name: Get yarn cache directory path
+              id: yarn-cache-dir-path
+              run: echo "::set-output name=dir::$(yarn cache dir)"
+            - name: yarn cache
+              uses: actions/cache@v1
               with:
-                  path: ~/.npm/
-                  key: npm-${{ matrix.node_version }}-cache
+                  path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-yarn-
             - name: Install modules
-              if: matrix.node_version != '8'
-              run: npm ci
-            - name: Install modules
-              if: matrix.node_version == '8'
-              run: npm install
+              run: yarn install
             - name: Run node tests
               env:
                   DB_TEST_HOST: 127.0.0.1
@@ -47,8 +48,8 @@ jobs:
                   DB_TEST_PORT: ${{ job.services.mysql.ports['3306'] }}
                   DB_TEST_DB: wdes_stats__test
               run: |
-                  npm run test
-                  npm run report-coverage
+                  yarn run test
+                  yarn run report-coverage
             - name: Send coverage
               uses: codecov/codecov-action@v1
               with:
@@ -85,11 +86,7 @@ jobs:
                   path: ~/.npm/
                   key: npm-${{ matrix.node_version }}-cache
             - name: Install modules
-              if: matrix.node_version != '8'
-              run: npm ci
-            - name: Install modules
-              if: matrix.node_version == '8'
-              run: npm install
+              run: yarn install
             - name: Run migrations up and down
               env:
                   DB_TEST_HOST: 127.0.0.1
@@ -98,5 +95,5 @@ jobs:
                   DB_TEST_PORT: ${{ job.services.mysql.ports['3306'] }}
                   DB_TEST_DB: wdes_stats__test
               run: |
-                  npm run migrate:test
-                  npm run migrate:test:reset
+                  yarn run migrate:test
+                  yarn run migrate:test:reset
