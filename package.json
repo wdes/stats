@@ -62,10 +62,10 @@
     },
     "homepage": "https://gitlab.com/wdes/wdes-stats#readme",
     "dependencies": {
-        "@sentry/node": "^5.12.3",
+        "@sentry/node": "^5.13.1",
         "@types/better-queue": "^3.8.2",
         "@types/express": "^4.17.2",
-        "@types/express-session": "^1.15.16",
+        "@types/express-session": "^1.17.0",
         "@types/joi": "^14.3.4",
         "@types/node-cron": "^2.0.3",
         "@types/nodemailer": "^6.4.0",
@@ -84,31 +84,30 @@
         "mysql2": "^2.1.0",
         "node-cron": "^2.0.3",
         "node-linux": "^0.1.12",
-        "nodemailer": "^6.4.2",
+        "nodemailer": "^6.4.3",
         "passport": "^0.4.1",
         "passport-github": "^1.1.0",
         "path-to-regexp": "^6.1.0",
         "request": "^2.88.2",
-        "sequelize": "^5.21.4",
+        "sequelize": "^5.21.5",
         "sequelize-cli": "^5.5.1",
-        "time": "^0.12.0",
         "ts-node": "^8.6.2",
-        "twig": "^1.14.0",
-        "typescript": "^3.7.5",
+        "twig": "^1.15.0",
+        "typescript": "^3.8.3",
         "vhost": "^3.0.2"
     },
     "devDependencies": {
-        "@sentry/cli": "^1.51.0",
+        "@sentry/cli": "^1.51.1",
         "@types/mocha": "^7.0.1",
-        "@types/sinon": "^7.5.1",
+        "@types/sinon": "^7.5.2",
         "apidoc": "^0.20.0",
         "chai": "^4.2.0",
-        "changelog-generator-twig": "^1.3.0",
+        "changelog-generator-twig": "^1.3.1",
         "jshint": "^2.11.0",
-        "mocha": "^7.0.1",
+        "mocha": "^7.1.0",
         "nyc": "^15.0.0",
         "prettier": "^1.19.1",
-        "sinon": "^8.1.1",
+        "sinon": "^9.0.0",
         "tslint": "^6.0.0",
         "tslint-config-prettier": "^1.18.0"
     },
@@ -120,7 +119,7 @@
         "printWidth": 120
     },
     "engines": {
-        "node": "10.10.x"
+        "node": ">=10.0.0"
     },
     "apidoc": {
         "title": "WdesStats",
