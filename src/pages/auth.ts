@@ -8,7 +8,9 @@ app.get(
     '/auth/github/callback',
     githubAuth.passport.authenticate('github', { session: false, failureRedirect: '/login' }),
     (req: Request, res: Response): void => {
+        // @ts-ignore: Object is possibly 'null'.
         req.session!.userId = req.user.id;
+        // @ts-ignore: Object is possibly 'null'.
         req.session!.githubUsername = req.user.username;
         res.redirect('/admin/');
     }
