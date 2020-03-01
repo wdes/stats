@@ -19,7 +19,7 @@ jobs:
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         strategy:
             matrix:
-                node_version: ["8", "10"]
+                node_version: ["10", "13"]
                 database_server: ["mysql:5.7", "mariadb:10.3"]
 
         steps:
@@ -72,7 +72,7 @@ jobs:
                 options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         strategy:
             matrix:
-                node_version: ["8", "10"]
+                node_version: ["10", "13"]
                 database_server: ["mysql:5.7", "mariadb:10.3"]
 
         steps:
