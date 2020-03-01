@@ -6,7 +6,8 @@ jobs:
     lint-node:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - name: Checkout repository
+              uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
                   node-version: 10
@@ -21,18 +22,18 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-yarn-
             - name: Install modules
-              run: npm ci
+              run: yarn install
             - name: Lint files
               run: |
                   set +e
                   echo "Running jshint"
-                  npm run jshint -- --verbose
+                  yarn run jshint -- --verbose
                   JSHINT=$?
                   echo "Running tslint"
-                  npm run tslint
+                  yarn run tslint
                   TSLINT=$?
                   echo "Running prettier"
-                  npm run prettier -- --list-different
+                  yarn run prettier -- --list-different
                   PRETTIER=$?
                   if [[ $JSHINT != 0 ]] || [[ $PRETTIER != 0 ]] || [[ $TSLINT != 0 ]]; then
                       echo "You have some errors to fix !";
@@ -42,7 +43,8 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - name: Checkout repository
+              uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
                   node-version: 10
@@ -57,6 +59,6 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-yarn-
             - name: Install modules
-              run: npm ci
+              run: yarn install
             - name: Build
-              run: npm run build
+              run: yarn run build
