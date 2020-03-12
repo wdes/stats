@@ -1,34 +1,24 @@
 'use strict';
 
-import * as request from 'request';
+import { ResponseInterface } from '@lib-plugins/sms/AbstractSmsApi';
+import { FreeApi } from '@lib-plugins/sms/FreeApi';
+import { LoggerApi } from '@lib-plugins/sms/LoggerApi';
+import { SmsModeApi } from '@lib-plugins/sms/SmsModeApi';
+import { EmailApi } from '@lib-plugins/sms/EmailApi';
 
 export default {
-    sendSms: (message) => {
-        const { FREE_SMS_API_USER, FREE_SMS_API_PASS } = process.env;
-        return new Promise(
-            (resolve: (data: { response: request.Response; body: any }) => void, reject: Error | string | any) => {
-                if (FREE_SMS_API_USER !== undefined && FREE_SMS_API_PASS !== undefined) {
-                    const msg = encodeURI(message);
-                    request(
-                        'https://smsapi.free-mobile.fr/sendmsg?user=' +
-                            FREE_SMS_API_USER +
-                            '&pass=' +
-                            FREE_SMS_API_PASS +
-                            '&msg=' +
-                            msg,
-                        (error, response, body): void => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                resolve({ response, body });
-                            }
-                        }
-                    );
-                } else {
-                    reject('Unable to send an sms');
-                }
-            }
-        );
+    sendSms(message: string): Promise<ResponseInterface> {
+        switch (process.env.SMS_PROVIDER) {
+            case 'free':
+                return new FreeApi().sendSms(message);
+            case 'smsmode':
+                return new SmsModeApi().sendSms(message);
+            case 'email':
+                return new EmailApi().sendSms(message);
+            case 'logger':
+            default:
+                return new LoggerApi().sendSms(message);
+        }
     },
     smsChangeStatusCode: (name, prevCode, actualCode, timestamp): string => {
         const timeEvent = new Date(timestamp * 1000);
