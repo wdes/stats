@@ -98,7 +98,7 @@
     },
     "devDependencies": {
         "@sentry/cli": "^1.51.1",
-        "@types/mocha": "^7.0.1",
+        "@types/mocha": "^7.0.2",
         "@types/sinon": "^7.5.2",
         "apidoc": "^0.20.0",
         "chai": "^4.2.0",
