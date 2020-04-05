@@ -40,7 +40,7 @@
         "migrate:production:reset": "NODE_ENV=production ts-node ./node_modules/.bin/sequelize db:migrate:undo:all --config config/db.ts --env production",
         "migrate:test:reset": "NODE_ENV=test ts-node ./node_modules/.bin/sequelize db:migrate:undo:all --config config/db.ts --env test",
         "migrate:development:reset": "NODE_ENV=development ts-node ./node_modules/.bin/sequelize db:migrate:undo:all --config config/db.ts --env development",
-        "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.ts\" \"*.ts\" \"*/**/*.js\" \"*.js\"",
+        "prettier": "prettier --ignore-path ./.prettierignore --write \"*/**/*.ts\" \"*.ts\" \"*/**/*.js\"",
         "jshint": "jshint ./",
         "tslint": "tslint -c tslint.json --project ./",
         "install:service": "ts-node service.ts",
