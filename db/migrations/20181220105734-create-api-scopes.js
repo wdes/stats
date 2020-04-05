@@ -13,7 +13,7 @@ module.exports = {
             },
         });
     },
-    down: queryInterface => {
+    down: (queryInterface) => {
         return queryInterface.dropTable('Api__Scopes');
     },
 };

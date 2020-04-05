@@ -23,9 +23,9 @@ import * as cluster from 'cluster';
  * @param {Server} server The server object
  * @return {void}
  */
-const recordStatForServer = server => {
+const recordStatForServer = (server) => {
     Status.getServerStatus(server.url, 'HEAD')
-        .then(data => {
+        .then((data) => {
             Servers.recordStat(
                 server.id,
                 new Date().getTime() / 1000,
@@ -50,11 +50,11 @@ const recordStatForServer = server => {
                         // {"name": "STATUS_CHANGED", "prevCode": "204", "actualCode": "200", "ts": 1548288000}
                     }
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                 });
         })
-        .catch(err => {
+        .catch((err) => {
             logger.error(err);
         });
 };
@@ -70,7 +70,7 @@ const scheduleServer = (server: MonitoringServerModel): void => {
         body: server,
     };
     if (cluster.isMaster) {
-        const serverSearch = serversTasks.find(obj => obj.server.id === server.id);
+        const serverSearch = serversTasks.find((obj) => obj.server.id === server.id);
         if (serverSearch !== undefined) {
             serverSearch.task.start();
             serverSearch.taskState.scheduled = true;
@@ -115,7 +115,7 @@ const unScheduleServer = (server: MonitoringServerModel): void => {
         body: server,
     };
     if (cluster.isMaster) {
-        const serverSearch = serversTasks.find(obj => obj.server.id === server.id);
+        const serverSearch = serversTasks.find((obj) => obj.server.id === server.id);
         if (serverSearch !== undefined) {
             serverSearch.task.stop();
             serverSearch.taskState.scheduled = false;
@@ -134,7 +134,7 @@ const getTasks = () => {
             scheduled: boolean;
         };
     }[] = [];
-    serversTasks.forEach(serversTask => {
+    serversTasks.forEach((serversTask) => {
         serversTasksToSend.push({
             server: serversTask.server,
             taskState: serversTask.taskState,
@@ -160,12 +160,12 @@ const askForServersTasks = (): void => {
 export default {
     init: () => {
         Servers.listServers()
-            .then(servers => {
-                servers.forEach(server => {
+            .then((servers) => {
+                servers.forEach((server) => {
                     scheduleServer(server);
                 });
             })
-            .catch(err => {
+            .catch((err) => {
                 logger.error(err);
             });
     },

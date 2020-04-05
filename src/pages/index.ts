@@ -7,10 +7,10 @@ import { Request, Response } from 'express';
 app.get('/', (req: Request, res: Response) => {
     const loggedIn = typeof req.session!.githubUsername === 'string';
     if (loggedIn) {
-        Servers.countServers().then(nbrServers => {
+        Servers.countServers().then((nbrServers) => {
             Servers.countServers({
                 where: { disabled: 1 },
-            }).then(nbrDisabledServers => {
+            }).then((nbrDisabledServers) => {
                 res.render('pages/index.twig', {
                     loggedIn: loggedIn,
                     nbrServers: nbrServers,

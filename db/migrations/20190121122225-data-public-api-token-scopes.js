@@ -18,7 +18,7 @@ module.exports = {
                     groupName: 'public',
                 },
             })
-            .then(model => {
+            .then((model) => {
                 model.destroy();
             });
     },

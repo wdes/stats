@@ -18,7 +18,7 @@ module.exports = {
                     alias: 'public',
                 },
             })
-            .then(model => {
+            .then((model) => {
                 model.destroy();
             });
     },

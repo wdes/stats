@@ -22,9 +22,9 @@ app.get(
     serverExists('query', 'id'),
     (req: Request, res: Response, next: NextFunction) => {
         Servers.lastStatusCode(req.query.id)
-            .then(statusCode => {
+            .then((statusCode) => {
                 res.send({ statusCode: statusCode });
             })
-            .catch(err => next(err));
+            .catch((err) => next(err));
     }
 );

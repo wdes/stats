@@ -68,7 +68,7 @@ const getServersStatus = (servers, cbSuccess: (data: any[]) => void): void => {
     for (const server in servers) {
         status.push(getServerStatus(servers[server]));
     }
-    Promise.all(status).then(values => {
+    Promise.all(status).then((values) => {
         cbSuccess(values);
     });
 };

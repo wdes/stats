@@ -13,10 +13,10 @@ export default {
                     type: QueryTypes.SELECT,
                     plain: true,
                 })
-                .then(data => {
+                .then((data) => {
                     resolve(data.lastStatusCode);
                 })
-                .catch(err => reject(err));
+                .catch((err) => reject(err));
         });
     },
     getMonitoringAvgTimes: () => {
@@ -25,7 +25,7 @@ export default {
                 .query('CALL getMonitoringAvgTimes();', {
                     type: QueryTypes.SELECT,
                 })
-                .then(data => {
+                .then((data) => {
                     const serversTimes: object[] = [];
                     for (const key in data[0]) {
                         const element = data[0][key];
@@ -40,7 +40,7 @@ export default {
                     }
                     resolve(serversTimes);
                 })
-                .catch(err => reject(err));
+                .catch((err) => reject(err));
         });
     },
     getMonitoringTimes: (serverId: number) => {
@@ -50,7 +50,7 @@ export default {
                     replacements: [serverId],
                     type: QueryTypes.SELECT,
                 })
-                .then(data => {
+                .then((data) => {
                     const timesByDate: object[] = [];
                     for (const key in data[0]) {
                         const element = data[0][key];
@@ -61,7 +61,7 @@ export default {
                     }
                     resolve(timesByDate);
                 })
-                .catch(err => reject(err));
+                .catch((err) => reject(err));
         });
     },
     percentageOfStatusCodesByServer: (serverId: number) => {
@@ -71,7 +71,7 @@ export default {
                     replacements: [serverId],
                     type: QueryTypes.SELECT,
                 })
-                .then(data => {
+                .then((data) => {
                     const percentagesByCodes: object[] = [];
                     for (const key in data[0]) {
                         const element = data[0][key];
@@ -82,7 +82,7 @@ export default {
                     }
                     resolve(percentagesByCodes);
                 })
-                .catch(err => reject(err));
+                .catch((err) => reject(err));
         });
     },
     serverExists: (serverId: number) => {
@@ -93,10 +93,10 @@ export default {
                     type: QueryTypes.SELECT,
                     plain: true,
                 })
-                .then(data => {
+                .then((data) => {
                     resolve(data.exists === 1);
                 })
-                .catch(err => reject(err));
+                .catch((err) => reject(err));
         });
     },
     recordStat: (serverId: number, tstamp: number, totalTime: number, statusCodeIN: number) => {
@@ -108,7 +108,7 @@ export default {
                 .then((data): void => {
                     resolve(data);
                 })
-                .catch(err => {
+                .catch((err) => {
                     if (err.name && err.name === 'SequelizeDatabaseError' && err.parent) {
                         if (err.parent.sqlState && (err.parent.sqlState === 45000 || err.parent.sqlState === '45000')) {
                             try {

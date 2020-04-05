@@ -8,7 +8,7 @@ import logger from '@test/logger';
 suite('WdesStats', () => {
     stack();
     logger();
-}).beforeAll('Load ENV', done => {
+}).beforeAll('Load ENV', (done) => {
     require('dotenv').config({ path: __dirname + '/../.env' });
     done();
 });

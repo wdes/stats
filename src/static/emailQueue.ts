@@ -18,9 +18,9 @@ export default class EmailQueue {
                 () => {
                     // Tick callback
                 },
-                messages => {
-                    messages.forEach(message => {
-                        EmailQueue.sendEmail(message).catch(err => {
+                (messages) => {
+                    messages.forEach((message) => {
+                        EmailQueue.sendEmail(message).catch((err) => {
                             logger.error(err);
                         });
                     });

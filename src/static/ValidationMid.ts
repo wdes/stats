@@ -39,7 +39,7 @@ function validationCallback(
 function middleware(schema): (req: Request, res: Response, next: NextFunction) => void {
     return (req: Request, res: Response, next: NextFunction) => {
         const objectToValidate = {};
-        ['params', 'body', 'query', 'headers'].forEach(key => {
+        ['params', 'body', 'query', 'headers'].forEach((key) => {
             if (schema[key]) {
                 objectToValidate[key] = req[key];
             }
@@ -49,4 +49,4 @@ function middleware(schema): (req: Request, res: Response, next: NextFunction) =
     };
 }
 
-export default schema => middleware(schema);
+export default (schema) => middleware(schema);

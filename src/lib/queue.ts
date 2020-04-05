@@ -32,7 +32,7 @@ const takeNextN = (first: boolean, groupName: string) => {
                         where: {
                             lock: '',
                             groupName: groupName,
-                            id: queues.map(queue => queue.id),
+                            id: queues.map((queue) => queue.id),
                         },
                         fields: ['lock'],
                     }
@@ -58,9 +58,9 @@ export const getStore = (groupName: string) => {
             attributes: ['id', 'task', 'lock'],
             where: { groupName: groupName },
         })
-            .then(rows => {
+            .then((rows) => {
                 const runningTasks: Tasks = {};
-                rows.forEach(row => {
+                rows.forEach((row) => {
                     if (!row.lock) {
                         return;
                     }
@@ -72,17 +72,17 @@ export const getStore = (groupName: string) => {
             .error(cb);
     };
     const store: BetterQueue.Store<string> = {
-        connect: cb => {
+        connect: (cb) => {
             // connect(cb: (error: any, length: number) => void): void;
             Queue.count({
                 where: {
                     groupName: groupName,
                 },
             })
-                .then(c => {
+                .then((c) => {
                     cb(null, c);
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                     cb(err, 0);
                 });
@@ -93,10 +93,10 @@ export const getStore = (groupName: string) => {
                 where: { id: taskId, groupName: groupName },
                 attributes: ['task'],
             })
-                .then(task => {
+                .then((task) => {
                     cb(null, JSON.parse(task.task));
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                     cb(err, '');
                 });
@@ -110,10 +110,10 @@ export const getStore = (groupName: string) => {
                 lock: '',
                 groupName: groupName,
             })
-                .then(queue => {
+                .then((queue) => {
                     cb(null);
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                     cb(err);
                 });
@@ -126,7 +126,7 @@ export const getStore = (groupName: string) => {
                 .then(() => {
                     cb();
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                     cb();
                 });
@@ -134,14 +134,14 @@ export const getStore = (groupName: string) => {
         getLock: (lockId, cb) => {
             // getLock(lockId: string, cb: (error: any, tasks: { [taskId: string]: T }) => void): void;
             Queue.findAll({ where: { lock: lockId, groupName: groupName } })
-                .then(rows => {
+                .then((rows) => {
                     const tasks = {};
-                    rows.forEach(row => {
+                    rows.forEach((row) => {
                         tasks[row.id] = JSON.parse(row.task);
                     });
                     cb(null, tasks);
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                     cb(err, {});
                 });
@@ -152,7 +152,7 @@ export const getStore = (groupName: string) => {
                 .then(() => {
                     cb(null);
                 })
-                .catch(err => {
+                .catch((err) => {
                     logger.error(err);
                     cb(err);
                 });
@@ -171,13 +171,13 @@ export default {
             () => {
                 // Tick callback
             },
-            messages => {
-                messages.forEach(message => {
+            (messages) => {
+                messages.forEach((message) => {
                     Sms.sendSms(message)
-                        .then(data => {
+                        .then((data) => {
                             // localLogger.debug(data.response.statusCode, data.response.body);
                         })
-                        .catch(err => {
+                        .catch((err) => {
                             logger.error(err);
                         });
                 });

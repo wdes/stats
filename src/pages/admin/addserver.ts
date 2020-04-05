@@ -13,7 +13,7 @@ app.get('/admin/addserver', (req: Request, res: Response, next: NextFunction) =>
 app.post('/admin/addserver', (req: Request, res: Response, next: NextFunction) => {
     const isDisabled = typeof req.body.disabled === 'string' && req.body.disabled === 'true';
     Servers.addServer(req.body.name, req.body.url, req.body.cron, isDisabled)
-        .then(server => {
+        .then((server) => {
             smsQueue.push(
                 '[wdes-stats][admin][new-server] Added server: ' +
                     server.name +

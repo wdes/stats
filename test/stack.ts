@@ -25,19 +25,19 @@ export default () => {
             );
         });
 
-        test('cb calls each half second', done => {
+        test('cb calls each half second', (done) => {
             timers.tick('01:00');
             expect(spy.callCount).to.equal(2);
             done();
         });
 
-        test('cb calls each half second on more time', done => {
+        test('cb calls each half second on more time', (done) => {
             timers.tick('04:00');
             expect(spy.callCount).to.equal(8);
             done();
         });
 
-        test('cb calls each half second on some hours', done => {
+        test('cb calls each half second on some hours', (done) => {
             timers.tick('01:00:00');
             expect(spy.callCount).to.equal(120);
             done();
@@ -60,7 +60,7 @@ export default () => {
             });
         });
 
-        test('add to stack', done => {
+        test('add to stack', (done) => {
             const stackTest = stack();
             stackTest.init(
                 30,
@@ -74,7 +74,7 @@ export default () => {
             done();
         });
 
-        test('Test to group messages', done => {
+        test('Test to group messages', (done) => {
             const spy = sinon.spy();
             const spyTimer = sinon.spy();
             const stackTest = stack();
@@ -83,7 +83,7 @@ export default () => {
                 () => {
                     spyTimer();
                 },
-                taskMessage => {
+                (taskMessage) => {
                     spy(taskMessage);
                 }
             );
@@ -104,14 +104,14 @@ export default () => {
             expect(spy.getCalls()[0].args).to.deep.equal([
                 ['Test message\nzd\nza\n\n--\nrandom\n', 'data\n\n--\nÈval\n^ëçç\nza\nsde\n\n--\n', 'ab'],
             ]);
-            spy.getCalls()[0].args[0].forEach(arg => {
+            spy.getCalls()[0].args[0].forEach((arg) => {
                 expect(arg.length).to.be.below(31);
             });
             expect(spy.getCalls()[1].args).to.deep.equal([[]]);
             done();
         });
 
-        test('Test to group messages (dataset: 2)', done => {
+        test('Test to group messages (dataset: 2)', (done) => {
             const spy = sinon.spy();
             const spyTimer = sinon.spy();
             const stackTest = stack();
@@ -120,7 +120,7 @@ export default () => {
                 () => {
                     spyTimer();
                 },
-                taskMessage => {
+                (taskMessage) => {
                     spy(taskMessage);
                 }
             );
@@ -144,19 +144,19 @@ export default () => {
                     'ong.',
                 ],
             ]);
-            spy.getCalls()[0].args[0].forEach(arg => {
+            spy.getCalls()[0].args[0].forEach((arg) => {
                 expect(arg.length).to.be.below(101);
             });
             expect(spy.getCalls()[1].args).to.deep.equal([[]]);
             done();
         });
 
-        test('cron task getter', done => {
+        test('cron task getter', (done) => {
             const stackTest = stack();
             stackTest.init(
                 100,
                 () => {},
-                taskMessage => {}
+                (taskMessage) => {}
             );
             stackTest.getCronTask().start();
             done();

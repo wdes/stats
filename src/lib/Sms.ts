@@ -3,7 +3,7 @@
 import * as request from 'request';
 
 export default {
-    sendSms: message => {
+    sendSms: (message) => {
         const { FREE_SMS_API_USER, FREE_SMS_API_PASS } = process.env;
         return new Promise(
             (resolve: (data: { response: request.Response; body: any }) => void, reject: Error | string | any) => {

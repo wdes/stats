@@ -24,7 +24,7 @@ module.exports = {
                     comment: 'Request total time',
                 },
             })
-            .then(function() {
+            .then(function () {
                 return queryInterface.sequelize.query(
                     "ALTER TABLE `monitoring__times` ADD UNIQUE `UNIQUE_idServer_time_totalTime`(`idServer`, `time`, `totalTime`) COMMENT 'UNIQUE'"
                 );

@@ -39,7 +39,7 @@ logger.info('Environnement : %s', app.get('env'));
 logger.debug('Loading pages');
 require('glob')
     .sync(__dirname + '/../src/pages/**/*.js')
-    .forEach(file => {
+    .forEach((file) => {
         // logger.info('Loaded page: ' + file);
         require(path.resolve(file));
     });
@@ -48,7 +48,7 @@ app.use(RequestMid.tokenMid);
 logger.debug('Loading api endpoints');
 require('glob')
     .sync(__dirname + '/../src/api/**/*.js')
-    .forEach(file => {
+    .forEach((file) => {
         // logger.info('Loaded : ' + file);
         require(path.resolve(file));
     });

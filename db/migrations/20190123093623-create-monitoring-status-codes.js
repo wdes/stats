@@ -25,7 +25,7 @@ module.exports = {
                     comment: 'Request status code',
                 },
             })
-            .then(function() {
+            .then(function () {
                 return queryInterface.sequelize.query(
                     "ALTER TABLE `monitoring__status-codes` ADD UNIQUE `UNIQUE_idServer_time_statusCode`(`idServer`, `time`, `statusCode`) COMMENT 'UNIQUE'"
                 );

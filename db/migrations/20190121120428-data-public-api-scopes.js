@@ -11,7 +11,7 @@ module.exports = {
     },
 
     down: (queryInterface, Sequelize) => {
-        return ApiScopes.default.findByPk('api.index').then(model => {
+        return ApiScopes.default.findByPk('api.index').then((model) => {
             model.destroy();
         });
     },

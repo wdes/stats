@@ -76,7 +76,7 @@ const RequestMid = {
             return;
         }
         const scope = path[2] + '.' + path[3];
-        Sentry.configureScope(sentryScope => {
+        Sentry.configureScope((sentryScope) => {
             sentryScope.setUser({ token: token, scope: scope }); // FIXME: remove token from sentry
         });
         RequestMid.tokenExists(
@@ -88,7 +88,7 @@ const RequestMid = {
                     () => {
                         next();
                     },
-                    code => {
+                    (code) => {
                         if (code === 500) {
                             Sentry.captureMessage('Token verification failed.', Sentry.Severity.Critical);
                             return res.status(500).send({

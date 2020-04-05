@@ -5,7 +5,7 @@ import { Strategy as GitHubStrategy } from 'passport-github';
 import { Request, Response, NextFunction } from 'express';
 const githubAdmins = process.env.GITHUB_ADMINS || '';
 
-const githubUsers = githubAdmins.split(',').map(user => user.trim());
+const githubUsers = githubAdmins.split(',').map((user) => user.trim());
 
 const strategy = new GitHubStrategy(
     {

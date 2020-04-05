@@ -6,10 +6,10 @@ import { Request, Response, NextFunction } from 'express';
 
 app.get('/avgtimes', (req: Request, res: Response, next: NextFunction) => {
     Servers.getMonitoringAvgTimes()
-        .then(avgtimes => {
+        .then((avgtimes) => {
             res.render('pages/avgtimes.twig', {
                 servers: avgtimes,
             });
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
 });

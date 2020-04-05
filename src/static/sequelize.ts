@@ -7,7 +7,7 @@ import { Sequelize } from 'sequelize';
 const env = process.env.NODE_ENV || '';
 const dbConfig = config[env];
 if (env !== 'production') {
-    dbConfig.logging = msg => logger.debug(msg);
+    dbConfig.logging = (msg) => logger.debug(msg);
     dbConfig.logging = false;
 } else {
     dbConfig.logging = false;
