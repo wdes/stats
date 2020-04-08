@@ -127,6 +127,7 @@
     },
     "_moduleAliases": {
         "@lib": "src/lib",
+        "@lib-plugins": "src/lib/plugins",
         "@static": "src/static",
         "@util": "src/util",
         "@api": "src/api",
