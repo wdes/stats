@@ -451,6 +451,11 @@
   resolved "https://registry.yarnpkg.com/@types/tz-offset/-/tz-offset-0.0.0.tgz#d58f1cebd794148d245420f8f0660305d320e565"
   integrity sha512-XLD/llTSB6EBe3thkN+/I0L+yCTB6sjrcVovQdx2Cnl6N6bTzHmwe/J8mWnsXFgxLrj/emzdv8IR4evKYG2qxQ==
 
+"@types/urlencode@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@types/urlencode/-/urlencode-1.1.1.tgz#98566e2d825231d780ebbf7e97bdd08e93919a6d"
+  integrity sha512-1plSgjCFnnGhQB5kBLUjVjcnQZ54TZDas0eSVW6ZI3+3h4ugS4nGFkcq6OTcwgIzuIl2hPSMu1UyevbsOTyrkw==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -1943,7 +1948,7 @@ https-proxy-agent@^4.0.0:
     agent-base "5"
     debug "4"
 
-iconv-lite@0.4.24:
+iconv-lite@0.4.24, iconv-lite@~0.4.11:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   integrity sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==
@@ -4101,6 +4106,13 @@ url-parse-lax@^1.0.0:
   integrity sha1-evjzA2Rem9eaJy56FKxovAYJ2nM=
   dependencies:
     prepend-http "^1.0.1"
+
+urlencode@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/urlencode/-/urlencode-1.1.0.tgz#1f2ba26f013c85f0133f7a3ad6ff2730adf7cbb7"
+  integrity sha1-HyuibwE8hfATP3o61v8nMK33y7c=
+  dependencies:
+    iconv-lite "~0.4.11"
 
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
