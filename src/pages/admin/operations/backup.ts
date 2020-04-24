@@ -54,17 +54,17 @@ app.get('/admin/operations/backup', (req: Request, res: Response, next: NextFunc
 });
 
 app.get('/admin/operations/backup-servers', (req: Request, res: Response, next: NextFunction) => {
-    MonitoringServer.findAll().then((models: [MonitoringServerModel[]]) => {
+    MonitoringServer.findAll().then((models: MonitoringServerModel[]) => {
         const backupDate = new Date().toISOString();
         const attachements: Attachment[] = [
             {
                 filename: 'servers.json',
-                content: JSON.stringify(models[0]),
+                content: JSON.stringify(models),
                 contentType: 'application/json',
             },
         ];
         EmailQueue.sendBackupEmail(
-            'Here is your backup.\nCreated at: ' + backupDate + '\nServers: ' + models[0].length + '\n\n',
+            'Here is your backup.\nCreated at: ' + backupDate + '\nServers: ' + models.length + '\n\n',
             attachements
         );
     });
