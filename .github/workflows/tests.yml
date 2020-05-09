@@ -53,8 +53,6 @@ jobs:
                   yarn run report-coverage
             - name: Send coverage
               uses: codecov/codecov-action@v1
-              with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
 
     migrations:
         name: Run migrations up and down on node ${{ matrix.node_version }} and ${{ matrix.database_server }}
