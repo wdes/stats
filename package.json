@@ -70,7 +70,7 @@
         "@types/node-cron": "^2.0.3",
         "@types/nodemailer": "^6.4.0",
         "@types/passport-github": "^1.1.5",
-        "@types/request": "^2.48.4",
+        "@types/request": "^2.48.5",
         "@types/urlencode": "^1.1.1",
         "better-queue": "^3.8.10",
         "body-parser": "^1.19.0",
