@@ -101,7 +101,7 @@
     "devDependencies": {
         "@sentry/cli": "^1.52.3",
         "@types/mocha": "^7.0.2",
-        "@types/sinon": "^9.0.0",
+        "@types/sinon": "^9.0.4",
         "apidoc": "^0.22.1",
         "chai": "^4.2.0",
         "changelog-generator-twig": "^1.3.1",
