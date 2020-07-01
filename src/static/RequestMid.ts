@@ -20,7 +20,8 @@ const RequestMid = {
                 plain: true,
             })
             .then((data): void => {
-                if (data.tokenExists === 1) {
+                // tslint:disable-next-line: no-string-literal
+                if (data['tokenExists'] === 1) {
                     onSuccess();
                 } else {
                     onError();
@@ -40,7 +41,8 @@ const RequestMid = {
                 plain: true,
             })
             .then((data): void => {
-                if (data.hasPermission === 1) {
+                // tslint:disable-next-line: no-string-literal
+                if (data['hasPermission'] === 1) {
                     req.params._token_valid = 'true';
                     onSuccess();
                 } else {

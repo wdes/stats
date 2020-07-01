@@ -14,7 +14,8 @@ export default {
                     plain: true,
                 })
                 .then((data) => {
-                    resolve(data.lastStatusCode);
+                    // tslint:disable-next-line: no-string-literal
+                    resolve(data['lastStatusCode']);
                 })
                 .catch((err) => reject(err));
         });
@@ -94,7 +95,8 @@ export default {
                     plain: true,
                 })
                 .then((data) => {
-                    resolve(data.exists === 1);
+                    // tslint:disable-next-line: no-string-literal
+                    resolve(data['exists'] === 1);
                 })
                 .catch((err) => reject(err));
         });

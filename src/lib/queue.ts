@@ -37,13 +37,13 @@ const takeNextN = (first: boolean, groupName: string) => {
                         fields: ['lock'],
                     }
                 )
-                    .then((infos: number[]) => {
+                    .then((infos) => {
                         // affectedCount, affectedRows
                         cb(null, infos[0] > 0 ? lockId : '');
                     })
-                    .catch(cb);
+                    .catch((err) => cb(err, ''));
             })
-            .catch(cb);
+            .catch((err) => cb(err, ''));
     };
 };
 
@@ -53,7 +53,7 @@ export const getStore = (groupName: string) => {
             [rowId: string]: string;
         };
     }
-    const getRunningTasks = (cb: (error: null, tasks: Tasks) => void, data?: any): void => {
+    const getRunningTasks = (cb: (error: null, tasks?: Tasks) => void, data?: any): void => {
         Queue.findAll({
             attributes: ['id', 'task', 'lock'],
             where: { groupName: groupName },
@@ -69,7 +69,7 @@ export const getStore = (groupName: string) => {
                 });
                 cb(null, runningTasks);
             })
-            .error(cb);
+            .catch((err) => cb(err));
     };
     const store: BetterQueue.Store<string> = {
         connect: (cb) => {
@@ -94,7 +94,7 @@ export const getStore = (groupName: string) => {
                 attributes: ['task'],
             })
                 .then((task) => {
-                    cb(null, JSON.parse(task.task));
+                    cb(null, task ? JSON.parse(task.task) : {});
                 })
                 .catch((err) => {
                     logger.error(err);
