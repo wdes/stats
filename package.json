@@ -94,7 +94,7 @@
         "sequelize-cli": "^6.1.0",
         "ts-node": "^8.10.2",
         "twig": "^1.15.1",
-        "typescript": "^3.9.6",
+        "typescript": "^3.9.7",
         "urlencode": "^1.1.0",
         "vhost": "^3.0.2"
     },
