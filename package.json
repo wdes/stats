@@ -91,7 +91,7 @@
         "path-to-regexp": "^6.1.0",
         "request": "^2.88.2",
         "sequelize": "^6.3.3",
-        "sequelize-cli": "^6.1.0",
+        "sequelize-cli": "^6.2.0",
         "ts-node": "^8.10.2",
         "twig": "^1.15.1",
         "typescript": "^3.9.7",
