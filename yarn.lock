@@ -4082,20 +4082,10 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-twig@^1.14.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/twig/-/twig-1.15.0.tgz#6b3666b5112475467602fa15c72b31e3edb8ac13"
-  integrity sha512-kJkEbF4sTyZcaMAXffCjaUt6ZSD3v6qZQZd9b6mySvfuUIseTCJCvikphAJvrNJTDw7nZDfGorvTtUkzge1HPg==
-  dependencies:
-    "@babel/runtime" "^7.8.4"
-    locutus "^2.0.11"
-    minimatch "3.0.x"
-    walk "2.3.x"
-
-twig@^1.15.1:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/twig/-/twig-1.15.1.tgz#68448ee2d8124adaca92d8d6a145f499f570039a"
-  integrity sha512-SPGkUM0p7hjgo+y5Dlm/XCSuZe0G3kfcgRPrxkMFln5e8bvQbxDOsia8QEo8xqXfjLR1Emp9FGkVYHya2b8qdA==
+twig@^1.14.0, twig@^1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/twig/-/twig-1.15.2.tgz#8600182f9cf12cfd5f5b365146c5b9914bfa1c10"
+  integrity sha512-n7w76E8gzguhcLyKcjlT3sYWGdBTgZY2DO/frcbZ5Fk7LwMRoTathvWMFxZyJ2HYRJ+rEzccw6nu3fsy7ceGGQ==
   dependencies:
     "@babel/runtime" "^7.8.4"
     locutus "^2.0.11"
