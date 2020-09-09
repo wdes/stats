@@ -99,7 +99,7 @@
         "vhost": "^3.0.2"
     },
     "devDependencies": {
-        "@sentry/cli": "^1.55.1",
+        "@sentry/cli": "^1.56.1",
         "@types/mocha": "^8.0.3",
         "@types/sinon": "^9.0.4",
         "apidoc": "^0.25.0",
