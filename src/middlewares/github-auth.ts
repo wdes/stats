@@ -26,11 +26,13 @@ const strategy = new GitHubStrategy(
 passport.use(strategy);
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-    if (typeof req.session!.userId === 'string' && typeof req.session!.githubUsername === 'string') {
-        if (githubUsers.indexOf(req.session!.githubUsername) !== -1) {
+    const session = (req as any).session;
+    const url = (req as any).url;
+    if (typeof session.userId === 'string' && typeof session.githubUsername === 'string') {
+        if (githubUsers.indexOf(session.githubUsername) !== -1) {
             return next();
         } else {
-            req.session!.messages = [
+            session.messages = [
                 {
                     message: 'Not admin.',
                     level: 'danger',
@@ -39,8 +41,8 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
             return res.redirect('/login');
         }
     } else {
-        req.session!.fromPath = req.url !== '/login' ? req.url : '/';
-        req.session!.messages = [
+        session.fromPath = url !== '/login' ? url : '/';
+        session.messages = [
             {
                 message: 'Not connected.',
                 level: 'warning',

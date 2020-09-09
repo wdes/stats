@@ -39,7 +39,7 @@ app.all('/*', (req: Request, res: Response, next: NextFunction): void => {
     );
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow, noimageindex');
-    if (req.method === 'OPTIONS') {
+    if ((req as any).method === 'OPTIONS') {
         res.status(200).end();
     } else {
         next();

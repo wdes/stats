@@ -45,7 +45,7 @@ function middleware(schema): (req: Request, res: Response, next: NextFunction) =
             }
         });
 
-        return joi.validate(objectToValidate, schema, {}, validationCallback(req, res, next));
+        return (joi as any).validate(objectToValidate, schema, {}, validationCallback(req, res, next));
     };
 }
 

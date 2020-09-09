@@ -15,9 +15,10 @@ app.get('/admin/servers', (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.post('/admin/servers/enable', (req: Request, res: Response, next: NextFunction) => {
-    MonitoringServer.findByPk(req.body.id).then((server: any) => {
+    const body = (req as any).body;
+    MonitoringServer.findByPk(body.id).then((server: any) => {
         if (typeof server === 'object') {
-            Servers.setDisabled(req.body.id, false).then(() => {
+            Servers.setDisabled(body.id, false).then(() => {
                 res.redirect('/admin/servers');
             });
             schedule.scheduleServer(server);
@@ -31,9 +32,10 @@ app.post('/admin/servers/enable', (req: Request, res: Response, next: NextFuncti
 });
 
 app.post('/admin/servers/disable', (req: Request, res: Response, next: NextFunction) => {
-    MonitoringServer.findByPk(req.body.id).then((server: any) => {
+    const body = (req as any).body;
+    MonitoringServer.findByPk(body.id).then((server: any) => {
         if (typeof server === 'object') {
-            Servers.setDisabled(req.body.id, true).then(() => {
+            Servers.setDisabled(body.id, true).then(() => {
                 res.redirect('/admin/servers');
             });
             schedule.unScheduleServer(server);

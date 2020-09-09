@@ -44,7 +44,7 @@ app.get('/admin/operations/backup', (req: Request, res: Response, next: NextFunc
             );
         }
     );
-    req.session!.messages = [
+    (req as any).session.messages = [
         {
             message: 'The backup will be send to you by email.',
             level: 'success',
@@ -68,7 +68,7 @@ app.get('/admin/operations/backup-servers', (req: Request, res: Response, next: 
             attachements
         );
     });
-    req.session!.messages = [
+    (req as any).session.messages = [
         {
             message: 'The backup will be send to you by email.',
             level: 'success',

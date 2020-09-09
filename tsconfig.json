@@ -11,7 +11,7 @@
         "alwaysStrict": true,
         "lib": ["es2017"],
         "module": "commonjs",
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "target": "es2017",
         "baseUrl": "./",
         "paths": {

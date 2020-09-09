@@ -8,26 +8,28 @@ app.get(
     '/auth/github/callback',
     githubAuth.passport.authenticate('github', { session: false, failureRedirect: '/login' }),
     (req: Request, res: Response): void => {
-        // @ts-ignore: Object is possibly 'null'.
-        req.session!.userId = req.user.id;
-        // @ts-ignore: Object is possibly 'null'.
-        req.session!.githubUsername = req.user.username;
+        const session = (req as any).session;
+        const user = (req as any).user;
+        session.userId = user.id;
+        session.githubUsername = user.username;
         res.redirect('/admin/');
     }
 );
 
 app.get('/login', (req: Request, res: Response) => {
-    const messages = req.session!.messages || [];
-    req.session = undefined;
+    const session = (req as any).session;
+    const messages = session.messages || [];
+    (req as any).session = undefined;
     res.render('pages/login.twig', {
         messages: messages,
     });
 });
 
 app.get('/logout', (req: Request, res: Response) => {
-    req.session!.userId = null;
-    req.session!.githubUsername = null;
-    req.session!.messages = [
+    const session = (req as any).session;
+    session.userId = null;
+    session.githubUsername = null;
+    session.messages = [
         {
             message: 'Loged out.',
             level: 'info',

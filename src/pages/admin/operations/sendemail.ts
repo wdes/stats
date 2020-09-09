@@ -9,8 +9,9 @@ app.get('/admin/operations/sendemail', (req: Request, res: Response, next: NextF
 });
 
 app.post('/admin/operations/sendemail', (req: Request, res: Response, next: NextFunction) => {
-    const msg = '[wdes-stats][admin-operations][test]' + req.body.textToSend;
-    if (req.body.sentToStack && req.body.sentToStack === 'true') {
+    const body = (req as any).body;
+    const msg = '[wdes-stats][admin-operations][test]' + body.textToSend;
+    if (body.sentToStack && body.sentToStack === 'true') {
         EmailQueue.getQueue().push('[queue] ' + msg);
     } else {
         EmailQueue.sendEmail('[direct] ' + msg);

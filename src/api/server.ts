@@ -21,7 +21,7 @@ app.get(
     '/api/10/server/lastStatusCode',
     serverExists('query', 'id'),
     (req: Request, res: Response, next: NextFunction) => {
-        Servers.lastStatusCode(req.query.id)
+        Servers.lastStatusCode((req as any).query.id)
             .then((statusCode) => {
                 res.send({ statusCode: statusCode });
             })
