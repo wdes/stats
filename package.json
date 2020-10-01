@@ -82,7 +82,7 @@
         "joi": "^17.2.1",
         "log4js": "^6.3.0",
         "module-alias": "^2.2.2",
-        "mysql2": "^2.1.0",
+        "mysql2": "^2.2.5",
         "node-cron": "^2.0.3",
         "node-linux": "^0.1.12",
         "nodemailer": "^6.4.12",
