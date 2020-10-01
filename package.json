@@ -88,7 +88,7 @@
         "nodemailer": "^6.4.11",
         "passport": "^0.4.1",
         "passport-github": "^1.1.0",
-        "path-to-regexp": "^6.1.0",
+        "path-to-regexp": "^6.2.0",
         "request": "^2.88.2",
         "sequelize": "^6.3.5",
         "sequelize-cli": "^6.2.0",
