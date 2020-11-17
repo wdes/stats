@@ -11,6 +11,7 @@ TAG_NAME=""
 PUSH_TAG=0
 SHOW_HELP=0
 OFFLINE=0
+VERSION_SEPARATOR='-'
 
 # Source: https://stackoverflow.com/a/46793269/5155484 and https://stackoverflow.com/a/28466267/5155484
 optspec="hpo-:e:n:"
@@ -89,7 +90,7 @@ fi
 
 if [ -z "$LAST_RELEASE" ]; then
     echo "None today, using first one"
-    LAST_RELEASE=$(echo "$ENV/$(date +'%Y-%m-%d')-0");# will be +1 below
+    LAST_RELEASE=$(echo "$ENV/$(date +'%Y-%m-%d')${VERSION_SEPARATOR}0");# will be +1 below
     # Last found release for ENV
     # No tag name defined so use the latest tag
     if [ -z "${TAG_NAME}" ]; then
@@ -106,7 +107,7 @@ fi
 echo "Version bump..."
 if [ -z "${TAG_NAME}" ]; then
     # Cut on last - and bump last number
-    VERSION_NAME=$(echo "${LAST_RELEASE}" | awk -F"-" '{print substr($0, 0, length($0) - length($NF)) $NF + 1 }')
+    VERSION_NAME=$(echo "${LAST_RELEASE}" | awk -F"${VERSION_SEPARATOR}" '{print substr($0, 0, length($0) - length($NF)) $NF + 1 }')
 else
     VERSION_NAME="$TAG_NAME"
 fi
