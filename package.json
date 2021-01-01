@@ -85,7 +85,7 @@
         "mysql2": "^2.2.5",
         "node-cron": "^2.0.3",
         "node-linux": "^0.1.12",
-        "nodemailer": "^6.4.16",
+        "nodemailer": "^6.4.17",
         "passport": "^0.4.1",
         "passport-github": "^1.1.0",
         "path-to-regexp": "^6.2.0",
