@@ -14,7 +14,7 @@ const strategy = new GitHubStrategy(
         callbackURL: process.env.GITHUB_CALLBACK_URL,
         passReqToCallback: true,
     },
-    (req: Request, accessToken, refreshToken, profile, cb: (err: Error | null, data: any) => void) => {
+    (req, accessToken, refreshToken, profile, cb: (err: Error | null, data: any) => void) => {
         if (githubUsers.indexOf(profile.username || '') !== -1) {
             return cb(null, profile);
         } else {
