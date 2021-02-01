@@ -90,7 +90,7 @@
         "passport-github": "^1.1.0",
         "path-to-regexp": "^6.2.0",
         "request": "^2.88.2",
-        "sequelize": "^6.4.0",
+        "sequelize": "^6.5.0",
         "sequelize-cli": "^6.2.0",
         "ts-node": "^9.1.1",
         "twig": "^1.15.4",
